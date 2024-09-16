@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".LoginActivity">
+
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="80dp"
+        >
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/logoApp"
+            android:src="@drawable/logovetlink"
+            />
+
+        <EditText
+            android:id="@+id/etUsername"
+            android:layout_width="306dp"
+            android:layout_height="48dp"
+            android:inputType="text"
+            android:paddingStart="20dp"
+            android:background="@drawable/rounded_edittext"
+            android:drawableStart="@drawable/iconuserlogin"
+            android:drawablePadding="20dp"
+            android:hint="Username"
+            android:textColorHint="#98FFFFFF"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/logoApp"
+
+            />
+
+        <EditText
+            android:id="@+id/etPassword"
+            android:layout_width="306dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="18dp"
+            android:inputType="textPassword"
+            android:background="@drawable/rounded_edittext"
+            android:paddingStart="20dp"
+            android:drawableStart="@drawable/iconlocklogin"
+            android:drawablePadding="20dp"
+            android:hint="Password"
+            android:textColorHint="#98FFFFFF"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/et_username"
+            />
+
+        <TextView
+            android:id="@+id/etForgotPwd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Forgot Password"
+            android:layout_gravity="end"
+            android:layout_marginTop="10dp"
+            />
+
+        <Button
+            android:id="@+id/btnLogin"
+            android:layout_width="306dp"
+            android:layout_height="48dp"
+            android:text="LOGIN"
+            android:layout_marginTop="25dp"
+            android:backgroundTint="@color/purple"
+            />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_weight="1"
+            android:layout_marginTop="10dp"
+            android:gravity="end"
+            >
+
+
+            <TextView
+                android:layout_width="155dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:text="Dont't have an account ?"
+                />
+
+            <TextView
+                android:id="@+id/tvRegister"
+                android:layout_width="68dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                android:text="Register"
+                android:textColor="@color/activeIcon"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
