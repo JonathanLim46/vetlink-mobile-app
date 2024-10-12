@@ -28,15 +28,15 @@
             />
 
         <EditText
-            android:id="@+id/etUsername"
+            android:id="@+id/etEmail"
             android:layout_width="306dp"
             android:layout_height="48dp"
-            android:inputType="text"
+            android:inputType="textEmailAddress"
             android:paddingStart="20dp"
             android:background="@drawable/rounded_edittext"
             android:drawableStart="@drawable/iconuserlogin"
             android:drawablePadding="20dp"
-            android:hint="Username"
+            android:hint="Email"
             android:textColorHint="#98FFFFFF"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
