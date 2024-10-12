@@ -63,12 +63,38 @@
             android:layout_marginStart="13dp">
 
             <TextView
+                android:id="@+id/tvName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Name"
+                android:textSize="12sp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                />
+
+            <EditText
+                android:id="@+id/etName"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="10dp"
+                android:paddingStart="20dp"
+                android:background="@drawable/rounded_edittext"
+                android:hint="Name"
+                android:textColorHint="@color/white"
+                app:layout_constraintTop_toBottomOf="@+id/tvName"
+                app:layout_constraintStart_toStartOf="parent"
+                />
+
+            <TextView
                 android:id="@+id/tvUsername"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Username"
+                android:layout_marginTop="20dp"
                 android:textSize="12sp"
-                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/etName"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 />
@@ -114,44 +140,44 @@
                 app:layout_constraintStart_toStartOf="parent"
                 />
 
-            <TextView
-                android:id="@+id/tvBirth"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:text="Birth of Date"
-                android:textSize="12sp"
-                app:layout_constraintTop_toBottomOf="@+id/etEmail"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                />
+<!--            <TextView-->
+<!--                android:id="@+id/tvBirth"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginTop="20dp"-->
+<!--                android:text="Birth of Date"-->
+<!--                android:textSize="12sp"-->
+<!--                app:layout_constraintTop_toBottomOf="@+id/etEmail"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                />-->
 
-            <EditText
-                android:id="@+id/etBirth"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginEnd="10dp"
-                android:paddingStart="20dp"
-                android:paddingEnd="20dp"
-                android:background="@drawable/rounded_edittext"
-                android:hint="Birth of Date"
-                android:inputType="date"
-                android:textColorHint="@color/white"
-                app:layout_constraintTop_toBottomOf="@+id/tvBirth"
-                app:layout_constraintStart_toStartOf="parent"
-                />
+<!--            <EditText-->
+<!--                android:id="@+id/etBirth"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="48dp"-->
+<!--                android:layout_marginTop="5dp"-->
+<!--                android:layout_marginEnd="10dp"-->
+<!--                android:paddingStart="20dp"-->
+<!--                android:paddingEnd="20dp"-->
+<!--                android:background="@drawable/rounded_edittext"-->
+<!--                android:hint="Birth of Date"-->
+<!--                android:inputType="date"-->
+<!--                android:textColorHint="@color/white"-->
+<!--                app:layout_constraintTop_toBottomOf="@+id/tvBirth"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                />-->
 
-            <ImageView
-                android:id="@+id/ivBirth"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_marginEnd="20dp"
-                android:src="@drawable/iconcalender"
-                app:layout_constraintTop_toTopOf="@+id/etBirth"
-                app:layout_constraintEnd_toEndOf="@+id/etBirth"
-                app:layout_constraintBottom_toBottomOf="@+id/etBirth"
-                />
+<!--            <ImageView-->
+<!--                android:id="@+id/ivBirth"-->
+<!--                android:layout_width="20dp"-->
+<!--                android:layout_height="20dp"-->
+<!--                android:layout_marginEnd="20dp"-->
+<!--                android:src="@drawable/iconcalender"-->
+<!--                app:layout_constraintTop_toTopOf="@+id/etBirth"-->
+<!--                app:layout_constraintEnd_toEndOf="@+id/etBirth"-->
+<!--                app:layout_constraintBottom_toBottomOf="@+id/etBirth"-->
+<!--                />-->
 
             <TextView
                 android:id="@+id/tvPhone"
@@ -160,7 +186,7 @@
                 android:layout_marginTop="20dp"
                 android:text="Phone Number"
                 android:textSize="12sp"
-                app:layout_constraintTop_toBottomOf="@+id/etBirth"
+                app:layout_constraintTop_toBottomOf="@+id/etEmail"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 />
