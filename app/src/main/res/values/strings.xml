@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">VetLink</string>
+    <string name="default_clinic">Klinik Hewan IPB</string>
+    <string name="user_name">Mawar Putri</string>
+    <string name="long_text">Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+        Fusce iaculis mattis leo id commodo. Etiam sed pretium leo. Nulla molestie orci ut varius
+        porta. Nullam eu justo lacinia, faucibus eros vel, lacinia dolor. Etiam sollicitudin ligula
+        vitae lorem tristique, eget ultricies elit tincidunt. Mauris eget diam nisl. Fusce at purus
+        semper, placerat tortor ac, ultrices arcu. Ut orci orci, interdum vitae arcu quis, bibendum
+        blandit felis. In ornare tellus quis quam ornare, malesuada gravida augue lobortis.</string>
 </resources>

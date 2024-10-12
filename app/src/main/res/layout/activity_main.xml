@@ -1,19 +1,331 @@
-<?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="UTF-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.MainActivity">
+    android:fitsSystemWindows="true"
+    tools:context=".activity.MainActivity"
+    >
 
-    <TextView
-        android:layout_width="wrap_content"
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:background="#fafafa"
+        >
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <com.google.android.material.appbar.CollapsingToolbarLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fitsSystemWindows="true"
+            app:contentScrim="?attr/colorPrimary"
+            app:layout_scrollFlags="scroll|snap|exitUntilCollapsed">
+
+            <include layout="@layout/home_header" />
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:background="@color/activeIcon"
+                app:layout_collapseMode="pin">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/ivPhotoHome"
+                        android:layout_width="62dp"
+                        android:layout_height="62dp"
+                        android:layout_marginStart="28dp"
+                        android:layout_marginTop="20dp"
+                        android:src="@drawable/tontawan"
+                        app:civ_border_color="@color/white"
+                        app:civ_border_width="1dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/tvNameHome"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
+                        android:text="@string/user_name"
+                        android:textColor="@color/white"
+                        android:textSize="18sp"
+                        app:layout_constraintStart_toEndOf="@+id/ivPhotoHome"
+                        app:layout_constraintTop_toTopOf="@+id/ivPhotoHome" />
+
+                    <TextView
+                        android:id="@+id/tvStatus"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-light"
+                        android:text="Pet Enthusiast"
+                        android:textColor="@color/white"
+                        android:textSize="12sp"
+                        app:layout_constraintStart_toStartOf="@+id/tvNameHome"
+                        app:layout_constraintTop_toBottomOf="@+id/tvNameHome" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="35dp"
+                        android:src="@drawable/iconnotif"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/tvNameHome" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.appcompat.widget.Toolbar>
+
+
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingTop="20dp"
+        android:paddingBottom="100dp"
+        android:clipToPadding="false"
+        android:background="#fafafa"
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
+        >
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cvHistoryClinic"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginBottom="20dp"
+                app:cardCornerRadius="12dp"
+                android:elevation="3dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                >
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/tvHistoryVisit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Riwayat Kunjungan"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:layout_marginTop="14dp"
+                        android:layout_marginStart="22dp"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        />
+
+                    <com.google.android.material.imageview.ShapeableImageView
+                        android:id="@+id/ivClinicHistory"
+                        android:layout_width="103dp"
+                        android:layout_height="100dp"
+                        android:src="@drawable/rspets"
+                        android:scaleType="fitXY"
+                        android:layout_marginBottom="26dp"
+                        app:shapeAppearanceOverlay="@style/RoundedSquare"
+                        app:layout_constraintStart_toStartOf="@+id/tvHistoryVisit"
+                        app:layout_constraintTop_toBottomOf="@+id/tvHistoryVisit"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        />
+
+                    <TextView
+                        android:id="@+id/tvClinicNameHistory"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/default_clinic"
+                        android:textSize="15sp"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="8dp"
+                        app:layout_constraintStart_toEndOf="@+id/ivClinicHistory"
+                        app:layout_constraintTop_toBottomOf="@+id/tvHistoryVisit"/>
+
+                    <TextView
+                        android:id="@+id/tvClinicLocationHistory"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Jl. Bogor Baru 02"
+                        android:textSize="12sp"
+                        android:fontFamily="sans-serif-light"
+                        app:layout_constraintTop_toBottomOf="@id/tvClinicNameHistory"
+                        app:layout_constraintStart_toStartOf="@id/tvClinicNameHistory"/>
+
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Daftar Kembali"
+                        android:textSize="12sp"
+                        android:layout_marginTop="12dp"
+                        android:backgroundTint="@color/buttonColor"
+                        app:layout_constraintTop_toBottomOf="@id/tvClinicLocationHistory"
+                        app:layout_constraintStart_toStartOf="@id/tvClinicLocationHistory"/>
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.cardview.widget.CardView>
+
+
+
+            <TextView
+                android:id="@+id/tvListClinic"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Daftar Klinik"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="31dp"
+                app:layout_constraintTop_toBottomOf="@+id/cvHistoryClinic"
+                app:layout_constraintStart_toStartOf="parent"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Lihat Semua"
+                android:textSize="12sp"
+                android:textColor="@color/defaultIcon"
+                android:textStyle="bold"
+                android:layout_marginEnd="20dp"
+                app:layout_constraintTop_toTopOf="@+id/tvListClinic"
+                app:layout_constraintEnd_toEndOf="parent"
+                />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvClinicList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scrollbars="horizontal"
+                android:nestedScrollingEnabled="false"
+                android:layout_marginTop="12dp"
+                app:layout_constraintTop_toBottomOf="@+id/tvListClinic"
+                />
+
+            <TextView
+                android:id="@+id/tvSpotlight"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="31dp"
+                android:text="Spotlight Kehilangan Hewan"
+                android:textStyle="bold"
+                android:textSize="24sp"
+                app:layout_constraintTop_toBottomOf="@+id/rvClinicList"
+                app:layout_constraintStart_toStartOf="@+id/tvListClinic"
+                />
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cvSpotlight"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="20dp"
+                app:cardCornerRadius="12dp"
+                android:elevation="3dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvSpotlight"
+                app:layout_constraintStart_toStartOf="@+id/cvHistoryClinic">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginBottom="20dp">
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/ivUserPhotoPostMissingSpotlight"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:src="@drawable/tontawan"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginStart="15dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"/>
+
+                    <TextView
+                        android:id="@+id/tvUserNamePostMissingSpotlight"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:text="@string/user_name"
+                        android:textSize="12sp"
+                        android:textStyle="bold"
+                        app:layout_constraintStart_toEndOf="@+id/ivUserPhotoPostMissingSpotlight"
+                        app:layout_constraintTop_toTopOf="@+id/ivUserPhotoPostMissingSpotlight"/>
+
+                    <TextView
+                        android:id="@+id/tvDatePostMissingSpotlight"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="7 Ags"
+                        android:textSize="11sp"
+                        android:fontFamily="sans-serif-light"
+                        app:layout_constraintTop_toBottomOf="@+id/tvUserNamePostMissingSpotlight"
+                        app:layout_constraintStart_toStartOf="@+id/tvUserNamePostMissingSpotlight"/>
+
+                    <TextView
+                        android:id="@+id/tvDescriptionPostSpotlight"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="11dp"
+                        android:layout_marginStart="10dp"
+                        android:text="@string/long_text"
+                        android:textSize="12sp"
+                        app:layout_constraintTop_toBottomOf="@+id/ivUserPhotoPostMissingSpotlight"
+                        app:layout_constraintStart_toStartOf="@+id/ivUserPhotoPostMissingSpotlight"/>
+
+                    <com.google.android.material.imageview.ShapeableImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="168dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="15dp"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginEnd="5dp"
+                        android:src="@drawable/cats"
+                        android:scaleType="fitXY"
+                        app:shapeAppearanceOverlay="@style/RoundedSquare"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tvDescriptionPostSpotlight"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.cardview.widget.CardView>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:background="@color/white"
+        app:menu="@menu/bottom_nav_menu"
+        app:itemTextColor="@drawable/bottom_navigation_colors"
+        app:itemIconTint="@drawable/bottom_navigation_colors"
+        app:itemActiveIndicatorStyle="@android:color/transparent"/>
+
+
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
