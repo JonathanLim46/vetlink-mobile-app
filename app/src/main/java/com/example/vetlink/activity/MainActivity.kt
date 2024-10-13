@@ -3,51 +3,63 @@ package com.example.vetlink.activity
 import ClinicList
 import ClinicListAdapter
 import android.os.Bundle
+import android.view.inputmethod.InputBinding
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.vetlink.Clinic
+import com.example.vetlink.Forum
+import com.example.vetlink.Home
+import com.example.vetlink.Profile
 import com.example.vetlink.R
+import com.example.vetlink.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var recyclerView: RecyclerView
-    private lateinit var clinicList: ArrayList<ClinicList>
-    private lateinit var clinicListAdapter: ClinicListAdapter
+    private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        binding = ActivityMainBinding.inflate(layoutInflater)
         enableEdgeToEdge()
-        setContentView(R.layout.activity_main)
+        setContentView(binding.root)
+        replaceFragment(Home())
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
 
-        init()
+        binding.bottomNavigation.setOnItemSelectedListener {
+            when(it.itemId) {
+                R.id.homePage -> replaceFragment(Home())
+                R.id.clinicPage -> replaceFragment(Clinic())
+                R.id.forumPage -> replaceFragment(Forum())
+                R.id.profilePage -> replaceFragment(Profile())
+
+
+                else ->{
+
+                }
+            }
+            true
+        }
+
+
+
 
     }
 
-    private fun init() {
-        recyclerView = findViewById(R.id.rvClinicList)
-        recyclerView.setHasFixedSize(true)
-        recyclerView.layoutManager = LinearLayoutManager(this, RecyclerView.HORIZONTAL, false)
+    private fun replaceFragment(fragment : Fragment){
 
-        clinicList = ArrayList()
-
-        addDataToList()
-
-        clinicListAdapter = ClinicListAdapter((clinicList))
-        recyclerView.adapter = clinicListAdapter
+        val fragmentManager = supportFragmentManager
+        val fragmentTransaction  = fragmentManager.beginTransaction()
+        fragmentTransaction.replace(R.id.frame_layout,fragment)
+        fragmentTransaction.commit()
     }
 
-    private fun addDataToList(){
-        clinicList.add(ClinicList(R.drawable.rspets, "Klinik IPB", "Sukmajaya, Depok", "Buka | 07.00 - 15.00"))
-        clinicList.add(ClinicList(R.drawable.rspets, "Klinik IPB", "Sukmajaya, Depok", "Buka | 07.00 - 15.00"))
-        clinicList.add(ClinicList(R.drawable.rspets, "Klinik IPB", "Sukmajaya, Depok", "Buka | 07.00 - 15.00"))
-        clinicList.add(ClinicList(R.drawable.rspets, "Klinik IPB", "Sukmajaya, Depok", "Buka | 07.00 - 15.00"))
-    }
 }

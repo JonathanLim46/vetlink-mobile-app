@@ -8,4 +8,6 @@
         vitae lorem tristique, eget ultricies elit tincidunt. Mauris eget diam nisl. Fusce at purus
         semper, placerat tortor ac, ultrices arcu. Ut orci orci, interdum vitae arcu quis, bibendum
         blandit felis. In ornare tellus quis quam ornare, malesuada gravida augue lobortis.</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
