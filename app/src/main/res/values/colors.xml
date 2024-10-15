@@ -6,4 +6,7 @@
     <color name="activeIcon">#3FA2F6</color>
     <color name="secondText">#727272</color>
     <color name="purple">#B08BBB</color>
+    <color name="transparant">#10000000</color>
+    <color name="lightwhite">#D0D0D0</color>
+    <color name="buttonColor">#B08BBB</color>
 </resources>

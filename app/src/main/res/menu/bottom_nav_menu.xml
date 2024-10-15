@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/homePage"
+        android:title="Home"
+        android:icon="@drawable/iconhome"
+        />
+    <item
+        android:id="@+id/clinicPage"
+        android:title="Clinic"
+        android:icon="@drawable/iconclinic"
+        />
+    <item
+        android:id="@+id/forumPage"
+        android:title="Forum"
+        android:icon="@drawable/iconforum"/>
+    <item
+        android:id="@+id/profilePage"
+        android:title="Profile"
+        android:icon="@drawable/iconuser"/>
+</menu>
