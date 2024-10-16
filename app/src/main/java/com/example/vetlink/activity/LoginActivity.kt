@@ -95,7 +95,10 @@ class LoginActivity : AppCompatActivity() {
                             it.data.token.let { it1 -> session.setToken(it1) }
 
                             val user = it.data.user
-                            Toast.makeText(this@LoginActivity, "Welcome, ${user.name}!", Toast.LENGTH_SHORT).show()
+                            val intent = Intent(this@LoginActivity, MainActivity::class.java)
+//                            intent.putExtra("user", user)
+                            startActivity(intent)
+                            finish()
 
                         }else{
                             Toast.makeText(this@LoginActivity, it?.message, Toast.LENGTH_SHORT).show()
@@ -112,4 +115,10 @@ class LoginActivity : AppCompatActivity() {
         })
     }
 
+    /*
+    * TODO
+    *  cari tau parceable
+    *  kirim user yang aktif ke main activity
+    *  cara dapet user ketika restart app atau pun paused
+    * */
 }
