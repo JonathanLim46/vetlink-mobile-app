@@ -14,4 +14,7 @@ interface AuthApi {
         @Field("email") email: String,
         @Field("password") password: String
     ): Call<LoginResponse>
+
+    @POST("logout")
+    fun logout(): Call<Void>
 }

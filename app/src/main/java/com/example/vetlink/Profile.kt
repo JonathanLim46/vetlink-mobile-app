@@ -1,23 +1,31 @@
 package com.example.vetlink
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
+import com.example.vetlink.activity.LoginActivity
+import com.example.vetlink.activity.MainActivity
+import com.example.vetlink.data.network.AuthApi
+import com.example.vetlink.databinding.FragmentProfileBinding
+import com.example.vetlink.helper.Session
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [Profile.newInstance] factory method to
- * create an instance of this fragment.
- */
 class Profile : Fragment() {
-    // TODO: Rename and change types of parameters
+
+    private lateinit var binding: FragmentProfileBinding
+    private lateinit var session: Session
+    private lateinit var authApi: AuthApi
+
     private var param1: String? = null
     private var param2: String? = null
 
@@ -33,20 +41,63 @@ class Profile : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_profile, container, false)
+        // Init session and AuthApi from MainActivity
+        session = (activity as MainActivity).getSession()
+        authApi = (activity as MainActivity).getAuthApi()
+
+        // Inflate the layout using ViewBinding
+        binding = FragmentProfileBinding.inflate(inflater, container, false)
+
+        // Call initView
+        initView()
+
+        return binding.root
+    }
+
+    private fun initView() {
+        // Access views via binding and set up your listeners
+        with(binding) {
+            btnLogout.setOnClickListener {
+                showLogoutConfirmationDialog()
+            }
+        }
+    }
+
+    private fun showLogoutConfirmationDialog() {
+        AlertDialog.Builder(requireContext())
+            .setTitle("Yakin Logout?")
+            .setMessage("Anda yakin ingin logout?")
+            .setPositiveButton("Ya") { dialog, which ->
+                performLogout()
+            }
+            .setNegativeButton("Tidak") { dialog, which ->
+                dialog.dismiss()
+            }
+            .show()
+    }
+
+    private fun performLogout() {
+        val call = authApi.logout()
+        call.enqueue(object : Callback<Void> {
+            override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                if (response.isSuccessful) {
+                    // Clear the session and navigate to LoginActivity
+                    session.clearToken()
+                    startActivity(Intent(activity, LoginActivity::class.java))
+                    activity?.finish() // Close the current activity
+                } else {
+                    // Handle error response (e.g., show a message)
+                    Toast.makeText(requireContext(), "Logout failed", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<Void>, t: Throwable) {
+                Toast.makeText(requireContext(), "Error: ${t.message}", Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 
     companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment Profile.
-         */
-        // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
             Profile().apply {
