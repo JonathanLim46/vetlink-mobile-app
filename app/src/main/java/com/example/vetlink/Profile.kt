@@ -1,11 +1,17 @@
 package com.example.vetlink
 
+import android.app.Dialog
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
+import android.widget.Button
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import com.example.vetlink.activity.LoginActivity
@@ -58,22 +64,34 @@ class Profile : Fragment() {
         // Access views via binding and set up your listeners
         with(binding) {
             btnLogout.setOnClickListener {
-                showLogoutConfirmationDialog()
+                val message : String? = "Are you sure you want to log out ? To Access it again, please log back into your account."
+                showLogoutConfirmationDialog(message)
             }
         }
     }
 
-    private fun showLogoutConfirmationDialog() {
-        AlertDialog.Builder(requireContext())
-            .setTitle("Yakin Logout?")
-            .setMessage("Anda yakin ingin logout?")
-            .setPositiveButton("Ya") { dialog, which ->
-                performLogout()
-            }
-            .setNegativeButton("Tidak") { dialog, which ->
-                dialog.dismiss()
-            }
-            .show()
+    private fun showLogoutConfirmationDialog(message: String?) {
+        val dialog = Dialog(requireContext())
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setCancelable(false)
+        dialog.setContentView(R.layout.custom_dialog_layout)
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+        val tvDialogDescription : TextView = dialog.findViewById(R.id.tvDialogDescription)
+        val btnYes : Button = dialog.findViewById(R.id.btnDialogLogout)
+        val btnNo : Button = dialog.findViewById(R.id.btnDialogCancel)
+
+        tvDialogDescription.text = message
+
+        btnYes.setOnClickListener{
+            performLogout()
+        }
+        btnNo.setOnClickListener{
+            dialog.dismiss()
+        }
+
+        dialog.show()
+
     }
 
     private fun performLogout() {
