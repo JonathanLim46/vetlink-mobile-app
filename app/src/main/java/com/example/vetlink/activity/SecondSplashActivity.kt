@@ -9,8 +9,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.vetlink.R
+import com.example.vetlink.helper.Session
 
 class SecondSplashActivity : AppCompatActivity() {
+
+    private lateinit var session: Session
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -21,8 +25,18 @@ class SecondSplashActivity : AppCompatActivity() {
             insets
         }
 
+        session = Session(this)
+
+
         Handler(Looper.getMainLooper()).postDelayed({
-            val intent = Intent(this@SecondSplashActivity, LoginActivity::class.java)
+            val intent: Intent
+
+            if (session.getToken() == null){
+                intent = Intent(this@SecondSplashActivity, LoginActivity::class.java)
+            }else{
+                intent = Intent(this@SecondSplashActivity, MainActivity::class.java)
+            }
+
             startActivity(intent)
             finish()
         },2000)
