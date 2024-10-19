@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    id("kotlin-parcelize")
 }
 
 android {
@@ -38,8 +39,14 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
-    buildFeatures {
-        viewBinding = true
+//    buildFeatures {
+//        viewBinding = true
+//    }
+    viewBinding{
+        enable = true
+    }
+    dataBinding{
+        enable = true
     }
 }
 
@@ -66,4 +73,11 @@ dependencies {
     //okhttp library
     implementation ("com.squareup.okhttp3:okhttp:4.12.0")
     implementation ("com.squareup.okhttp3:logging-interceptor:4.10.0")
+
+    //coroutines
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
+
+    //ViewModel and LiveData
+    implementation("androidx.lifecycle:lifecycle-extensions:2.2.0")
 }

@@ -10,14 +10,17 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.vetlink.activity.MainActivity
+import com.example.vetlink.data.model.user.User
+import com.example.vetlink.databinding.FragmentHomeBinding
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
-private lateinit var recyclerView: RecyclerView
 private lateinit var clinicList: ArrayList<ClinicList>
 private lateinit var clinicListAdapter: ClinicListAdapter
+private var currentUser: User? = null
 
 /**
  * A simple [Fragment] subclass.
@@ -25,6 +28,9 @@ private lateinit var clinicListAdapter: ClinicListAdapter
  * create an instance of this fragment.
  */
 class Home : Fragment() {
+
+    private lateinit var binding: FragmentHomeBinding
+
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -37,15 +43,44 @@ class Home : Fragment() {
         }
     }
 
+    fun updateUserData(user: User?) {
+        if (user != null) {
+            binding.tvNameHome.text = user.name
+        } else {
+            binding.tvNameHome.text = "Welcome, Guest" // Default text if user is null
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        val view = inflater.inflate(R.layout.fragment_home, container, false)
-        init(view)
 
-        return view
+        //init current user
+        currentUser = (activity as MainActivity).getCurrentUser()
+
+        // Inflate the layout for this fragment
+        binding = FragmentHomeBinding.inflate(inflater, container, false)
+
+        initView()
+
+        return binding.root
+    }
+
+    private fun initView() {
+        with(binding){
+            rvClinicList.setHasFixedSize(true)
+            rvClinicList.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
+
+            clinicList = ArrayList()
+            addDataToList()
+
+            clinicListAdapter = ClinicListAdapter(clinicList)
+            rvClinicList.adapter = clinicListAdapter
+
+            // Set the TextView directly using the currentUser variable
+            tvNameHome.text = currentUser?.name ?: "Welcome, Guest"
+        }
     }
 
     companion object {
@@ -66,19 +101,6 @@ class Home : Fragment() {
                     putString(ARG_PARAM2, param2)
                 }
             }
-    }
-
-    private fun init(view: View){
-        recyclerView = view.findViewById(R.id.rvClinicList)
-        recyclerView.setHasFixedSize(true)
-        recyclerView.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
-
-        clinicList = ArrayList()
-
-        addDataToList()
-
-        clinicListAdapter = ClinicListAdapter((clinicList))
-        recyclerView.adapter = clinicListAdapter
     }
 
     private fun addDataToList(){
