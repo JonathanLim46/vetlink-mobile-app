@@ -6,8 +6,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.vetlink.R
 
-class ClinicListAdapter(private val clinicList : List<ClinicList>) :
-    RecyclerView.Adapter<ClinicListAdapter.ClinicViewHolder>() {
+class ClinicListAdapter(private val clinicList : List<ClinicList>) : RecyclerView.Adapter<ClinicListAdapter.ClinicViewHolder>() {
 
     class ClinicViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
         val clinicImageView : ImageView = itemView.findViewById(R.id.ivClinic)

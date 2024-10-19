@@ -3,6 +3,7 @@ package com.example.vetlink.activity
 import android.content.Intent
 import android.os.Bundle
 import android.provider.ContactsContract.CommonDataKinds.Email
+import android.util.Log
 import android.util.Patterns
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -96,7 +97,7 @@ class LoginActivity : AppCompatActivity() {
 
                             val user = it.data.user
                             val intent = Intent(this@LoginActivity, MainActivity::class.java)
-//                            intent.putExtra("user", user)
+                            intent.putExtra("user", user)
                             startActivity(intent)
                             finish()
 
