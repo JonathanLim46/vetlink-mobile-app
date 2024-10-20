@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.example.vetlink.databinding.FragmentClinicBinding
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -21,6 +22,8 @@ class Clinic : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
 
+    private lateinit var binding: FragmentClinicBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -33,8 +36,19 @@ class Clinic : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
+        binding = FragmentClinicBinding.inflate(inflater, container, false)
+
+        initView()
+
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_clinic, container, false)
+        return binding.root
+    }
+
+    fun initView() {
+        with(binding){
+
+        }
     }
 
     companion object {
