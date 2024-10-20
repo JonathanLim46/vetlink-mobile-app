@@ -29,7 +29,7 @@ object RetrofitInstance {
         val client = getOkHttpClien(session)
 
         return Retrofit.Builder()
-            .baseUrl("http://192.168.1.11:8000/api/")
+            .baseUrl("http://192.168.1.48:8000/api/")
             .client(client)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
