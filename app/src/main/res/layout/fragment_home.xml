@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Home">
+    tools:context=".fragment.HomeFragment">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -19,7 +19,7 @@
             app:contentScrim="?attr/colorPrimary"
             app:layout_scrollFlags="scroll|snap|exitUntilCollapsed">
 
-            <include layout="@layout/home_header" />
+            <include layout="@layout/layout_home_header" />
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
@@ -36,9 +36,9 @@
                         android:id="@+id/ivPhotoHome"
                         android:layout_width="62dp"
                         android:layout_height="62dp"
-                        android:layout_marginStart="28dp"
+                        android:layout_marginStart="15dp"
                         android:layout_marginTop="20dp"
-                        android:src="@drawable/tontawan"
+                        android:src="@drawable/img_tontawan"
                         app:civ_border_color="@color/white"
                         app:civ_border_width="1dp"
                         app:layout_constraintStart_toStartOf="parent"
@@ -48,7 +48,7 @@
                         android:id="@+id/tvNameHome"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="20dp"
+                        android:layout_marginStart="15dp"
                         android:text="@string/user_name"
                         android:textColor="@color/white"
                         android:textSize="18sp"
@@ -69,7 +69,7 @@
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginEnd="35dp"
+                        android:layout_marginEnd="25dp"
                         android:src="@drawable/iconnotif"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="@+id/tvNameHome" />
@@ -119,7 +119,7 @@
                         android:id="@+id/tvHistoryVisit"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Riwayat Kunjungan"
+                        android:text="Visit History"
                         android:textSize="20sp"
                         android:textStyle="bold"
                         android:layout_marginTop="14dp"
@@ -132,8 +132,9 @@
                         android:id="@+id/ivClinicHistory"
                         android:layout_width="103dp"
                         android:layout_height="100dp"
-                        android:src="@drawable/rspets"
+                        android:src="@drawable/img_rspets"
                         android:scaleType="fitXY"
+                        android:layout_marginTop="5dp"
                         android:layout_marginBottom="26dp"
                         app:shapeAppearanceOverlay="@style/RoundedSquare"
                         app:layout_constraintStart_toStartOf="@+id/tvHistoryVisit"
@@ -148,7 +149,7 @@
                         android:text="@string/default_clinic"
                         android:textSize="15sp"
                         android:layout_marginStart="10dp"
-                        android:layout_marginTop="8dp"
+                        android:layout_marginTop="15dp"
                         app:layout_constraintStart_toEndOf="@+id/ivClinicHistory"
                         app:layout_constraintTop_toBottomOf="@+id/tvHistoryVisit"/>
 
@@ -165,9 +166,9 @@
                     <Button
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Daftar Kembali"
+                        android:text="Return Visit"
                         android:textSize="12sp"
-                        android:layout_marginTop="12dp"
+                        android:layout_marginTop="5dp"
                         android:backgroundTint="@color/buttonColor"
                         app:layout_constraintTop_toBottomOf="@id/tvClinicLocationHistory"
                         app:layout_constraintStart_toStartOf="@id/tvClinicLocationHistory"/>
@@ -182,7 +183,7 @@
                 android:id="@+id/tvListClinic"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Daftar Klinik"
+                android:text="Nearest Clinic"
                 android:textSize="24sp"
                 android:textStyle="bold"
                 android:layout_marginStart="16dp"
@@ -194,7 +195,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Lihat Semua"
+                android:text="@string/view_more"
                 android:textSize="12sp"
                 android:textColor="@color/defaultIcon"
                 android:textStyle="bold"
@@ -218,12 +219,23 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="31dp"
-                android:text="Spotlight Kehilangan Hewan"
+                android:text="Animal Loss Spotlight"
                 android:textStyle="bold"
                 android:textSize="24sp"
                 app:layout_constraintTop_toBottomOf="@+id/rvClinicList"
                 app:layout_constraintStart_toStartOf="@+id/tvListClinic"
                 />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="20dp"
+                android:text="@string/view_more"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:textColor="@color/defaultIcon"
+                app:layout_constraintTop_toTopOf="@id/tvSpotlight"
+                app:layout_constraintEnd_toEndOf="parent"/>
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/cvSpotlight"
@@ -251,7 +263,7 @@
                         android:id="@+id/ivUserPhotoPostMissingSpotlight"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
-                        android:src="@drawable/tontawan"
+                        android:src="@drawable/img_tontawan"
                         android:layout_marginTop="10dp"
                         android:layout_marginStart="15dp"
                         app:layout_constraintStart_toStartOf="parent"
@@ -296,7 +308,7 @@
                         android:layout_marginBottom="15dp"
                         android:layout_marginStart="5dp"
                         android:layout_marginEnd="5dp"
-                        android:src="@drawable/cats"
+                        android:src="@drawable/img_cats"
                         android:scaleType="fitXY"
                         app:shapeAppearanceOverlay="@style/RoundedSquare"
                         app:layout_constraintStart_toStartOf="parent"

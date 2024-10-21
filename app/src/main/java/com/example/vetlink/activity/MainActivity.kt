@@ -1,24 +1,18 @@
 package com.example.vetlink.activity
 
-import ClinicList
-import ClinicListAdapter
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.view.inputmethod.InputBinding
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.example.vetlink.Clinic
-import com.example.vetlink.Forum
-import com.example.vetlink.Home
-import com.example.vetlink.Profile
+import com.example.vetlink.fragment.ClinicFragment
+import com.example.vetlink.fragment.ForumFragment
+import com.example.vetlink.fragment.HomeFragment
+import com.example.vetlink.fragment.ProfileFragment
 import com.example.vetlink.R
 import com.example.vetlink.data.model.user.ProfileResponse
 import com.example.vetlink.data.model.user.User
@@ -27,11 +21,9 @@ import com.example.vetlink.data.network.RetrofitInstance
 import com.example.vetlink.data.network.UserApi
 import com.example.vetlink.databinding.ActivityMainBinding
 import com.example.vetlink.helper.Session
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.create
 
 class MainActivity : AppCompatActivity() {
 
@@ -56,7 +48,7 @@ class MainActivity : AppCompatActivity() {
         // This block will run after the data has been fetched
         enableEdgeToEdge()
         setContentView(binding.root)
-        replaceFragment(Home()) // Now you can replace the fragment safely
+        replaceFragment(HomeFragment()) // Now you can replace the fragment safely
         fetchData()
 
 
@@ -77,10 +69,10 @@ class MainActivity : AppCompatActivity() {
 
         binding.bottomNavigation.setOnItemSelectedListener {
             when(it.itemId) {
-                R.id.homePage -> replaceFragment(Home())
-                R.id.clinicPage -> replaceFragment(Clinic())
-                R.id.forumPage -> replaceFragment(Forum())
-                R.id.profilePage -> replaceFragment(Profile())
+                R.id.homePage -> replaceFragment(HomeFragment())
+                R.id.clinicPage -> replaceFragment(ClinicFragment())
+                R.id.forumPage -> replaceFragment(ForumFragment())
+                R.id.profilePage -> replaceFragment(ProfileFragment())
 
 
                 else ->{
@@ -143,7 +135,7 @@ class MainActivity : AppCompatActivity() {
     private fun updateFragments() {
         // Example: Iterate through the fragments and call an update method
         for (fragment in supportFragmentManager.fragments) {
-            if (fragment is Home) {
+            if (fragment is HomeFragment) {
                 fragment.updateUserData(currentUser)
             }
             // Add other fragments as needed

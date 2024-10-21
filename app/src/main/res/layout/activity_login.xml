@@ -27,42 +27,67 @@
             android:src="@drawable/logovetlink"
             />
 
-        <EditText
-            android:id="@+id/etEmail"
-            android:layout_width="306dp"
-            android:layout_height="48dp"
-            android:inputType="textEmailAddress"
-            android:paddingStart="20dp"
-            android:background="@drawable/rounded_edittext"
-            android:drawableStart="@drawable/iconemail"
-            android:drawableTint="@color/white"
-            android:drawablePadding="20dp"
-            android:hint="Email"
-            android:textColorHint="#98FFFFFF"
-            android:textColor="@color/white"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/logoApp"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputLayoutEmailLog"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColorHint="@color/hintColor"
+            app:hintTextColor="#adcaf7"
+            app:errorEnabled="true">
 
-            />
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etEmail"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:inputType="textEmailAddress"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
+                android:background="@drawable/rounded_edittext"
+                android:drawableStart="@drawable/iconemail"
+                android:drawableTint="@color/white"
+                android:drawablePadding="20dp"
+                android:hint="Email"
+                android:textColor="@color/white"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/logoApp"
 
-        <EditText
-            android:id="@+id/etPassword"
-            android:layout_width="306dp"
-            android:layout_height="48dp"
-            android:layout_marginTop="18dp"
-            android:inputType="textPassword"
-            android:background="@drawable/rounded_edittext"
-            android:paddingStart="20dp"
-            android:drawableStart="@drawable/iconlocklogin"
-            android:drawablePadding="20dp"
-            android:hint="Password"
-            android:textColorHint="#98FFFFFF"
-            android:textColor="@color/white"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/et_username"
-            />
+                />
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputLayoutPasswordLog"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:textColorHint="@color/hintColor"
+            app:hintTextColor="#adcaf7"
+            app:errorEnabled="true"
+            app:passwordToggleEnabled="true"
+            app:passwordToggleTint="#85FFFFFF"
+            >
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etPassword"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:layout_marginTop="18dp"
+                android:inputType="textPassword"
+                android:background="@drawable/rounded_edittext"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
+                android:drawableStart="@drawable/iconlocklogin"
+                android:drawablePadding="20dp"
+                android:hint="Password"
+                android:textColorHint="#98FFFFFF"
+                android:textColor="@color/white"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/et_username"
+                />
+
+        </com.google.android.material.textfield.TextInputLayout>
 
         <TextView
             android:id="@+id/etForgotPwd"
@@ -70,7 +95,7 @@
             android:layout_height="wrap_content"
             android:text="Forgot Password"
             android:layout_gravity="end"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="3dp"
             />
 
         <Button
@@ -96,7 +121,7 @@
                 android:layout_width="155dp"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="20dp"
-                android:text="Dont't have an account ?"
+                android:text="Don't have an account ?"
                 />
 
             <TextView
