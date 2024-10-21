@@ -11,4 +11,5 @@
     <color name="buttonColor">#B08BBB</color>
     <color name="red">#EA3C3D</color>
     <color name="cancelbtn">#F0F0F2</color>
+    <color name="hintColor">#98FFFFFF</color>
 </resources>

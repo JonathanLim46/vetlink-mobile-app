@@ -8,7 +8,7 @@
     android:clickable="true"
     android:focusable="true"
     android:orientation="vertical"
-    android:background="@drawable/second_border_card">
+    android:background="@drawable/card_border_second">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -26,7 +26,7 @@
                 android:id="@+id/ivClinic"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:src="@drawable/rspets"
+                android:src="@drawable/img_rspets"
                 android:scaleType="fitXY"/>
 
         </androidx.cardview.widget.CardView>

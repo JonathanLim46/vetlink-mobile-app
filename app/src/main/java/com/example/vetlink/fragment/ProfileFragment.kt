@@ -1,10 +1,12 @@
-package com.example.vetlink
+package com.example.vetlink.fragment
 
 import android.app.Dialog
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.text.SpannableString
+import android.text.style.UnderlineSpan
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -13,7 +15,7 @@ import android.view.Window
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
+import com.example.vetlink.R
 import com.example.vetlink.activity.LoginActivity
 import com.example.vetlink.activity.MainActivity
 import com.example.vetlink.data.network.AuthApi
@@ -26,7 +28,7 @@ import retrofit2.Response
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
-class Profile : Fragment() {
+class ProfileFragment : Fragment() {
 
     private lateinit var binding: FragmentProfileBinding
     private lateinit var session: Session
@@ -63,6 +65,13 @@ class Profile : Fragment() {
     private fun initView() {
         // Access views via binding and set up your listeners
         with(binding) {
+
+            val email = "mawar132@gmail.com"
+            val mSpannableString = SpannableString(email)
+            mSpannableString.setSpan(UnderlineSpan(), 0, mSpannableString.length, 0)
+
+            tvEmailProfile.text = mSpannableString
+
             btnLogout.setOnClickListener {
                 val message : String? = "Are you sure you want to log out ? To Access it again, please log back into your account."
                 showLogoutConfirmationDialog(message)
@@ -118,7 +127,7 @@ class Profile : Fragment() {
     companion object {
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
-            Profile().apply {
+            ProfileFragment().apply {
                 arguments = Bundle().apply {
                     putString(ARG_PARAM1, param1)
                     putString(ARG_PARAM2, param2)

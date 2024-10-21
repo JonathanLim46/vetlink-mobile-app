@@ -1,8 +1,11 @@
 package com.example.vetlink.activity
 
 import android.content.Intent
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.os.Bundle
 import android.provider.ContactsContract.CommonDataKinds.Email
+import android.text.TextWatcher
 import android.util.Log
 import android.util.Patterns
 import android.widget.Toast
@@ -16,6 +19,7 @@ import com.example.vetlink.data.network.AuthApi
 import com.example.vetlink.data.network.RetrofitInstance
 import com.example.vetlink.databinding.ActivityLoginBinding
 import com.example.vetlink.helper.Session
+import com.google.android.material.textfield.TextInputLayout
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -48,29 +52,48 @@ class LoginActivity : AppCompatActivity() {
 
     private fun initView() {
         with(binding){
+
             btnLogin.setOnClickListener{
                 val email = etEmail.text.toString()
                 val password = etPassword.text.toString()
 
+                val colorError = ColorStateList.valueOf(Color.RED)
+
+
                 //check if email is empty
                 if (email.isEmpty()){
-                    etEmail.error = "Email is required"
+                    textInputLayoutEmailLog.error = "Email is required"
+                    textInputLayoutEmailLog.setErrorTextColor(colorError)
+                    textInputLayoutEmailLog.setErrorIconTintList(colorError)
                     etEmail.requestFocus()
                     return@setOnClickListener
-                }
-                //check if password is empty
-                if(password.isEmpty()){
-                    etPassword.error = "Password is required"
-                    etPassword.requestFocus()
+                } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                    textInputLayoutEmailLog.error = "Email is invalid"
+                    textInputLayoutEmailLog.setErrorTextColor(colorError)
+                    textInputLayoutEmailLog.setErrorIconTintList(colorError)
+                    etEmail.requestFocus()
                     return@setOnClickListener
+                } else {
+                    textInputLayoutEmailLog.error = null
+                    textInputLayoutEmailLog.isErrorEnabled = false
                 }
 
-                //check the email format
-                if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-                    // Email format is invalid
-                    etEmail.error = "Email is invalid"
-                    etEmail.requestFocus()
+                //check if password is empty
+                if(password.isEmpty()){
+                    textInputLayoutPasswordLog.error = "Password is required"
+                    textInputLayoutPasswordLog.setErrorTextColor(colorError)
+                    textInputLayoutPasswordLog.setErrorIconTintList(colorError)
+                    etPassword.requestFocus()
                     return@setOnClickListener
+//                } else if (password.length < 7){
+//                    textInputLayoutPasswordLog.error = "Password must be minimum 8 characters"
+//                    textInputLayoutPasswordLog.setErrorTextColor(ColorStateList.valueOf(Color.RED))
+//                    textInputLayoutPasswordLog.setErrorIconTintList(ColorStateList.valueOf(Color.RED))
+//                    etPassword.requestFocus()
+//                    return@setOnClickListener
+                } else{
+                    textInputLayoutPasswordLog.error = null
+                    textInputLayoutPasswordLog.isErrorEnabled = false
                 }
 
                 loginUser(email, password)

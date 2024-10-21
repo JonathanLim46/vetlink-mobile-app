@@ -53,7 +53,7 @@
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"
             android:layout_marginTop="15dp"
-            android:layout_marginBottom="40dp"
+            android:layout_marginBottom="60dp"
             app:layout_constraintTop_toBottomOf="@+id/llSignup"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -80,86 +80,121 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     />
 
-                <EditText
-                    android:id="@+id/etName"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/textInputLayoutNameSign"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:layout_marginEnd="10dp"
-                    android:paddingStart="20dp"
-                    android:paddingEnd="20dp"
-                    android:paddingTop="15dp"
-                    android:paddingBottom="15dp"
-                    android:background="@drawable/rounded_edittext"
-                    android:hint="Name"
-                    android:inputType="text"
-                    android:textColorHint="@color/white"
-                    android:textColor="@color/white"
+                    android:textColorHint="@color/hintColor"
+                    app:errorEnabled="true"
+                    app:hintEnabled="false"
+                    app:counterEnabled="true"
+                    app:counterMaxLength="16"
                     app:layout_constraintTop_toBottomOf="@+id/tvName"
-                    app:layout_constraintStart_toStartOf="parent"
-                    />
+                    app:layout_constraintStart_toStartOf="parent">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="20dp"
+                        android:paddingEnd="20dp"
+                        android:paddingTop="15dp"
+                        android:paddingBottom="15dp"
+                        android:background="@drawable/rounded_edittext"
+                        android:hint="Name"
+                        android:textColorHint="@color/hintColor"
+                        android:inputType="text"
+                        android:textColor="@color/white"
+                        />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
 
                 <TextView
                     android:id="@+id/tvUsername"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Username"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginTop="10dp"
                     android:textSize="12sp"
-                    app:layout_constraintTop_toBottomOf="@id/etName"
+                    app:layout_constraintTop_toBottomOf="@id/textInputLayoutNameSign"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     />
 
-                <EditText
-                    android:id="@+id/etUsername"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@id/textInputLayoutUsernameSign"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:layout_marginEnd="10dp"
-                    android:paddingStart="20dp"
-                    android:paddingEnd="20dp"
-                    android:paddingTop="15dp"
-                    android:paddingBottom="15dp"
-                    android:background="@drawable/rounded_edittext"
-                    android:hint="Username"
-                    android:inputType="text"
-                    android:textColorHint="@color/white"
-                    android:textColor="@color/white"
+                    app:errorEnabled="true"
+                    app:hintEnabled="false"
+                    app:counterEnabled="true"
+                    app:counterMaxLength="16"
                     app:layout_constraintTop_toBottomOf="@+id/tvUsername"
-                    app:layout_constraintStart_toStartOf="parent"
-                    />
+                    app:layout_constraintStart_toStartOf="parent">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etUsername"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="20dp"
+                        android:paddingEnd="20dp"
+                        android:paddingTop="15dp"
+                        android:paddingBottom="15dp"
+                        android:background="@drawable/rounded_edittext"
+                        android:hint="Username"
+                        android:inputType="text"
+                        android:textColorHint="@color/hintColor"
+                        android:textColor="@color/white"/>
+
+
+                </com.google.android.material.textfield.TextInputLayout>
+
 
                 <TextView
                     android:id="@+id/tvEmail"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginTop="10dp"
                     android:text="Email"
                     android:textSize="12sp"
-                    app:layout_constraintTop_toBottomOf="@+id/etUsername"
+                    app:layout_constraintTop_toBottomOf="@+id/textInputLayoutUsernameSign"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     />
 
-                <EditText
-                    android:id="@+id/etEmail"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/textInputLayoutEmail"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:layout_marginEnd="10dp"
-                    android:paddingStart="20dp"
-                    android:paddingEnd="20dp"
-                    android:paddingTop="15dp"
-                    android:paddingBottom="15dp"
-                    android:background="@drawable/rounded_edittext"
-                    android:hint="Email"
-                    android:inputType="textEmailAddress"
-                    android:textColorHint="@color/white"
-                    android:textColor="@color/white"
+                    app:errorEnabled="true"
+                    app:hintEnabled="false"
                     app:layout_constraintTop_toBottomOf="@+id/tvEmail"
-                    app:layout_constraintStart_toStartOf="parent"
-                    />
+                    app:layout_constraintStart_toStartOf="parent">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etEmail"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="20dp"
+                        android:paddingEnd="20dp"
+                        android:paddingTop="15dp"
+                        android:paddingBottom="15dp"
+                        android:background="@drawable/rounded_edittext"
+                        android:hint="Email"
+                        android:inputType="textEmailAddress"
+                        android:textColorHint="@color/hintColor"
+                        android:textColor="@color/white"
+                        />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
 
                 <!--            <TextView-->
                 <!--                android:id="@+id/tvBirth"-->
@@ -204,77 +239,99 @@
                     android:id="@+id/tvPhone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginTop="10dp"
                     android:text="Phone Number"
                     android:textSize="12sp"
-                    app:layout_constraintTop_toBottomOf="@+id/etEmail"
+                    app:layout_constraintTop_toBottomOf="@+id/textInputLayoutEmail"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     />
 
-                <EditText
-                    android:id="@+id/etPhone"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/textInputLayoutPhone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:layout_marginEnd="10dp"
-                    android:paddingStart="20dp"
-                    android:paddingEnd="20dp"
-                    android:paddingTop="15dp"
-                    android:paddingBottom="15dp"
-                    android:background="@drawable/rounded_edittext"
-                    android:hint="+62"
-                    android:inputType="phone"
-                    android:textColorHint="@color/white"
-                    android:textColor="@color/white"
-                    app:layout_constraintTop_toBottomOf="@+id/tvPhone"
-                    app:layout_constraintStart_toStartOf="parent"
-                    />
+                    app:hintEnabled="false"
+                    app:errorEnabled="true"
+                    app:layout_constraintTop_toBottomOf="@id/tvPhone"
+                    app:layout_constraintStart_toStartOf="parent">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etPhone"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="20dp"
+                        android:paddingEnd="20dp"
+                        android:paddingTop="15dp"
+                        android:paddingBottom="15dp"
+                        android:background="@drawable/rounded_edittext"
+                        android:hint="+62"
+                        android:inputType="phone"
+                        android:textColorHint="@color/hintColor"
+                        android:textColor="@color/white"
+                        />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+
 
                 <TextView
-                    android:id="@+id/etPasswordSignUp"
+                    android:id="@+id/tvPasswordSignUp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginTop="10dp"
                     android:text="Password"
                     android:textSize="12sp"
-                    app:layout_constraintTop_toBottomOf="@+id/etPhone"
+                    app:layout_constraintTop_toBottomOf="@+id/textInputLayoutPhone"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     />
 
-                <EditText
-                    android:id="@+id/etPassword"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/textInputLayoutPassword"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:layout_marginEnd="10dp"
-                    android:paddingStart="20dp"
-                    android:paddingEnd="20dp"
-                    android:paddingTop="15dp"
-                    android:paddingBottom="15dp"
-                    android:background="@drawable/rounded_edittext"
-                    android:hint="Password"
-                    android:inputType="textPassword"
-                    android:textColorHint="@color/white"
-                    android:textColor="@color/white"
-                    app:layout_constraintTop_toBottomOf="@+id/etPasswordSignUp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    />
+                    app:hintEnabled="false"
+                    app:errorEnabled="true"
+                    app:passwordToggleEnabled="true"
+                    app:passwordToggleTint="#85FFFFFF"
+                    app:layout_constraintTop_toBottomOf="@id/tvPasswordSignUp"
+                    app:layout_constraintStart_toStartOf="parent">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etPassword"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="20dp"
+                        android:paddingEnd="20dp"
+                        android:paddingTop="15dp"
+                        android:paddingBottom="15dp"
+                        android:background="@drawable/rounded_edittext"
+                        android:hint="Password"
+                        android:inputType="textPassword"
+                        android:textColorHint="@color/hintColor"
+                        android:textColor="@color/white"
+                        />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
 
                 <Button
                     android:id="@+id/btnSignUp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="50dp"
+                    android:layout_marginTop="15dp"
                     android:paddingTop="15dp"
                     android:paddingBottom="15dp"
                     android:backgroundTint="@color/purple"
                     android:text="Sign Up"
-                    app:layout_constraintTop_toBottomOf="@id/etPasswordSignUp"
+                    app:layout_constraintTop_toBottomOf="@id/textInputLayoutPassword"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
                     />
 
                 <LinearLayout
@@ -306,7 +363,7 @@
                             android:text="Login"
                             android:textColor="@color/activeIcon"
                             android:textStyle="bold"
-                            android:layout_marginBottom="18dp"/>
+                            android:layout_marginBottom="20dp"/>
                     </TableRow>
 
 

@@ -1,4 +1,4 @@
-package com.example.vetlink
+package com.example.vetlink.fragment
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -14,10 +14,10 @@ private const val ARG_PARAM2 = "param2"
 
 /**
  * A simple [Fragment] subclass.
- * Use the [Forum.newInstance] factory method to
+ * Use the [ForumFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class Forum : Fragment() {
+class ForumFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -61,7 +61,7 @@ class Forum : Fragment() {
         // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
-            Forum().apply {
+            ForumFragment().apply {
                 arguments = Bundle().apply {
                     putString(ARG_PARAM1, param1)
                     putString(ARG_PARAM2, param2)

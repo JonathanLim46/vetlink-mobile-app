@@ -1,4 +1,4 @@
-package com.example.vetlink
+package com.example.vetlink.fragment
 
 import ClinicList
 import ClinicListAdapter
@@ -7,9 +7,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.vetlink.R
 import com.example.vetlink.activity.MainActivity
 import com.example.vetlink.data.model.user.User
 import com.example.vetlink.databinding.FragmentHomeBinding
@@ -24,10 +24,10 @@ private var currentUser: User? = null
 
 /**
  * A simple [Fragment] subclass.
- * Use the [Home.newInstance] factory method to
+ * Use the [HomeFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class Home : Fragment() {
+class HomeFragment : Fragment() {
 
     private lateinit var binding: FragmentHomeBinding
 
@@ -95,7 +95,7 @@ class Home : Fragment() {
         // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
-            Home().apply {
+            HomeFragment().apply {
                 arguments = Bundle().apply {
                     putString(ARG_PARAM1, param1)
                     putString(ARG_PARAM2, param2)
@@ -104,9 +104,9 @@ class Home : Fragment() {
     }
 
     private fun addDataToList(){
-        clinicList.add(ClinicList(R.drawable.rspets, "Klinik IPB", "Sukmajaya, Depok", "Buka | 07.00 - 15.00"))
-        clinicList.add(ClinicList(R.drawable.rspets, "Klinik IPB", "Sukmajaya, Depok", "Buka | 07.00 - 15.00"))
-        clinicList.add(ClinicList(R.drawable.rspets, "Klinik IPB", "Sukmajaya, Depok", "Buka | 07.00 - 15.00"))
-        clinicList.add(ClinicList(R.drawable.rspets, "Klinik IPB", "Sukmajaya, Depok", "Buka | 07.00 - 15.00"))
+        clinicList.add(ClinicList(R.drawable.img_rspets, "Klinik IPB", "Sukmajaya, Depok", "Buka | 07.00 - 15.00"))
+        clinicList.add(ClinicList(R.drawable.img_rspets, "Klinik IPB", "Sukmajaya, Depok", "Buka | 07.00 - 15.00"))
+        clinicList.add(ClinicList(R.drawable.img_rspets, "Klinik IPB", "Sukmajaya, Depok", "Buka | 07.00 - 15.00"))
+        clinicList.add(ClinicList(R.drawable.img_rspets, "Klinik IPB", "Sukmajaya, Depok", "Buka | 07.00 - 15.00"))
     }
 }
