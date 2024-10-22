@@ -51,11 +51,12 @@
             android:id="@+id/tvEmailProfile"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="mawar132@gmail.com"
+            android:text="@string/email"
             app:layout_constraintTop_toBottomOf="@+id/tvUsernameProfile"
             app:layout_constraintStart_toStartOf="@+id/tvUsernameProfile"/>
 
         <ImageView
+            android:id="@+id/ivAccount"
             android:layout_width="25dp"
             android:layout_height="20dp"
             android:layout_marginEnd="15dp"
@@ -127,7 +128,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/faqMenu"
+            android:id="@+id/scheduleMenu"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
@@ -138,6 +139,54 @@
             app:layout_constraintTop_toBottomOf="@+id/myPetsMenu"
             app:layout_constraintStart_toStartOf="@+id/myPetsMenu"
             app:layout_constraintEnd_toEndOf="@+id/myPetsMenu">
+
+            <TextView
+                android:id="@+id/tvSchedule"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Schedule"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+            <ImageView
+                android:id="@+id/ivSchedule"
+                android:layout_width="15dp"
+                android:layout_height="20dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginTop="2dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:contentDescription="buttonFAQ"
+                android:scaleX="-1"
+                android:src="@drawable/iconback"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/tvSchedule" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="20dp"
+                android:background="@color/defaultIcon"
+                app:layout_constraintTop_toBottomOf="@id/tvSchedule"
+                app:layout_constraintEnd_toEndOf="@+id/ivSchedule"
+                />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/faqMenu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:clickable="true"
+            android:focusable="true"
+            app:layout_constraintTop_toBottomOf="@+id/scheduleMenu"
+            app:layout_constraintStart_toStartOf="@+id/scheduleMenu"
+            app:layout_constraintEnd_toEndOf="@+id/scheduleMenu">
 
             <TextView
                 android:id="@+id/tvFAQ"
