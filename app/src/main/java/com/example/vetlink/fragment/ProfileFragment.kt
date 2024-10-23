@@ -18,6 +18,7 @@ import android.widget.Toast
 import com.example.vetlink.R
 import com.example.vetlink.activity.LoginActivity
 import com.example.vetlink.activity.MainActivity
+import com.example.vetlink.activity.MenuActivity
 import com.example.vetlink.data.network.AuthApi
 import com.example.vetlink.databinding.FragmentProfileBinding
 import com.example.vetlink.helper.Session
@@ -71,6 +72,12 @@ class ProfileFragment : Fragment() {
             mSpannableString.setSpan(UnderlineSpan(), 0, mSpannableString.length, 0)
 
             tvEmailProfile.text = mSpannableString
+
+            ivAccount.setOnClickListener{
+                val intent = Intent(activity, MenuActivity::class.java)
+                intent.putExtra("MENU_TITLE", "Account")
+                startActivity(intent)
+            }
 
             btnLogout.setOnClickListener {
                 val message : String? = "Are you sure you want to log out ? To Access it again, please log back into your account."
