@@ -10,6 +10,7 @@ import android.util.Log
 import android.util.Patterns
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -19,6 +20,11 @@ import com.example.vetlink.data.network.AuthApi
 import com.example.vetlink.data.network.RetrofitInstance
 import com.example.vetlink.databinding.ActivityLoginBinding
 import com.example.vetlink.helper.Session
+import com.example.vetlink.helper.SessionManager
+import com.example.vetlink.repository.AuthRepository
+import com.example.vetlink.util.toast
+import com.example.vetlink.viewModel.LoginActivityViewModel
+import com.example.vetlink.viewModel.ViewModelFactory
 import com.google.android.material.textfield.TextInputLayout
 import retrofit2.Call
 import retrofit2.Callback
@@ -29,7 +35,11 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
 
     private lateinit var authApi: AuthApi
-    private lateinit var session: Session
+    private lateinit var session: SessionManager
+
+    private val loginViewModel: LoginActivityViewModel by viewModels {
+        ViewModelFactory(AuthRepository(session))
+    }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,7 +54,19 @@ class LoginActivity : AppCompatActivity() {
             insets
         }
 
-        session = Session(this)
+        session = SessionManager(this)
+        loginViewModel.loginResponse.observe(this) { loginResponse ->
+            loginResponse?.let {
+                toast(loginResponse.data.token)
+            }
+        }
+
+        loginViewModel.errorMessage.observe(this) { message ->
+            message?.let {
+                // Handle error
+            }
+        }
+
         authApi = RetrofitInstance.getRetrofit(session).create(AuthApi::class.java)
 
         initView()
@@ -96,7 +118,8 @@ class LoginActivity : AppCompatActivity() {
                     textInputLayoutPasswordLog.isErrorEnabled = false
                 }
 
-                loginUser(email, password)
+                loginViewModel.loginUser(email, password)
+//                loginUser(email, password)
 
             }
 
@@ -108,35 +131,35 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun loginUser(email: String, password: String){
-        val call  = authApi.login(email, password)
-        call.enqueue(object: Callback<LoginResponse>{
-            override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
-                if (response.isSuccessful){
-                    val loginResponse = response.body()
-                    loginResponse.let {
-                        if (it?.status == 200){
-                            //store token
-                            it.data.token.let { it1 -> session.setToken(it1) }
-
-                            val user = it.data.user
-                            val intent = Intent(this@LoginActivity, MainActivity::class.java)
-                            intent.putExtra("user", user)
-                            startActivity(intent)
-                            finish()
-
-                        }else{
-                            Toast.makeText(this@LoginActivity, it?.message, Toast.LENGTH_SHORT).show()
-                        }
-                    }
-                }else{
-                    Toast.makeText(this@LoginActivity, "Login Failed", Toast.LENGTH_SHORT).show()
-                }
-            }
-
-            override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
-                Toast.makeText(this@LoginActivity, "Error: ${t.message}", Toast.LENGTH_SHORT).show()
-            }
-        })
+//        val call  = authApi.login(email, password)
+//        call.enqueue(object: Callback<LoginResponse>{
+//            override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
+//                if (response.isSuccessful){
+//                    val loginResponse = response.body()
+//                    loginResponse.let {
+//                        if (it?.status == 200){
+//                            //store token
+//                            it.data.token.let { it1 -> session.setToken(it1) }
+//
+//                            val user = it.data.user
+//                            val intent = Intent(this@LoginActivity, MainActivity::class.java)
+//                            intent.putExtra("user", user)
+//                            startActivity(intent)
+//                            finish()
+//
+//                        }else{
+//                            Toast.makeText(this@LoginActivity, it?.message, Toast.LENGTH_SHORT).show()
+//                        }
+//                    }
+//                }else{
+//                    Toast.makeText(this@LoginActivity, "Login Failed", Toast.LENGTH_SHORT).show()
+//                }
+//            }
+//
+//            override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
+//                Toast.makeText(this@LoginActivity, "Error: ${t.message}", Toast.LENGTH_SHORT).show()
+//            }
+//        })
     }
 
     /*
