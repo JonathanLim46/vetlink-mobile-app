@@ -1,5 +1,6 @@
 package com.example.vetlink.fragment
 
+import android.annotation.SuppressLint
 import com.example.vetlink.adapter.ClinicList
 import com.example.vetlink.adapter.ClinicListAdapter
 import android.os.Bundle
@@ -9,10 +10,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.vetlink.R
 import com.example.vetlink.activity.MainActivity
 import com.example.vetlink.data.model.user.User
 import com.example.vetlink.databinding.FragmentHomeBinding
+import java.util.Collections
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -67,8 +70,11 @@ class HomeFragment : Fragment() {
         return binding.root
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private fun initView() {
+
         with(binding){
+
             rvClinicList.setHasFixedSize(true)
             rvClinicList.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
 
@@ -76,10 +82,19 @@ class HomeFragment : Fragment() {
             addDataToList()
 
             clinicListAdapter = ClinicListAdapter(clinicList)
+            clinicListAdapter.notifyDataSetChanged()
             rvClinicList.adapter = clinicListAdapter
+
+            srlList.setOnRefreshListener {
+
+                srlList.isRefreshing = false
+                clinicListAdapter.notifyDataSetChanged()
+            }
 
             // Set the TextView directly using the currentUser variable
             tvNameHome.text = currentUser?.name ?: "Welcome, Guest"
+
+
         }
     }
 
