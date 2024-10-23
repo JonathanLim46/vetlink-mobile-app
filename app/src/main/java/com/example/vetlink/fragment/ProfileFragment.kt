@@ -111,24 +111,24 @@ class ProfileFragment : Fragment() {
     }
 
     private fun performLogout() {
-        val call = authApi.logout()
-        call.enqueue(object : Callback<Void> {
-            override fun onResponse(call: Call<Void>, response: Response<Void>) {
-                if (response.isSuccessful) {
-                    // Clear the session and navigate to LoginActivity
-                    session.clearToken()
-                    startActivity(Intent(activity, LoginActivity::class.java))
-                    activity?.finish() // Close the current activity
-                } else {
-                    // Handle error response (e.g., show a message)
-                    Toast.makeText(requireContext(), "Logout failed", Toast.LENGTH_SHORT).show()
-                }
-            }
-
-            override fun onFailure(call: Call<Void>, t: Throwable) {
-                Toast.makeText(requireContext(), "Error: ${t.message}", Toast.LENGTH_SHORT).show()
-            }
-        })
+//        val call = authApi.logout()
+//        call.enqueue(object : Callback<Void> {
+//            override fun onResponse(call: Call<Void>, response: Response<Void>) {
+//                if (response.isSuccessful) {
+//                    // Clear the session and navigate to LoginActivity
+//                    session.clearToken()
+//                    startActivity(Intent(activity, LoginActivity::class.java))
+//                    activity?.finish() // Close the current activity
+//                } else {
+//                    // Handle error response (e.g., show a message)
+//                    Toast.makeText(requireContext(), "Logout failed", Toast.LENGTH_SHORT).show()
+//                }
+//            }
+//
+//            override fun onFailure(call: Call<Void>, t: Throwable) {
+//                Toast.makeText(requireContext(), "Error: ${t.message}", Toast.LENGTH_SHORT).show()
+//            }
+//        })
     }
 
     companion object {

@@ -10,10 +10,11 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.vetlink.R
 import com.example.vetlink.helper.Session
+import com.example.vetlink.helper.SessionManager
 
 class SecondSplashActivity : AppCompatActivity() {
 
-    private lateinit var session: Session
+    private lateinit var session: SessionManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,13 +26,13 @@ class SecondSplashActivity : AppCompatActivity() {
             insets
         }
 
-        session = Session(this)
+        session = SessionManager(this)
 
 
         Handler(Looper.getMainLooper()).postDelayed({
             val intent: Intent
 
-            if (session.getToken() == null){
+            if (session.getAuthToken() == null){
                 intent = Intent(this@SecondSplashActivity, LoginActivity::class.java)
             }else{
                 intent = Intent(this@SecondSplashActivity, MainActivity::class.java)

@@ -39,9 +39,6 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
-//    buildFeatures {
-//        viewBinding = true
-//    }
     viewBinding{
         enable = true
     }
@@ -75,9 +72,12 @@ dependencies {
     implementation ("com.squareup.okhttp3:logging-interceptor:4.10.0")
 
     //coroutines
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
+    implementation(libs.kotlinx.coroutines.core)
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.1")
 
     //ViewModel and LiveData
     implementation("androidx.lifecycle:lifecycle-extensions:2.2.0")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.6")
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.8.6")
+    implementation(libs.retrofit2.kotlin.coroutines.adapter)
 }
