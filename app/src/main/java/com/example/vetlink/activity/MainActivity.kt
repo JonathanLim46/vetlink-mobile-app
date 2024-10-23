@@ -42,8 +42,6 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
 
         session = Session(this)
-//        authApi = RetrofitInstance.getRetrofit(session).create(AuthApi::class.java)
-//        userApi = RetrofitInstance.getRetrofit(session).create(UserApi::class.java)
 
         // This block will run after the data has been fetched
         enableEdgeToEdge()
@@ -87,14 +85,6 @@ class MainActivity : AppCompatActivity() {
         with(binding){
 
         }
-    }
-
-    fun getSession(): Session{
-        return session
-    }
-
-    fun getAuthApi(): AuthApi {
-        return authApi
     }
 
     private fun replaceFragment(fragment : Fragment){

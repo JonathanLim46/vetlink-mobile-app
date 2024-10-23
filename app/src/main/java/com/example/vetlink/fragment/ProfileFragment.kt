@@ -32,9 +32,6 @@ private const val ARG_PARAM2 = "param2"
 class ProfileFragment : Fragment() {
 
     private lateinit var binding: FragmentProfileBinding
-    private lateinit var session: Session
-    private lateinit var authApi: AuthApi
-
     private var param1: String? = null
     private var param2: String? = null
 
@@ -51,8 +48,6 @@ class ProfileFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Init session and AuthApi from MainActivity
-        session = (activity as MainActivity).getSession()
-        authApi = (activity as MainActivity).getAuthApi()
 
         // Inflate the layout using ViewBinding
         binding = FragmentProfileBinding.inflate(inflater, container, false)
