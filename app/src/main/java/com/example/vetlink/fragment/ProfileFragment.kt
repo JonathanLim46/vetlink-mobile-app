@@ -14,17 +14,12 @@ import android.view.ViewGroup
 import android.view.Window
 import android.widget.Button
 import android.widget.TextView
-import android.widget.Toast
 import com.example.vetlink.R
-import com.example.vetlink.activity.LoginActivity
 import com.example.vetlink.activity.MainActivity
 import com.example.vetlink.activity.MenuActivity
 import com.example.vetlink.data.network.AuthApi
 import com.example.vetlink.databinding.FragmentProfileBinding
 import com.example.vetlink.helper.Session
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
@@ -90,7 +85,7 @@ class ProfileFragment : Fragment() {
         val dialog = Dialog(requireContext())
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setCancelable(false)
-        dialog.setContentView(R.layout.custom_dialog_layout)
+        dialog.setContentView(R.layout.layout_custom_dialog)
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
         val tvDialogDescription : TextView = dialog.findViewById(R.id.tvDialogDescription)

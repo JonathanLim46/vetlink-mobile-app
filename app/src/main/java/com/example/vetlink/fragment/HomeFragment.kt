@@ -1,7 +1,7 @@
 package com.example.vetlink.fragment
 
-import ClinicList
-import ClinicListAdapter
+import com.example.vetlink.adapter.ClinicList
+import com.example.vetlink.adapter.ClinicListAdapter
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
