@@ -57,6 +57,8 @@ class LoginActivity : AppCompatActivity() {
         session = SessionManager(this)
         loginViewModel.loginResponse.observe(this) { loginResponse ->
             loginResponse?.let {
+                val intent = Intent(this, MainActivity::class.java)
+                startActivity(intent)
                 toast(loginResponse.data.token)
             }
         }
