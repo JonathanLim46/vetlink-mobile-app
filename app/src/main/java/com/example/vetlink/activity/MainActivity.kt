@@ -42,8 +42,8 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
 
         session = Session(this)
-        authApi = RetrofitInstance.getRetrofit(session).create(AuthApi::class.java)
-        userApi = RetrofitInstance.getRetrofit(session).create(UserApi::class.java)
+//        authApi = RetrofitInstance.getRetrofit(session).create(AuthApi::class.java)
+//        userApi = RetrofitInstance.getRetrofit(session).create(UserApi::class.java)
 
         // This block will run after the data has been fetched
         enableEdgeToEdge()
@@ -106,30 +106,30 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun fetchData(){
-        val callUser = userApi.getProfile()
-        callUser.enqueue(object: Callback<ProfileResponse> {
-            override fun onResponse(call: Call<ProfileResponse>, response: Response<ProfileResponse>) {
-                if (response.isSuccessful) {
-                    // Since 'data' is not a list, treat it as a single user object
-                    val user = response.body()?.data
-
-                    if (user != null) {
-                        currentUser = user
-                        // Notify fragments about the user data change
-                        updateFragments()
-                    } else {
-                        Toast.makeText(this@MainActivity, "Data pengguna tidak ditemukan", Toast.LENGTH_SHORT).show()
-                    }
-                } else {
-                    Toast.makeText(this@MainActivity, "Terjadi error saat mengambil data", Toast.LENGTH_SHORT).show()
-                }
-            }
-
-            override fun onFailure(call: Call<ProfileResponse>, t: Throwable) {
-                Toast.makeText(this@MainActivity, "Terjadi error saat mengambil data", Toast.LENGTH_SHORT).show()
-                Log.e("API Error", t.message.toString())  // Log the error message for debugging
-            }
-        })
+//        val callUser = userApi.getProfile()
+//        callUser.enqueue(object: Callback<ProfileResponse> {
+//            override fun onResponse(call: Call<ProfileResponse>, response: Response<ProfileResponse>) {
+//                if (response.isSuccessful) {
+//                    // Since 'data' is not a list, treat it as a single user object
+//                    val user = response.body()?.data
+//
+//                    if (user != null) {
+//                        currentUser = user
+//                        // Notify fragments about the user data change
+//                        updateFragments()
+//                    } else {
+//                        Toast.makeText(this@MainActivity, "Data pengguna tidak ditemukan", Toast.LENGTH_SHORT).show()
+//                    }
+//                } else {
+//                    Toast.makeText(this@MainActivity, "Terjadi error saat mengambil data", Toast.LENGTH_SHORT).show()
+//                }
+//            }
+//
+//            override fun onFailure(call: Call<ProfileResponse>, t: Throwable) {
+//                Toast.makeText(this@MainActivity, "Terjadi error saat mengambil data", Toast.LENGTH_SHORT).show()
+//                Log.e("API Error", t.message.toString())  // Log the error message for debugging
+//            }
+//        })
     }
 
     private fun updateFragments() {
