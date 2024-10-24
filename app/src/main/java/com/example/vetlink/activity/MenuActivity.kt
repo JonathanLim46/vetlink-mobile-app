@@ -19,6 +19,7 @@ import com.example.vetlink.databinding.ActivityMenuBinding
 import com.example.vetlink.fragment.AccountFragment
 import com.example.vetlink.fragment.ChangePasswordFragment
 import com.example.vetlink.fragment.MyPetsFragment
+import com.example.vetlink.fragment.PetDetailsFragment
 import com.example.vetlink.fragment.ProfileFragment
 
 class MenuActivity : AppCompatActivity() {
@@ -53,6 +54,10 @@ class MenuActivity : AppCompatActivity() {
             replaceFragment(AccountFragment())
         } else if (menuTitle == "Change Password"){
             replaceFragment(ChangePasswordFragment())
+        } else if (menuTitle == "My Pets"){
+            replaceFragment(MyPetsFragment())
+        } else if (menuTitle == "Pet Details"){
+            replaceFragment(PetDetailsFragment())
         }
 
         binding.ivBackMenu.setOnClickListener{

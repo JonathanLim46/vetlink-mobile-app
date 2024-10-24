@@ -69,6 +69,12 @@ class ProfileFragment : Fragment() {
                 startActivity(intent)
             }
 
+            myPetsMenu.setOnClickListener{
+                val intent = Intent(activity, MenuActivity::class.java)
+                intent.putExtra("MENU_TITLE", "My Pets")
+                startActivity(intent)
+            }
+
             btnLogout.setOnClickListener {
                 val message : String? = "Are you sure you want to log out ? To Access it again, please log back into your account."
                 showLogoutConfirmationDialog(message)
