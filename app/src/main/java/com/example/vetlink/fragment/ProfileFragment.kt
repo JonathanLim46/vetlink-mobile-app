@@ -9,6 +9,7 @@ import android.text.SpannableString
 import android.text.style.UnderlineSpan
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
+import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
@@ -63,15 +64,25 @@ class ProfileFragment : Fragment() {
 
             tvEmailProfile.text = mSpannableString
 
+            val intent = Intent(activity, MenuActivity::class.java)
+
             ivAccount.setOnClickListener{
-                val intent = Intent(activity, MenuActivity::class.java)
                 intent.putExtra("MENU_TITLE", "Account")
                 startActivity(intent)
             }
 
             myPetsMenu.setOnClickListener{
-                val intent = Intent(activity, MenuActivity::class.java)
                 intent.putExtra("MENU_TITLE", "My Pets")
+                startActivity(intent)
+            }
+
+            scheduleMenu.setOnClickListener{
+                intent.putExtra("MENU_TITLE", "Schedule")
+                startActivity(intent)
+            }
+
+            faqMenu.setOnClickListener{
+                intent.putExtra("MENU_TITLE", "FAQ VetLink")
                 startActivity(intent)
             }
 

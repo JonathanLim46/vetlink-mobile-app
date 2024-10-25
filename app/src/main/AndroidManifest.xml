@@ -15,7 +15,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.VetLink"
         android:usesCleartextTraffic="true"
+        android:hardwareAccelerated="true"
         tools:targetApi="31">
+<!--        windowSoftInput untuk adjust edit text-->
         <activity
             android:name=".activity.MenuActivity"
             android:windowSoftInputMode="adjustPan"
