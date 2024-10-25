@@ -36,7 +36,7 @@ object RetrofitInstance {
     // Create Retrofit instance
     fun getRetrofit(session: SessionManager): Retrofit {
         return Retrofit.Builder()
-            .baseUrl("http://192.168.100.22:8000/api/") // Replace with your base URL
+            .baseUrl("http://192.168.100.69:8000/api/") // Replace with your base URL
             .client(getOkHttpClient(session))
             .addConverterFactory(GsonConverterFactory.create()) // Use Gson for JSON conversion
             .build() // No need for CoroutineCallAdapterFactory

@@ -2,9 +2,14 @@ package com.example.vetlink.repository
 
 import android.se.omapi.Session
 import com.example.vetlink.data.model.auth.LoginResponse
+import com.example.vetlink.data.model.auth.LogoutResponse
+import com.example.vetlink.data.model.user.ProfileResponse
 import com.example.vetlink.data.network.AuthApi
 import com.example.vetlink.data.network.RetrofitInstance
 import com.example.vetlink.helper.SessionManager
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import retrofit2.Response
 
 class AuthRepository(val session: SessionManager) {
 
@@ -14,8 +19,28 @@ class AuthRepository(val session: SessionManager) {
         return authApi.login(email, password)
     }
 
-    suspend fun logout(): Void {
-        return authApi.logout()
+    suspend fun resgister(){
+
+    }
+
+    suspend fun getProfile(): ProfileResponse {
+        return authApi.getProfile()
+    }
+
+    suspend fun logout(): Boolean {
+        return withContext(Dispatchers.IO){
+            try{
+                val logoutResponse = authApi.logout()
+                if (logoutResponse.isSuccessful){
+                    session.clearAuthToken()
+                    true
+                }else {
+                    false
+                }
+            }catch(e: Exception){
+                false
+            }
+        }
     }
 
 }

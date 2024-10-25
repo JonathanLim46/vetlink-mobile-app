@@ -7,87 +7,100 @@ import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.text.SpannableString
 import android.text.style.UnderlineSpan
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
-import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import com.example.vetlink.R
-import com.example.vetlink.activity.MainActivity
+import com.example.vetlink.activity.LoginActivity
 import com.example.vetlink.activity.MenuActivity
-import com.example.vetlink.data.network.AuthApi
 import com.example.vetlink.databinding.FragmentProfileBinding
-import com.example.vetlink.helper.Session
-
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+import com.example.vetlink.helper.SessionManager
+import com.example.vetlink.viewModel.MainActivityViewModel
 
 class ProfileFragment : Fragment() {
 
     private lateinit var binding: FragmentProfileBinding
-    private var param1: String? = null
-    private var param2: String? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    private val sharedMainActivityViewModel: MainActivityViewModel by activityViewModels()
+    private lateinit var session: SessionManager
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Init session and AuthApi from MainActivity
-
-        // Inflate the layout using ViewBinding
         binding = FragmentProfileBinding.inflate(inflater, container, false)
+        session = SessionManager(requireContext())
 
-        // Call initView
         initView()
+        setupObservers()
 
         return binding.root
     }
 
+    private fun setupObservers() {
+        // Observe user data from shared ViewModel
+        sharedMainActivityViewModel.user.observe(viewLifecycleOwner) { user ->
+            if (user != null) {
+                binding.tvUsernameProfile.text = user.name
+                val email = user.email ?: "Email not available"
+                val spannableEmail = SpannableString(email).apply {
+                    setSpan(UnderlineSpan(), 0, length, 0)
+                }
+                binding.tvEmailProfile.text = spannableEmail
+            } else {
+                binding.tvUsernameProfile.text = "User"
+                binding.tvEmailProfile.text = "No email available"
+            }
+        }
+
+        // Observe error messages
+        sharedMainActivityViewModel.errorMessageUser.observe(viewLifecycleOwner) { errorMessage ->
+            errorMessage?.let {
+                Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        sharedMainActivityViewModel.logoutSuccess.observe(viewLifecycleOwner) { success ->
+            if (success){
+                startActivity(Intent(activity, LoginActivity::class.java))
+                activity?.finish()
+            }else{
+                Toast.makeText(requireContext(), "Logout failed. Try again later.", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
     private fun initView() {
-        // Access views via binding and set up your listeners
         with(binding) {
-
-            val email = "mawar132@gmail.com"
-            val mSpannableString = SpannableString(email)
-            mSpannableString.setSpan(UnderlineSpan(), 0, mSpannableString.length, 0)
-
-            tvEmailProfile.text = mSpannableString
-
             val intent = Intent(activity, MenuActivity::class.java)
 
-            ivAccount.setOnClickListener{
+            ivAccount.setOnClickListener {
                 intent.putExtra("MENU_TITLE", "Account")
                 startActivity(intent)
             }
 
-            myPetsMenu.setOnClickListener{
+            myPetsMenu.setOnClickListener {
                 intent.putExtra("MENU_TITLE", "My Pets")
                 startActivity(intent)
             }
 
-            scheduleMenu.setOnClickListener{
+            scheduleMenu.setOnClickListener {
                 intent.putExtra("MENU_TITLE", "Schedule")
                 startActivity(intent)
             }
 
-            faqMenu.setOnClickListener{
+            faqMenu.setOnClickListener {
                 intent.putExtra("MENU_TITLE", "FAQ VetLink")
                 startActivity(intent)
             }
 
             btnLogout.setOnClickListener {
-                val message : String? = "Are you sure you want to log out ? To Access it again, please log back into your account."
+                val message = "Are you sure you want to log out? To access it again, please log back into your account."
                 showLogoutConfirmationDialog(message)
             }
         }
@@ -100,52 +113,20 @@ class ProfileFragment : Fragment() {
         dialog.setContentView(R.layout.layout_custom_dialog)
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
-        val tvDialogDescription : TextView = dialog.findViewById(R.id.tvDialogDescription)
-        val btnYes : Button = dialog.findViewById(R.id.btnDialogLogout)
-        val btnNo : Button = dialog.findViewById(R.id.btnDialogCancel)
+        val tvDialogDescription: TextView = dialog.findViewById(R.id.tvDialogDescription)
+        val btnYes: Button = dialog.findViewById(R.id.btnDialogLogout)
+        val btnNo: Button = dialog.findViewById(R.id.btnDialogCancel)
 
         tvDialogDescription.text = message
 
-        btnYes.setOnClickListener{
-            performLogout()
+        btnYes.setOnClickListener {
+            sharedMainActivityViewModel.performLogout()
+            dialog.dismiss()
         }
-        btnNo.setOnClickListener{
+        btnNo.setOnClickListener {
             dialog.dismiss()
         }
 
         dialog.show()
-
-    }
-
-    private fun performLogout() {
-//        val call = authApi.logout()
-//        call.enqueue(object : Callback<Void> {
-//            override fun onResponse(call: Call<Void>, response: Response<Void>) {
-//                if (response.isSuccessful) {
-//                    // Clear the session and navigate to LoginActivity
-//                    session.clearToken()
-//                    startActivity(Intent(activity, LoginActivity::class.java))
-//                    activity?.finish() // Close the current activity
-//                } else {
-//                    // Handle error response (e.g., show a message)
-//                    Toast.makeText(requireContext(), "Logout failed", Toast.LENGTH_SHORT).show()
-//                }
-//            }
-//
-//            override fun onFailure(call: Call<Void>, t: Throwable) {
-//                Toast.makeText(requireContext(), "Error: ${t.message}", Toast.LENGTH_SHORT).show()
-//            }
-//        })
-    }
-
-    companion object {
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            ProfileFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
     }
 }

@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -15,6 +16,7 @@ import com.example.vetlink.R
 import com.example.vetlink.activity.MainActivity
 import com.example.vetlink.data.model.user.User
 import com.example.vetlink.databinding.FragmentHomeBinding
+import com.example.vetlink.viewModel.MainActivityViewModel
 import java.util.Collections
 
 // TODO: Rename parameter arguments, choose names that match
@@ -23,7 +25,6 @@ private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 private lateinit var clinicList: ArrayList<ClinicList>
 private lateinit var clinicListAdapter: ClinicListAdapter
-private var currentUser: User? = null
 
 /**
  * A simple [Fragment] subclass.
@@ -33,6 +34,8 @@ private var currentUser: User? = null
 class HomeFragment : Fragment() {
 
     private lateinit var binding: FragmentHomeBinding
+
+    private val sharedMainActivityViewModel: MainActivityViewModel by activityViewModels()
 
     // TODO: Rename and change types of parameters
     private var param1: String? = null
@@ -46,33 +49,32 @@ class HomeFragment : Fragment() {
         }
     }
 
-    fun updateUserData(user: User?) {
-        if (user != null) {
-            binding.tvNameHome.text = user.name
-        } else {
-            binding.tvNameHome.text = "Welcome, Guest" // Default text if user is null
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
 
-        //init current user
-        currentUser = (activity as MainActivity).getCurrentUser()
-
         // Inflate the layout for this fragment
         binding = FragmentHomeBinding.inflate(inflater, container, false)
 
         initView()
+        setupObservers()
 
         return binding.root
     }
 
-    @SuppressLint("NotifyDataSetChanged")
-    private fun initView() {
+    private fun setupObservers() {
+        // Observe user data from shared ViewModel
+        sharedMainActivityViewModel.user.observe(viewLifecycleOwner) { user ->
+            if (user != null){
+                binding.tvNameHome.text = user.name
+            }
 
+        }
+    }
+
+    private fun initView() {
         with(binding){
 
             rvClinicList.setHasFixedSize(true)
@@ -91,10 +93,7 @@ class HomeFragment : Fragment() {
                 clinicListAdapter.notifyDataSetChanged()
             }
 
-            // Set the TextView directly using the currentUser variable
-            tvNameHome.text = currentUser?.name ?: "Welcome, Guest"
-
-
+            tvNameHome.text = "Loading.."
         }
     }
 

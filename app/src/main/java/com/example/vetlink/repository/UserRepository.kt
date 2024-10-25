@@ -1,8 +1,10 @@
 package com.example.vetlink.repository
 
 import com.example.vetlink.data.model.auth.LoginResponse
+import com.example.vetlink.data.model.auth.LogoutResponse
 import com.example.vetlink.data.model.user.User
 import com.example.vetlink.data.network.AuthApi
+import retrofit2.Response
 
 class UserRepository(private val authApi: AuthApi) {
 
@@ -14,7 +16,7 @@ class UserRepository(private val authApi: AuthApi) {
         return true
     }
 
-    suspend fun logoutUser(): Void{
+    suspend fun logoutUser(): Response<LogoutResponse>{
         return authApi.logout()
     }
 
