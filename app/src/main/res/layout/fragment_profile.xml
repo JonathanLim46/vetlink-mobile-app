@@ -41,7 +41,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
-            android:text="@string/user_name"
+            android:text="@string/loading"
             android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintStart_toEndOf="@+id/ivPhotoProfile"
@@ -51,7 +51,7 @@
             android:id="@+id/tvEmailProfile"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/email"
+            android:text="@string/loading"
             app:layout_constraintTop_toBottomOf="@+id/tvUsernameProfile"
             app:layout_constraintStart_toStartOf="@+id/tvUsernameProfile"/>
 
