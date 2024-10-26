@@ -8,7 +8,8 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.vetlink.R
 
-class FaqListAdapter(private val faqList: List<FaqList>) : RecyclerView.Adapter<FaqListAdapter.FaqViewHolder>(){
+class FaqListAdapter(private val faqList: List<FaqList>,
+        private val isFaqCategory: Boolean) : RecyclerView.Adapter<FaqListAdapter.FaqViewHolder>(){
 
     class FaqViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
         val faqHeader: TextView = itemView.findViewById(R.id.tvFaqHeader)
@@ -17,7 +18,12 @@ class FaqListAdapter(private val faqList: List<FaqList>) : RecyclerView.Adapter<
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FaqViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.each_item_faq, parent, false)
+        val layoutId = if(isFaqCategory){
+            R.layout.each_item_faq_category_rule
+        } else {
+            R.layout.each_item_faq
+        }
+        val view = LayoutInflater.from(parent.context).inflate(layoutId, parent, false)
         return FaqViewHolder(view)
     }
 

@@ -29,6 +29,7 @@ class FaqCategoryListAdapter(private val faqCategoryList: List<FaqCategoryList>)
         val faqCategoryList = faqCategoryList[position]
         holder.faqIV.setImageResource(faqCategoryList.faqIV)
         holder.faqHeader.text = faqCategoryList.faqHeader
+        holder.itemView.setOnClickListener(faqCategoryList.clickListener)
     }
 
 }
