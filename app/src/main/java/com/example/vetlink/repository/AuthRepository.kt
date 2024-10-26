@@ -3,6 +3,7 @@ package com.example.vetlink.repository
 import android.se.omapi.Session
 import com.example.vetlink.data.model.auth.LoginResponse
 import com.example.vetlink.data.model.auth.LogoutResponse
+import com.example.vetlink.data.model.auth.RegisterResponse
 import com.example.vetlink.data.model.user.ProfileResponse
 import com.example.vetlink.data.network.AuthApi
 import com.example.vetlink.data.network.RetrofitInstance
@@ -19,8 +20,8 @@ class AuthRepository(val session: SessionManager) {
         return authApi.login(email, password)
     }
 
-    suspend fun resgister(){
-
+    suspend fun register(name: String, username: String, email: String, password: String, phoneNumber: String): RegisterResponse {
+        return authApi.register(name, username, email, password, phoneNumber)
     }
 
     suspend fun getProfile(): ProfileResponse {

@@ -34,7 +34,6 @@ class LoginActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityLoginBinding
 
-    private lateinit var authApi: AuthApi
     private lateinit var session: SessionManager
 
     private val loginViewModel: LoginActivityViewModel by viewModels {
@@ -65,11 +64,9 @@ class LoginActivity : AppCompatActivity() {
 
         loginViewModel.errorMessage.observe(this) { message ->
             message?.let {
-                // Handle error
+                toast(message)
             }
         }
-
-        authApi = RetrofitInstance.getRetrofit(session).create(AuthApi::class.java)
 
         initView()
     }
@@ -130,38 +127,6 @@ class LoginActivity : AppCompatActivity() {
                 startActivity(intent)
             }
         }
-    }
-
-    private fun loginUser(email: String, password: String){
-//        val call  = authApi.login(email, password)
-//        call.enqueue(object: Callback<LoginResponse>{
-//            override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
-//                if (response.isSuccessful){
-//                    val loginResponse = response.body()
-//                    loginResponse.let {
-//                        if (it?.status == 200){
-//                            //store token
-//                            it.data.token.let { it1 -> session.setToken(it1) }
-//
-//                            val user = it.data.user
-//                            val intent = Intent(this@LoginActivity, MainActivity::class.java)
-//                            intent.putExtra("user", user)
-//                            startActivity(intent)
-//                            finish()
-//
-//                        }else{
-//                            Toast.makeText(this@LoginActivity, it?.message, Toast.LENGTH_SHORT).show()
-//                        }
-//                    }
-//                }else{
-//                    Toast.makeText(this@LoginActivity, "Login Failed", Toast.LENGTH_SHORT).show()
-//                }
-//            }
-//
-//            override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
-//                Toast.makeText(this@LoginActivity, "Error: ${t.message}", Toast.LENGTH_SHORT).show()
-//            }
-//        })
     }
 
     /*
