@@ -2,7 +2,7 @@ package com.example.vetlink.adapter
 
 import android.view.View
 
-interface RecyclerViewClickListener {
+interface RecyclerViewClickListener<T> {
 
-    fun onItemClicke(view: View, item: PetsList)
+    fun onItemClicke(view: View, item: T)
 }

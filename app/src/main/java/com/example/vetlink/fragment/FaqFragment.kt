@@ -1,5 +1,6 @@
 package com.example.vetlink.fragment
 
+import android.content.Intent
 import android.graphics.Rect
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -9,10 +10,12 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.vetlink.R
+import com.example.vetlink.activity.MenuActivity
 import com.example.vetlink.adapter.FaqCategoryList
 import com.example.vetlink.adapter.FaqCategoryListAdapter
 import com.example.vetlink.adapter.FaqList
 import com.example.vetlink.adapter.FaqListAdapter
+import com.example.vetlink.adapter.RecyclerViewClickListener
 import com.example.vetlink.databinding.FragmentFaqBinding
 
 // TODO: Rename parameter arguments, choose names that match
@@ -25,7 +28,7 @@ private const val ARG_PARAM2 = "param2"
  * Use the [FaqFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class FaqFragment : Fragment() {
+class FaqFragment : Fragment(){
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -63,7 +66,8 @@ class FaqFragment : Fragment() {
             faqList = ArrayList()
             addDataToFaq()
 
-            faqListAdapter = FaqListAdapter(faqList)
+            val isFaqCategory = false
+            faqListAdapter = FaqListAdapter(faqList, isFaqCategory)
             rvFAQ.adapter = faqListAdapter
 
 
@@ -76,9 +80,24 @@ class FaqFragment : Fragment() {
     }
 
     private fun addDataToFAQIV(){
-        faqCategoryList.add(FaqCategoryList(R.drawable.img_guide, "Panduan \n Menggunakan \n Aplikasi"))
-        faqCategoryList.add(FaqCategoryList(R.drawable.img_cancel, "Pembatalan \n Kunjungan \n Klinik"))
-        faqCategoryList.add(FaqCategoryList(R.drawable.img_how_to_post, "Publikasi \n Kehilangan \n Hewan"))
+        faqCategoryList.add(FaqCategoryList(R.drawable.img_guide, "Panduan \n Menggunakan \n Aplikasi",
+            View.OnClickListener {
+                val intent = Intent(activity, MenuActivity::class.java)
+                intent.putExtra("MENU_TITLE", "Panduan Aplikasi")
+                startActivity(intent)
+            }))
+        faqCategoryList.add(FaqCategoryList(R.drawable.img_cancel, "Pembatalan \n Kunjungan \n Klinik",
+            View.OnClickListener {
+                val intent = Intent(activity, MenuActivity::class.java)
+                intent.putExtra("MENU_TITLE", "FAQ Pembatalan")
+                startActivity(intent)
+            }))
+        faqCategoryList.add(FaqCategoryList(R.drawable.img_how_to_post, "Publikasi \n Kehilangan \n Hewan",
+            View.OnClickListener {
+                val intent = Intent(activity, MenuActivity::class.java)
+                intent.putExtra("MENU_TITLE", "FAQ Kehilangan")
+                startActivity(intent)
+            }))
     }
 
     private fun addDataToFaq(){
@@ -126,4 +145,5 @@ class FaqFragment : Fragment() {
                 }
             }
     }
+
 }

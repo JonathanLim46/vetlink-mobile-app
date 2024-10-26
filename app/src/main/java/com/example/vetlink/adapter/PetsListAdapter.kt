@@ -11,7 +11,7 @@ import com.example.vetlink.databinding.FragmentMyPetsBinding
 
 class PetsListAdapter(private val petsList: List<PetsList>) : RecyclerView.Adapter<PetsListAdapter.PetsViewHolder>() {
 
-    var listener: RecyclerViewClickListener? = null
+    private lateinit var listener: RecyclerViewClickListener<PetsList>
 
     class PetsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
         val petsMenu: ImageView = itemView.findViewById(R.id.ivMenuMyPetList)
@@ -22,7 +22,7 @@ class PetsListAdapter(private val petsList: List<PetsList>) : RecyclerView.Adapt
         val petsWeigth : TextView = itemView.findViewById(R.id.tvWeigthPets)
     }
 
-    fun setClickListener(clickListener: RecyclerViewClickListener){
+    fun setClickListener(clickListener: RecyclerViewClickListener<PetsList>){
         this.listener = clickListener
     }
 
