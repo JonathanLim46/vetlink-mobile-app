@@ -20,9 +20,20 @@ class LoginActivityViewModel(private val repository: AuthRepository) : ViewModel
         viewModelScope.launch {
             try {
                 val response = repository.login(identifier, password)
-                loginResponse.postValue(response)
-                repository.session.saveAuthToken(response.data.token)
-                Log.d("API_RESPONSE", "Login successful: $response")
+
+                // Check if the login was successful based on the response
+                if (response.status == 200) {
+                    // Successful login
+                    loginResponse.postValue(response)
+                    response.data.token?.let { token ->
+                        repository.session.saveAuthToken(token)
+                    }
+                    Log.d("API_RESPONSE", "Login successful: $response")
+                } else {
+                    // Handle invalid credentials
+                    errorMessage.postValue(response.message ?: "Invalid credentials")
+                    Log.e("API_ERROR", "Invalid credentials: ${response.message}")
+                }
             } catch (e: ConnectException) {
                 errorMessage.postValue("Unable to connect to the server. Please check your internet connection.")
                 Log.e("API_ERROR", "Network error: ${e.message}")

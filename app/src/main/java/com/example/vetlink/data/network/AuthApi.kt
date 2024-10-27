@@ -27,7 +27,7 @@ interface AuthApi {
     @FormUrlEncoded
     @POST("login")
     suspend fun login(
-        @Field("email") email: String,
+        @Field("identifier") identifier: String,
         @Field("password") password: String
     ): LoginResponse
 
