@@ -10,7 +10,10 @@ import com.example.vetlink.data.network.RetrofitInstance
 import com.example.vetlink.helper.SessionManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Response
 
 class AuthRepository(val session: SessionManager) {
@@ -21,8 +24,13 @@ class AuthRepository(val session: SessionManager) {
         return authApi.login(identifier, password)
     }
 
-    suspend fun register(name: String, username: String, email: String, password: String, phoneNumber: String, photo: MultipartBody.Part?): RegisterResponse {
-        return authApi.register(name, username, email, password, phoneNumber, photo)
+    suspend fun register(name: String, username: String, email: String, password: String, phoneNumber: String, photo: MultipartBody.Part? = null): RegisterResponse {
+        val nameRequestBody = RequestBody.create("text/plain".toMediaTypeOrNull(), name)
+        val usernameRequestBody = RequestBody.create("text/plain".toMediaTypeOrNull(), username)
+        val emailRequestBody = RequestBody.create("text/plain".toMediaTypeOrNull(), email)
+        val passwordRequestBody = RequestBody.create("text/plain".toMediaTypeOrNull(), password)
+        val phoneNumberRequestBody = RequestBody.create("text/plain".toMediaTypeOrNull(), phoneNumber)
+        return authApi.register(nameRequestBody, usernameRequestBody, emailRequestBody, passwordRequestBody, phoneNumberRequestBody, photo)
     }
 
     suspend fun getProfile(): ProfileResponse {
