@@ -1,11 +1,24 @@
 package com.example.vetlink.fragment
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
+import android.util.Log
+import android.view.KeyEvent
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
+import android.widget.TextView
+import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView.LayoutManager
+import com.example.vetlink.R
+import com.example.vetlink.adapter.ClinicList
+import com.example.vetlink.adapter.ClinicListAdapter
 import com.example.vetlink.databinding.FragmentClinicBinding
+import java.util.Locale
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -23,6 +36,9 @@ class ClinicFragment : Fragment() {
     private var param2: String? = null
 
     private lateinit var binding: FragmentClinicBinding
+    private lateinit var allClinicList: ArrayList<ClinicList>
+    private lateinit var clinicList: ArrayList<ClinicList>
+    private lateinit var clinicListAdapter: ClinicListAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,8 +63,85 @@ class ClinicFragment : Fragment() {
 
     fun initView() {
         with(binding){
+            val isClinicPage = true
+
+            rvClinicPage.layoutManager = LinearLayoutManager(requireContext())
+
+            clinicData()
+
+            clinicListAdapter = ClinicListAdapter(clinicList, isClinicPage)
+            clinicListAdapter.notifyDataSetChanged()
+            rvClinicPage.adapter = clinicListAdapter
+
+
+//            searchbar dan searchview
+
+            searchBarClinic.setOnClickListener{
+                searchView.show()
+            }
+
+            searchView.editText.setOnEditorActionListener(object: TextView.OnEditorActionListener{
+                override fun onEditorAction(p0: TextView?, p1: Int, p2: KeyEvent?): Boolean {
+                    val text: String = p0?.text.toString()
+                    searchView.hide()
+                    searchBarClinic.setText(text)
+                    return true
+                }
+
+            })
+
+            searchView.editText.addTextChangedListener(object: TextWatcher{
+                override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+                }
+
+                override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+                }
+
+                override fun afterTextChanged(p0: Editable?) {
+                    filterList(p0.toString())
+                }
+
+            })
+
+
 
         }
+    }
+
+    private fun filterList(query: String){
+        with(binding){
+            clinicList.clear()
+            if(query.isEmpty()){
+                clinicList.addAll(allClinicList)
+            }else {
+                for (clinic in allClinicList){
+                    if (clinic.clinicName.lowercase().contains(query.lowercase())){
+                        clinicList.add(clinic)
+                    }
+                }
+            }
+            clinicListAdapter.notifyDataSetChanged()
+        }
+
+    }
+
+    private fun clinicData(){
+        allClinicList = ArrayList()
+        clinicList = ArrayList()
+
+        addDataToList()
+        clinicList.addAll(allClinicList)
+    }
+
+
+    private fun addDataToList(){
+        allClinicList.add(ClinicList(R.drawable.img_rspets, "Klinik IPB", "Sukmajaya, Depok", "Buka | 07.00 - 15.00"))
+        allClinicList.add(ClinicList(R.drawable.img_rspets, "Klinik IPB", "Sukmajaya, Depok", "Buka | 07.00 - 15.00"))
+        allClinicList.add(ClinicList(R.drawable.img_rspets, "Klinik IPB", "Sukmajaya, Depok", "Buka | 07.00 - 15.00"))
+        allClinicList.add(ClinicList(R.drawable.img_rspets, "Klinik Sukmajaya", "Sukmajaya, Depok", "Buka | 07.00 - 15.00"))
+
     }
 
     companion object {
