@@ -17,6 +17,7 @@ import com.example.vetlink.activity.MainActivity
 import com.example.vetlink.data.model.user.User
 import com.example.vetlink.databinding.FragmentHomeBinding
 import com.example.vetlink.viewModel.MainActivityViewModel
+import com.squareup.picasso.Picasso
 import java.util.Collections
 
 // TODO: Rename parameter arguments, choose names that match
@@ -69,6 +70,9 @@ class HomeFragment : Fragment() {
         sharedMainActivityViewModel.user.observe(viewLifecycleOwner) { user ->
             if (user != null){
                 binding.tvNameHome.text = user.name
+                if (user.photo != null){
+                    Picasso.get().load(user.photo).resize(50, 50).centerCrop().into(binding.ivPhotoHome)
+                }
             }
 
         }
