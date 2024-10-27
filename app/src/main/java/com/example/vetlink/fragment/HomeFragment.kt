@@ -76,6 +76,7 @@ class HomeFragment : Fragment() {
 
     private fun initView() {
         with(binding){
+            val isClinicPage = false
 
             rvClinicList.setHasFixedSize(true)
             rvClinicList.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
@@ -83,7 +84,7 @@ class HomeFragment : Fragment() {
             clinicList = ArrayList()
             addDataToList()
 
-            clinicListAdapter = ClinicListAdapter(clinicList)
+            clinicListAdapter = ClinicListAdapter(clinicList, isClinicPage)
             clinicListAdapter.notifyDataSetChanged()
             rvClinicList.adapter = clinicListAdapter
 

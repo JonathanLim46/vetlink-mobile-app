@@ -8,7 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.vetlink.R
 
-class ClinicListAdapter(private val clinicList : List<ClinicList>) : RecyclerView.Adapter<ClinicListAdapter.ClinicViewHolder>() {
+class ClinicListAdapter(private val clinicList : List<ClinicList>, private val isClinicPage: Boolean) : RecyclerView.Adapter<ClinicListAdapter.ClinicViewHolder>() {
 
     class ClinicViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
         val clinicImageView : ImageView = itemView.findViewById(R.id.ivClinic)
@@ -18,7 +18,12 @@ class ClinicListAdapter(private val clinicList : List<ClinicList>) : RecyclerVie
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ClinicViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.each_item_clinic,parent,false)
+        val layoutId = if(isClinicPage){
+            R.layout.each_item_clinic_main
+        } else {
+            R.layout.each_item_clinic
+        }
+        val view = LayoutInflater.from(parent.context).inflate(layoutId,parent,false)
         return ClinicViewHolder(view)
     }
 
