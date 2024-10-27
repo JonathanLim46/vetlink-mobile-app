@@ -22,6 +22,7 @@ import com.example.vetlink.activity.MenuActivity
 import com.example.vetlink.databinding.FragmentProfileBinding
 import com.example.vetlink.helper.SessionManager
 import com.example.vetlink.viewModel.MainActivityViewModel
+import com.squareup.picasso.Picasso
 
 class ProfileFragment : Fragment() {
 
@@ -48,10 +49,13 @@ class ProfileFragment : Fragment() {
             if (user != null) {
                 binding.tvUsernameProfile.text = user.name
                 val email = user.email ?: "Email not available"
+
                 val spannableEmail = SpannableString(email).apply {
                     setSpan(UnderlineSpan(), 0, length, 0)
                 }
                 binding.tvEmailProfile.text = spannableEmail
+                Picasso.get().load(user.photo).resize(50, 50).centerCrop().into(binding.ivPhotoProfile)
+
             } else {
                 binding.tvUsernameProfile.text = "User"
                 binding.tvEmailProfile.text = "No email available"
