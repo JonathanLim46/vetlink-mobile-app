@@ -1,12 +1,17 @@
 package com.example.vetlink.activity
 
+import android.app.Activity
+import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
+import android.net.Uri
 import android.os.Bundle
 import android.util.Patterns
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.vetlink.R
@@ -16,9 +21,17 @@ import com.example.vetlink.repository.AuthRepository
 import com.example.vetlink.util.toast
 import com.example.vetlink.viewModel.RegisterActivityViewModel
 import com.example.vetlink.viewModel.ViewModelFactory
+import android.Manifest
+import android.content.pm.PackageManager
+import android.util.Log
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import java.io.File
 
 class SignupActivity : AppCompatActivity() {
 
+    private var selectedImageUri: Uri? = null
     private lateinit var binding: ActivitySignupBinding
     private lateinit var session: SessionManager
 
@@ -31,6 +44,7 @@ class SignupActivity : AppCompatActivity() {
         enableEdgeToEdge()
         binding = ActivitySignupBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
@@ -39,13 +53,13 @@ class SignupActivity : AppCompatActivity() {
         session = SessionManager(this)
 
         registerViewModel.registerResponse.observe(this) { registerResponse ->
-            registerResponse?.let { //this code meaning
+            registerResponse?.let {
                 toast(registerResponse.message)
                 finish()
             }
         }
 
-        registerViewModel.errorMessage.observe(this){ message ->
+        registerViewModel.errorMessage.observe(this) { message ->
             message?.let {
                 toast(message)
             }
@@ -55,111 +69,110 @@ class SignupActivity : AppCompatActivity() {
     }
 
     private fun initView() {
-        with(binding){
-            ivBack.setOnClickListener{
+        with(binding) {
+            ivBack.setOnClickListener {
                 finish()
             }
-            tvLogin.setOnClickListener{
+            tvLogin.setOnClickListener {
                 finish()
             }
 
-            btnSignUp.setOnClickListener{
-                val name = etName.text.toString()
-                val username = etUsername.text.toString()
-                val email = etEmail.text.toString()
-                val phone = etPhone.text.toString()
-                val password = etPassword.text.toString()
-                val colorError = ColorStateList.valueOf(Color.RED)
-                var isFormValid = true
-
-                if (name.isEmpty()){
-                    textInputLayoutNameSign.error = "Name is required"
-                    textInputLayoutNameSign.setErrorTextColor(colorError)
-                    textInputLayoutNameSign.setErrorIconTintList(colorError)
-                    etName.requestFocus()
-                    isFormValid = false
-                } else if (name.length <= 3){
-                    textInputLayoutNameSign.error = "Name Must Be More Than 3 Characters"
-                    textInputLayoutNameSign.setErrorTextColor(colorError)
-                    textInputLayoutNameSign.setErrorIconTintList(colorError)
-                    etName.requestFocus()
-                    isFormValid = false
+            ivPhotoSignUp.setOnClickListener {
+                // Check permissions before opening the image chooser
+                if (checkSelfPermission(Manifest.permission.READ_MEDIA_IMAGES) != PackageManager.PERMISSION_GRANTED) {
+                    requestPermissions(arrayOf(Manifest.permission.READ_MEDIA_IMAGES), REQUEST_CODE_IMAGE_PICKER)
                 } else {
-                    textInputLayoutNameSign.error = null
-                    textInputLayoutNameSign.isErrorEnabled = false
+                    openImageChooser()
                 }
+            }
 
-                if (username.isEmpty()){
-                    textInputLayoutUsernameSign.error = "Username is required"
-                    textInputLayoutUsernameSign.setErrorTextColor(colorError)
-                    textInputLayoutUsernameSign.setErrorIconTintList(colorError)
-                    etUsername.requestFocus()
-                    isFormValid = false
-                } else if (username.length <= 3) {
-                    textInputLayoutUsernameSign.error = "Username Must Be More Than 3 Characters"
-                    textInputLayoutUsernameSign.setErrorTextColor(colorError)
-                    textInputLayoutUsernameSign.setErrorIconTintList(colorError)
-                    etUsername.requestFocus()
-                    isFormValid = false
-                } else {
-                    textInputLayoutUsernameSign.error = null
-                    textInputLayoutUsernameSign.isErrorEnabled = false
-                }
-
-                if (email.isEmpty()){
-                    textInputLayoutEmail.error = "Email is required"
-                    textInputLayoutEmail.setErrorTextColor(colorError)
-                    textInputLayoutEmail.setErrorIconTintList(colorError)
-                    etEmail.requestFocus()
-                    isFormValid = false
-                } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-                    textInputLayoutEmail.error = "Email is invalid"
-                    textInputLayoutEmail.setErrorTextColor(colorError)
-                    textInputLayoutEmail.setErrorIconTintList(colorError)
-                    etEmail.requestFocus()
-                    isFormValid = false
-                } else {
-                    textInputLayoutEmail.error = null
-                    textInputLayoutEmail.isErrorEnabled = false
-                }
-
-                if (phone.isEmpty()){
-                    textInputLayoutPhone.error = "Phone number is required"
-                    textInputLayoutPhone.setErrorTextColor(colorError)
-                    textInputLayoutPhone.setErrorIconTintList(colorError)
-                    etPhone.requestFocus()
-                    isFormValid = false
-//                } else if (Patterns.PHONE.matcher(phone).matches()) {
-//                    textInputLayoutPhone.error = "Phone number is invalid"
-//                    textInputLayoutPhone.setErrorTextColor(colorError)
-//                    textInputLayoutPhone.setErrorIconTintList(colorError)
-//                    etPhone.requestFocus()
-                } else {
-                    textInputLayoutPhone.error = null
-                    textInputLayoutPhone.isErrorEnabled = false
-                }
-
-                if (password.isEmpty()){
-                    textInputLayoutPassword.error = "Password is required"
-                    textInputLayoutPassword.setErrorTextColor(colorError)
-                    textInputLayoutPassword.setErrorIconTintList(colorError)
-                    etPassword.requestFocus()
-                    isFormValid = false
-//                } else if (password.length < 3) {
-//                    textInputLayoutPassword.error = "Password is must be more than 3 characters"
-//                    textInputLayoutPassword.setErrorTextColor(colorError)
-//                    textInputLayoutPassword.setErrorIconTintList(colorError)
-//                    etPassword.requestFocus()
-                } else {
-                    textInputLayoutPassword.error = null
-                    textInputLayoutPassword.isErrorEnabled = false
-                }
-
-                if (isFormValid){
-                    registerViewModel.registerUser(name, username, email, password, phone)
-                }
-
+            btnSignUp.setOnClickListener {
+                validateFormAndRegister()
             }
         }
+    }
+
+    private fun validateFormAndRegister() {
+        val name = binding.etName.text.toString()
+        val username = binding.etUsername.text.toString()
+        val email = binding.etEmail.text.toString()
+        val phone = binding.etPhone.text.toString()
+        val password = binding.etPassword.text.toString()
+        val colorError = ColorStateList.valueOf(Color.RED)
+        var isFormValid = true
+
+        if (name.isEmpty()) {
+            binding.textInputLayoutNameSign.error = "Name is required"
+            binding.textInputLayoutNameSign.setErrorTextColor(colorError)
+            binding.textInputLayoutNameSign.setErrorIconTintList(colorError)
+            binding.etName.requestFocus()
+            isFormValid = false
+        } else if (name.length <= 3) {
+            binding.textInputLayoutNameSign.error = "Name Must Be More Than 3 Characters"
+            binding.textInputLayoutNameSign.setErrorTextColor(colorError)
+            binding.textInputLayoutNameSign.setErrorIconTintList(colorError)
+            binding.etName.requestFocus()
+            isFormValid = false
+        } else {
+            binding.textInputLayoutNameSign.error = null
+            binding.textInputLayoutNameSign.isErrorEnabled = false
+        }
+
+        if (isFormValid) {
+            val photoPart: MultipartBody.Part? = selectedImageUri?.let { uri ->
+                val filePath = getFilePathFromUri(uri) // Get the file path from URI
+                val file = File(filePath) // Handle the file path correctly
+                val requestFile = RequestBody.create("image/*".toMediaTypeOrNull(), file)
+                MultipartBody.Part.createFormData("photo", file.name, requestFile)
+            }
+            registerViewModel.registerUser(name, username, email, password, phone, photoPart)
+        }
+    }
+
+    private fun getFilePathFromUri(uri: Uri): String? {
+        val cursor = contentResolver.query(uri, arrayOf(android.provider.MediaStore.Images.Media.DATA), null, null, null)
+        return cursor?.use {
+            if (it.moveToFirst()) {
+                val columnIndex = it.getColumnIndex(android.provider.MediaStore.Images.Media.DATA)
+                it.getString(columnIndex)
+            } else {
+                null
+            }
+        }
+    }
+
+    private fun openImageChooser() {
+        Intent(Intent.ACTION_PICK).also {
+            it.type = "image/*"
+            it.putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("image/jpeg", "image/jpg", "image/png"))
+            startActivityForResult(it, REQUEST_CODE_IMAGE_PICKER)
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE_IMAGE_PICKER) {
+            selectedImageUri = data?.data
+            selectedImageUri?.let { uri ->
+                // Set the selected image URI to the ImageView
+                binding.ivPhotoSignUp.setImageURI(uri)
+            }
+        }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == REQUEST_CODE_IMAGE_PICKER) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permission granted, open the image chooser
+                openImageChooser()
+            } else {
+                toast("Permission denied to access images.")
+            }
+        }
+    }
+
+    companion object {
+        const val REQUEST_CODE_IMAGE_PICKER = 101
     }
 }
