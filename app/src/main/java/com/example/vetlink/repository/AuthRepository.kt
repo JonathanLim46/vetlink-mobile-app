@@ -10,18 +10,19 @@ import com.example.vetlink.data.network.RetrofitInstance
 import com.example.vetlink.helper.SessionManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import okhttp3.MultipartBody
 import retrofit2.Response
 
 class AuthRepository(val session: SessionManager) {
 
     private val authApi: AuthApi = RetrofitInstance.getRetrofit(session).create(AuthApi::class.java)
 
-    suspend fun login(email: String, password: String): LoginResponse {
-        return authApi.login(email, password)
+    suspend fun login(identifier: String, password: String): LoginResponse {
+        return authApi.login(identifier, password)
     }
 
-    suspend fun register(name: String, username: String, email: String, password: String, phoneNumber: String): RegisterResponse {
-        return authApi.register(name, username, email, password, phoneNumber)
+    suspend fun register(name: String, username: String, email: String, password: String, phoneNumber: String, photo: MultipartBody.Part?): RegisterResponse {
+        return authApi.register(name, username, email, password, phoneNumber, photo)
     }
 
     suspend fun getProfile(): ProfileResponse {

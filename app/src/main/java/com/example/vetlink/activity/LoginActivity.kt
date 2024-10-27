@@ -75,28 +75,22 @@ class LoginActivity : AppCompatActivity() {
         with(binding){
 
             btnLogin.setOnClickListener{
-                val email = etEmail.text.toString()
+                val identifier = etIdentifier.text.toString()
                 val password = etPassword.text.toString()
 
                 val colorError = ColorStateList.valueOf(Color.RED)
 
 
                 //check if email is empty
-                if (email.isEmpty()){
-                    textInputLayoutEmailLog.error = "Email is required"
-                    textInputLayoutEmailLog.setErrorTextColor(colorError)
-                    textInputLayoutEmailLog.setErrorIconTintList(colorError)
-                    etEmail.requestFocus()
-                    return@setOnClickListener
-                } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-                    textInputLayoutEmailLog.error = "Email is invalid"
-                    textInputLayoutEmailLog.setErrorTextColor(colorError)
-                    textInputLayoutEmailLog.setErrorIconTintList(colorError)
-                    etEmail.requestFocus()
+                if (identifier.isEmpty()){
+                    textInputLayoutIdentifierLog.error = "Email is required"
+                    textInputLayoutIdentifierLog.setErrorTextColor(colorError)
+                    textInputLayoutIdentifierLog.setErrorIconTintList(colorError)
+                    etIdentifier.requestFocus()
                     return@setOnClickListener
                 } else {
-                    textInputLayoutEmailLog.error = null
-                    textInputLayoutEmailLog.isErrorEnabled = false
+                    textInputLayoutIdentifierLog.error = null
+                    textInputLayoutIdentifierLog.isErrorEnabled = false
                 }
 
                 //check if password is empty
@@ -106,19 +100,12 @@ class LoginActivity : AppCompatActivity() {
                     textInputLayoutPasswordLog.setErrorIconTintList(colorError)
                     etPassword.requestFocus()
                     return@setOnClickListener
-//                } else if (password.length < 7){
-//                    textInputLayoutPasswordLog.error = "Password must be minimum 8 characters"
-//                    textInputLayoutPasswordLog.setErrorTextColor(ColorStateList.valueOf(Color.RED))
-//                    textInputLayoutPasswordLog.setErrorIconTintList(ColorStateList.valueOf(Color.RED))
-//                    etPassword.requestFocus()
-//                    return@setOnClickListener
                 } else{
                     textInputLayoutPasswordLog.error = null
                     textInputLayoutPasswordLog.isErrorEnabled = false
                 }
 
-                loginViewModel.loginUser(email, password)
-//                loginUser(email, password)
+                loginViewModel.loginUser(identifier, password)
 
             }
 
