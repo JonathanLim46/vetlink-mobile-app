@@ -54,7 +54,11 @@ class ProfileFragment : Fragment() {
                     setSpan(UnderlineSpan(), 0, length, 0)
                 }
                 binding.tvEmailProfile.text = spannableEmail
-                Picasso.get().load(user.photo).resize(50, 50).centerCrop().into(binding.ivPhotoProfile)
+                if (user.photo != null) {
+                    Picasso.get().load(user.photo).resize(50, 50).centerCrop().into(binding.ivPhotoProfile)
+                }else{
+                    binding.ivPhotoProfile.setImageResource(R.drawable.default_profile)
+                }
 
             } else {
                 binding.tvUsernameProfile.text = "User"

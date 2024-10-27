@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.vetlink.data.model.auth.LoginResponse
 import com.example.vetlink.repository.AuthRepository
 import kotlinx.coroutines.launch
+import org.intellij.lang.annotations.Identifier
 import java.net.ConnectException
 import java.net.SocketTimeoutException
 
@@ -15,10 +16,10 @@ class LoginActivityViewModel(private val repository: AuthRepository) : ViewModel
     val loginResponse = MutableLiveData<LoginResponse>()
     val errorMessage = MutableLiveData<String>()
 
-    fun loginUser(email: String, password: String) {
+    fun loginUser(identifier: String, password: String) {
         viewModelScope.launch {
             try {
-                val response = repository.login(email, password)
+                val response = repository.login(identifier, password)
                 loginResponse.postValue(response)
                 repository.session.saveAuthToken(response.data.token)
                 Log.d("API_RESPONSE", "Login successful: $response")

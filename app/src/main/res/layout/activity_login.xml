@@ -29,7 +29,7 @@
             />
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/textInputLayoutEmailLog"
+            android:id="@+id/textInputLayoutIdentifierLog"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColorHint="@color/hintColor"
@@ -37,17 +37,17 @@
             app:errorEnabled="true">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etEmail"
+                android:id="@+id/etIdentifier"
                 android:layout_width="match_parent"
                 android:layout_height="52dp"
                 android:inputType="textEmailAddress"
                 android:paddingStart="20dp"
                 android:paddingEnd="20dp"
                 android:background="@drawable/rounded_edittext"
-                android:drawableStart="@drawable/iconemail"
+                android:drawableStart="@drawable/iconuserlogin"
                 android:drawableTint="@color/white"
                 android:drawablePadding="20dp"
-                android:hint="Email"
+                android:hint="Email or Username"
                 android:textColor="@color/white"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

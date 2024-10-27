@@ -72,6 +72,8 @@ class HomeFragment : Fragment() {
                 binding.tvNameHome.text = user.name
                 if (user.photo != null){
                     Picasso.get().load(user.photo).resize(50, 50).centerCrop().into(binding.ivPhotoHome)
+                }else{
+                    binding.ivPhotoHome.setImageResource(R.drawable.default_profile)
                 }
             }
 
