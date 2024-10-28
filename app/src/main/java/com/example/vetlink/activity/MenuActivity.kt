@@ -43,7 +43,7 @@ class MenuActivity : AppCompatActivity() {
 
     @SuppressLint("MissingInflatedId")
     private fun initView(){
-        var menuTitle = intent.getStringExtra("MENU_TITLE")
+        val menuTitle = intent.getStringExtra("MENU_TITLE")
         binding.tvMenu.text = menuTitle ?: "Menu"
 
         if (menuTitle == "Account"){

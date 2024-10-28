@@ -1,5 +1,6 @@
 package com.example.vetlink.fragment
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -15,6 +16,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView.LayoutManager
 import com.example.vetlink.R
+import com.example.vetlink.activity.MenuActivity
 import com.example.vetlink.adapter.ClinicList
 import com.example.vetlink.adapter.ClinicListAdapter
 import com.example.vetlink.databinding.FragmentClinicBinding

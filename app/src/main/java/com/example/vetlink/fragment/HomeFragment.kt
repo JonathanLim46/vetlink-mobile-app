@@ -1,6 +1,7 @@
 package com.example.vetlink.fragment
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import com.example.vetlink.adapter.ClinicList
 import com.example.vetlink.adapter.ClinicListAdapter
 import android.os.Bundle
@@ -101,8 +102,23 @@ class HomeFragment : Fragment() {
             }
 
             tvNameHome.text = "Loading.."
+
+//            View More
+            tvViewMoreClinic.setOnClickListener{
+                val intent = Intent(activity, MainActivity::class.java)
+                intent.putExtra("fragment", "clinicFragment")
+                startActivity(intent)
+            }
+
+            tvViewMoreForum.setOnClickListener{
+                val intent = Intent(activity, MainActivity::class.java)
+                intent.putExtra("fragment", "forumFragment")
+                startActivity(intent)
+            }
+
         }
     }
+
 
     companion object {
         /**
