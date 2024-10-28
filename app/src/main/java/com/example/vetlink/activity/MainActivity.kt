@@ -73,6 +73,16 @@ class MainActivity : AppCompatActivity() {
             true
         }
 
+//        View More
+        val viewMore = intent.getStringExtra("fragment")
+        if (viewMore == "clinicFragment"){
+            binding.bottomNavigation.selectedItemId = R.id.clinicPage
+            replaceFragment(ClinicFragment())
+        } else if (viewMore == "forumFragment"){
+            binding.bottomNavigation.selectedItemId = R.id.forumPage
+            replaceFragment(ForumFragment())
+        }
+
         observeViewModel()
     }
 
