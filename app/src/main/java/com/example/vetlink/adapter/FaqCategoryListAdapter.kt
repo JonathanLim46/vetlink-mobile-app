@@ -10,10 +10,16 @@ import com.example.vetlink.R
 
 class FaqCategoryListAdapter(private val faqCategoryList: List<FaqCategoryList>) : RecyclerView.Adapter<FaqCategoryListAdapter.FaqCategoryViewHolder>() {
 
+    private lateinit var listener: RecyclerViewClickListener<FaqCategoryList>
+
     class FaqCategoryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
         val faqIV: ImageView = itemView.findViewById(R.id.ivFAQ)
         val faqHeader: TextView = itemView.findViewById(R.id.tvFAQCategory)
 
+    }
+
+    fun clickListener(clickListener: RecyclerViewClickListener<FaqCategoryList>){
+        this.listener = clickListener
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FaqCategoryViewHolder {
@@ -29,7 +35,9 @@ class FaqCategoryListAdapter(private val faqCategoryList: List<FaqCategoryList>)
         val faqCategoryList = faqCategoryList[position]
         holder.faqIV.setImageResource(faqCategoryList.faqIV)
         holder.faqHeader.text = faqCategoryList.faqHeader
-        holder.itemView.setOnClickListener(faqCategoryList.clickListener)
+        holder.itemView.setOnClickListener{
+            listener?.onItemClicke(it, faqCategoryList)
+        }
     }
 
 }
