@@ -8,7 +8,7 @@
     android:clickable="true"
     android:focusable="true"
     android:orientation="vertical"
-    android:background="@drawable/card_border_second">
+    android:background="@drawable/layout_border_card_second">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -52,7 +52,7 @@
             android:textSize="11sp"
             android:fontFamily="sans-serif-light"
             android:drawablePadding="5dp"
-            app:drawableStartCompat="@drawable/iconlocation"
+            app:drawableStartCompat="@drawable/icon_location"
             app:drawableTint="@color/lightwhite"
             app:layout_constraintTop_toBottomOf="@+id/tvCardClinicName"
             app:layout_constraintStart_toStartOf="@+id/tvCardClinicName"
@@ -68,7 +68,7 @@
             android:textSize="11sp"
             android:fontFamily="sans-serif-light"
             android:drawablePadding="5dp"
-            app:drawableStartCompat="@drawable/iconhistory"
+            app:drawableStartCompat="@drawable/icon_history"
             app:drawableTint="@color/lightwhite"
             app:layout_constraintTop_toBottomOf="@+id/tvClinicLocation"
             app:layout_constraintBottom_toBottomOf="parent"

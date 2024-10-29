@@ -10,6 +10,8 @@ import com.example.vetlink.R
 
 class ClinicListAdapter(private val clinicList : List<ClinicList>, private val isClinicPage: Boolean) : RecyclerView.Adapter<ClinicListAdapter.ClinicViewHolder>() {
 
+    private lateinit var listener: RecyclerViewClickListener<ClinicList>
+
     class ClinicViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
         val clinicImageView : ImageView = itemView.findViewById(R.id.ivClinic)
         val clinicNameTv : TextView = itemView.findViewById(R.id.tvCardClinicName)
@@ -17,11 +19,15 @@ class ClinicListAdapter(private val clinicList : List<ClinicList>, private val i
         val clinicTimeOpenTv : TextView = itemView.findViewById(R.id.tvClinicTimeOpen)
     }
 
+    fun clickListener(clickListener: RecyclerViewClickListener<ClinicList>){
+        this.listener = clickListener
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ClinicViewHolder {
         val layoutId = if(isClinicPage){
             R.layout.each_item_clinic_main
         } else {
-            R.layout.each_item_clinic
+            R.layout.each_item_clinic_home
         }
         val view = LayoutInflater.from(parent.context).inflate(layoutId,parent,false)
         return ClinicViewHolder(view)
@@ -37,5 +43,9 @@ class ClinicListAdapter(private val clinicList : List<ClinicList>, private val i
         holder.clinicNameTv.text = clinicList.clinicName
         holder.clinicLocationTv.text = clinicList.clinicLocation
         holder.clinicTimeOpenTv.text = clinicList.clinicTimeOpen
+
+        holder.itemView.setOnClickListener{
+            listener?.onItemClicke(it, clinicList)
+        }
     }
 }

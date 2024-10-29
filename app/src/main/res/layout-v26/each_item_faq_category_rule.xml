@@ -13,7 +13,7 @@
         android:textSize="14sp"
         android:textStyle="bold"
         android:textColor="@color/white"
-        android:background="@drawable/border_text"
+        android:background="@drawable/layout_border_text"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
     />

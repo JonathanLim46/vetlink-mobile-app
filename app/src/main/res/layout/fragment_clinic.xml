@@ -31,19 +31,27 @@
             android:hint="Search Clinic"
             style="@style/CustomSearchViewStyle"
             app:layout_anchor="@+id/searchBarClinic"
-            app:layout_constraintTop_toTopOf="parent"
-            />
+            app:layout_constraintTop_toTopOf="parent">
+
+<!--            <androidx.recyclerview.widget.RecyclerView-->
+<!--                android:id="@+id/rvSearchView"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                />-->
+
+        </com.google.android.material.search.SearchView>
 
         <TextView
             android:id="@+id/tvLocationClinic"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="25dp"
+            android:layout_marginEnd="15dp"
             android:text="DEPOK"
-            android:textSize="21sp"
+            android:textSize="16sp"
             android:textStyle="bold"
             android:drawablePadding="5dp"
-            app:drawableRightCompat="@drawable/icongps"
+            android:drawableTint="@color/purple"
+            app:drawableRightCompat="@drawable/icon_gps"
             app:layout_constraintHorizontal_bias="1"
             app:layout_constraintStart_toEndOf="@+id/searchBarClinic"
             app:layout_constraintEnd_toEndOf="parent"

@@ -1,6 +1,6 @@
 package com.example.vetlink.fragment
 
-import android.annotation.SuppressLint
+import android.content.Intent
 import com.example.vetlink.adapter.ClinicList
 import com.example.vetlink.adapter.ClinicListAdapter
 import android.os.Bundle
@@ -11,14 +11,12 @@ import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.vetlink.R
 import com.example.vetlink.activity.MainActivity
-import com.example.vetlink.data.model.user.User
+import com.example.vetlink.adapter.RecyclerViewClickListener
 import com.example.vetlink.databinding.FragmentHomeBinding
 import com.example.vetlink.viewModel.MainActivityViewModel
 import com.squareup.picasso.Picasso
-import java.util.Collections
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -32,7 +30,7 @@ private lateinit var clinicListAdapter: ClinicListAdapter
  * Use the [HomeFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class HomeFragment : Fragment() {
+class HomeFragment : Fragment(), RecyclerViewClickListener<ClinicList> {
 
     private lateinit var binding: FragmentHomeBinding
 
@@ -73,7 +71,7 @@ class HomeFragment : Fragment() {
                 if (user.photo != null){
                     Picasso.get().load(user.photo).resize(50, 50).centerCrop().into(binding.ivPhotoHome)
                 }else{
-                    binding.ivPhotoHome.setImageResource(R.drawable.default_profile)
+                    binding.ivPhotoHome.setImageResource(R.drawable.img_default_profile)
                 }
             }
 
@@ -94,6 +92,8 @@ class HomeFragment : Fragment() {
             clinicListAdapter.notifyDataSetChanged()
             rvClinicList.adapter = clinicListAdapter
 
+            clinicListAdapter.clickListener(this@HomeFragment)
+
             srlList.setOnRefreshListener {
 
                 srlList.isRefreshing = false
@@ -101,8 +101,23 @@ class HomeFragment : Fragment() {
             }
 
             tvNameHome.text = "Loading.."
+
+//            View More
+            tvViewMoreClinic.setOnClickListener{
+                val intent = Intent(activity, MainActivity::class.java)
+                intent.putExtra("fragment", "clinicFragment")
+                startActivity(intent)
+            }
+
+            tvViewMoreForum.setOnClickListener{
+                val intent = Intent(activity, MainActivity::class.java)
+                intent.putExtra("fragment", "forumFragment")
+                startActivity(intent)
+            }
+
         }
     }
+
 
     companion object {
         /**
@@ -125,9 +140,11 @@ class HomeFragment : Fragment() {
     }
 
     private fun addDataToList(){
-        clinicList.add(ClinicList(R.drawable.img_rspets, "Klinik IPB", "Sukmajaya, Depok", "Buka | 07.00 - 15.00"))
-        clinicList.add(ClinicList(R.drawable.img_rspets, "Klinik IPB", "Sukmajaya, Depok", "Buka | 07.00 - 15.00"))
-        clinicList.add(ClinicList(R.drawable.img_rspets, "Klinik IPB", "Sukmajaya, Depok", "Buka | 07.00 - 15.00"))
-        clinicList.add(ClinicList(R.drawable.img_rspets, "Klinik IPB", "Sukmajaya, Depok", "Buka | 07.00 - 15.00"))
+        clinicList.add(ClinicList(R.drawable.img_rspets, "Klinik IPB",
+            "Sukmajaya, Depok", "Buka | 07.00 - 15.00"))
+    }
+
+    override fun onItemClicke(view: View, item: ClinicList) {
+
     }
 }

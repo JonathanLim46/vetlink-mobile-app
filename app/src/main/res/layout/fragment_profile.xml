@@ -64,7 +64,7 @@
             android:clickable="true"
             android:focusable="true"
             android:contentDescription="button"
-            android:src="@drawable/iconedit"
+            android:src="@drawable/icon_edit"
             app:layout_constraintEnd_toEndOf="@+id/myPetsMenu"
             app:layout_constraintTop_toTopOf="@+id/tvUsernameProfile" />
 
@@ -112,7 +112,7 @@
                 android:focusable="true"
                 android:contentDescription="button"
                 android:scaleX="-1"
-                android:src="@drawable/iconback"
+                android:src="@drawable/icon_back"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@id/tvMyPets" />
 
@@ -160,7 +160,7 @@
                 android:focusable="true"
                 android:contentDescription="buttonFAQ"
                 android:scaleX="-1"
-                android:src="@drawable/iconback"
+                android:src="@drawable/icon_back"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@id/tvSchedule" />
 
@@ -208,7 +208,7 @@
                 android:focusable="true"
                 android:contentDescription="buttonFAQ"
                 android:scaleX="-1"
-                android:src="@drawable/iconback"
+                android:src="@drawable/icon_back"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@id/tvFAQ" />
 

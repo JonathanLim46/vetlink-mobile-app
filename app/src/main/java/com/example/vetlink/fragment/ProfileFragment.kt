@@ -57,7 +57,7 @@ class ProfileFragment : Fragment() {
                 if (user.photo != null) {
                     Picasso.get().load(user.photo).resize(50, 50).centerCrop().into(binding.ivPhotoProfile)
                 }else{
-                    binding.ivPhotoProfile.setImageResource(R.drawable.default_profile)
+                    binding.ivPhotoProfile.setImageResource(R.drawable.img_default_profile)
                 }
 
             } else {
@@ -120,7 +120,7 @@ class ProfileFragment : Fragment() {
         val dialog = Dialog(requireContext())
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setCancelable(false)
-        dialog.setContentView(R.layout.layout_custom_dialog)
+        dialog.setContentView(R.layout.layout_center_logout_dialog)
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
         val tvDialogDescription: TextView = dialog.findViewById(R.id.tvDialogDescription)

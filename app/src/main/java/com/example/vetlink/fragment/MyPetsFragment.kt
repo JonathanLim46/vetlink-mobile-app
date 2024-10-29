@@ -67,7 +67,7 @@ class MyPetsFragment : Fragment(), RecyclerViewClickListener<PetsList>, PetsCate
         val secondLine = viewLayout.findViewById<TextView>(R.id.tvSecondLineDialog)
 
         firstLine.text = "Edit Pet"
-        firstLine.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.iconedit, 0, 0, 0)
+        firstLine.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.icon_edit, 0, 0, 0)
         secondLine.text = "Delete Pet"
 
         if (viewLayout.parent != null) {

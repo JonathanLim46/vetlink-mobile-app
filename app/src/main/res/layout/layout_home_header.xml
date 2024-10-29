@@ -10,7 +10,7 @@
         android:id="@+id/layerSatu"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/card_border_main"
+        android:background="@drawable/layout_border_card_main"
         app:layout_constraintTop_toTopOf="parent"
 
         >
@@ -27,7 +27,7 @@
             android:layout_marginStart="25dp"
             android:layout_marginEnd="25dp"
             android:layout_marginBottom="40dp"
-            android:background="@drawable/card_border_second"
+            android:background="@drawable/layout_border_card_second"
             >
 
             <LinearLayout
@@ -95,7 +95,7 @@
                     android:text="Mbal"
                     android:textSize="11sp"
                     android:fontFamily="sans-serif-light"
-                    app:drawableLeftCompat="@drawable/iconpets"
+                    app:drawableLeftCompat="@drawable/icon_pets"
                     android:drawablePadding="5dp"
                     />
 
@@ -107,7 +107,7 @@
                     android:text="Klinik Hewan IPB"
                     android:textSize="11sp"
                     android:fontFamily="sans-serif-light"
-                    app:drawableLeftCompat="@drawable/iconlocation"
+                    app:drawableLeftCompat="@drawable/icon_location"
                     android:drawablePadding="5dp"
                     />
 

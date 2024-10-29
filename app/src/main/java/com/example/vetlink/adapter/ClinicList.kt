@@ -1,5 +1,7 @@
 package com.example.vetlink.adapter
 
+import android.view.View.OnClickListener
+
 data class ClinicList(
     val clinicImage:Int,
     val clinicName: String,
