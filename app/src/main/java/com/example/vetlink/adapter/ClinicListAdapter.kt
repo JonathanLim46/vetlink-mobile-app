@@ -10,11 +10,17 @@ import com.example.vetlink.R
 
 class ClinicListAdapter(private val clinicList : List<ClinicList>, private val isClinicPage: Boolean) : RecyclerView.Adapter<ClinicListAdapter.ClinicViewHolder>() {
 
+    private lateinit var listener: RecyclerViewClickListener<ClinicList>
+
     class ClinicViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
         val clinicImageView : ImageView = itemView.findViewById(R.id.ivClinic)
         val clinicNameTv : TextView = itemView.findViewById(R.id.tvCardClinicName)
         val clinicLocationTv : TextView = itemView.findViewById(R.id.tvClinicLocation)
         val clinicTimeOpenTv : TextView = itemView.findViewById(R.id.tvClinicTimeOpen)
+    }
+
+    fun clickListener(clickListener: RecyclerViewClickListener<ClinicList>){
+        this.listener = clickListener
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ClinicViewHolder {
@@ -38,6 +44,8 @@ class ClinicListAdapter(private val clinicList : List<ClinicList>, private val i
         holder.clinicLocationTv.text = clinicList.clinicLocation
         holder.clinicTimeOpenTv.text = clinicList.clinicTimeOpen
 
-        holder.itemView.setOnClickListener(clinicList.clickListener)
+        holder.itemView.setOnClickListener{
+            listener?.onItemClicke(it, clinicList)
+        }
     }
 }

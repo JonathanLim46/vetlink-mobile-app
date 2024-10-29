@@ -5,5 +5,5 @@ import android.view.View
 data class FaqCategoryList(
     val faqIV: Int,
     val faqHeader: String,
-    val clickListener: View.OnClickListener
+    val faqContext: String
 )

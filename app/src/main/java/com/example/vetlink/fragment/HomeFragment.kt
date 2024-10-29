@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.vetlink.R
 import com.example.vetlink.activity.MainActivity
+import com.example.vetlink.adapter.RecyclerViewClickListener
 import com.example.vetlink.data.model.user.User
 import com.example.vetlink.databinding.FragmentHomeBinding
 import com.example.vetlink.viewModel.MainActivityViewModel
@@ -33,7 +34,7 @@ private lateinit var clinicListAdapter: ClinicListAdapter
  * Use the [HomeFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class HomeFragment : Fragment() {
+class HomeFragment : Fragment(), RecyclerViewClickListener<ClinicList> {
 
     private lateinit var binding: FragmentHomeBinding
 
@@ -95,6 +96,8 @@ class HomeFragment : Fragment() {
             clinicListAdapter.notifyDataSetChanged()
             rvClinicList.adapter = clinicListAdapter
 
+            clinicListAdapter.clickListener(this@HomeFragment)
+
             srlList.setOnRefreshListener {
 
                 srlList.isRefreshing = false
@@ -142,9 +145,10 @@ class HomeFragment : Fragment() {
 
     private fun addDataToList(){
         clinicList.add(ClinicList(R.drawable.img_rspets, "Klinik IPB",
-            "Sukmajaya, Depok", "Buka | 07.00 - 15.00",
-            View.OnClickListener {
+            "Sukmajaya, Depok", "Buka | 07.00 - 15.00"))
+    }
 
-            }))
+    override fun onItemClicke(view: View, item: ClinicList) {
+
     }
 }

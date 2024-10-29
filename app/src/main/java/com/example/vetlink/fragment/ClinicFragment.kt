@@ -21,6 +21,7 @@ import com.example.vetlink.R
 import com.example.vetlink.activity.MenuActivity
 import com.example.vetlink.adapter.ClinicList
 import com.example.vetlink.adapter.ClinicListAdapter
+import com.example.vetlink.adapter.RecyclerViewClickListener
 import com.example.vetlink.databinding.FragmentClinicBinding
 import java.util.Locale
 
@@ -34,7 +35,7 @@ private const val ARG_PARAM2 = "param2"
  * Use the [ClinicFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class ClinicFragment : Fragment() {
+class ClinicFragment : Fragment(), RecyclerViewClickListener<ClinicList>{
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -75,8 +76,9 @@ class ClinicFragment : Fragment() {
 
             clinicListAdapter = ClinicListAdapter(clinicList, isClinicPage)
             clinicListAdapter.notifyDataSetChanged()
-            rvClinicPage.adapter = clinicListAdapter
 
+            rvClinicPage.adapter = clinicListAdapter
+            clinicListAdapter.clickListener(this@ClinicFragment)
 
 //            searchbar dan searchview
 
@@ -146,16 +148,17 @@ class ClinicFragment : Fragment() {
 
 
     private fun addDataToList(){
-        val intent = Intent(activity, MenuActivity::class.java)
-        intent.putExtra("MENU_TITLE", "Clinic")
 
         allClinicList.add(ClinicList(R.drawable.img_rspets, "Klinik IPB",
-            "Sukmajaya, Depok", "Buka | 07.00 - 15.00",
-            View.OnClickListener {
-                startActivity(intent)
-            }))
+            "Sukmajaya, Depok", "Buka | 07.00 - 15.00"))
 
 
+    }
+
+    override fun onItemClicke(view: View, item: ClinicList) {
+        val intent = Intent(activity, MenuActivity::class.java)
+        intent.putExtra("MENU_TITLE", "Clinic")
+        startActivity(intent)
     }
 
     companion object {
@@ -177,4 +180,6 @@ class ClinicFragment : Fragment() {
                 }
             }
     }
+
+
 }
