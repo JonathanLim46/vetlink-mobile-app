@@ -42,7 +42,7 @@
             android:text="Babakan, Kota Bogor"
             android:textSize="12sp"
             android:drawablePadding="5dp"
-            app:drawableLeftCompat="@drawable/iconlocation"
+            app:drawableLeftCompat="@drawable/icon_location"
             app:layout_constraintTop_toBottomOf="@+id/tvCardClinicName"
             app:layout_constraintStart_toStartOf="parent"
             />
@@ -57,7 +57,7 @@
             android:text="Buka | 10.00 - 17.30"
             android:textSize="12sp"
             android:drawablePadding="5dp"
-            app:drawableLeftCompat="@drawable/iconhistory"
+            app:drawableLeftCompat="@drawable/icon_history"
             app:layout_constraintTop_toBottomOf="@+id/tvClinicLocation"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"

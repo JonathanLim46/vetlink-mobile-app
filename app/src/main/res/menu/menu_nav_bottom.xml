@@ -3,19 +3,19 @@
     <item
         android:id="@+id/homePage"
         android:title="Home"
-        android:icon="@drawable/iconhome"
+        android:icon="@drawable/icon_home"
         />
     <item
         android:id="@+id/clinicPage"
         android:title="Clinic"
-        android:icon="@drawable/iconclinic"
+        android:icon="@drawable/icon_clinic"
         />
     <item
         android:id="@+id/forumPage"
         android:title="Forum"
-        android:icon="@drawable/iconforum"/>
+        android:icon="@drawable/icon_forum"/>
     <item
         android:id="@+id/profilePage"
         android:title="Profile"
-        android:icon="@drawable/iconuser"/>
+        android:icon="@drawable/icon_user"/>
 </menu>

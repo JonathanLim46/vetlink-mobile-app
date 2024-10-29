@@ -57,7 +57,7 @@ class ProfileFragment : Fragment() {
                 if (user.photo != null) {
                     Picasso.get().load(user.photo).resize(50, 50).centerCrop().into(binding.ivPhotoProfile)
                 }else{
-                    binding.ivPhotoProfile.setImageResource(R.drawable.default_profile)
+                    binding.ivPhotoProfile.setImageResource(R.drawable.img_default_profile)
                 }
 
             } else {
