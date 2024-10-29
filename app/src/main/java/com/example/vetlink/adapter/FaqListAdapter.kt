@@ -3,7 +3,6 @@ package com.example.vetlink.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.vetlink.R
@@ -21,7 +20,7 @@ class FaqListAdapter(private val faqList: List<FaqList>,
         val layoutId = if(isFaqCategory){
             R.layout.each_item_faq_category_rule
         } else {
-            R.layout.each_item_faq
+            R.layout.each_item_faq_questions
         }
         val view = LayoutInflater.from(parent.context).inflate(layoutId, parent, false)
         return FaqViewHolder(view)

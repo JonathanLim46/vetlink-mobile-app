@@ -12,7 +12,7 @@
         android:id="@+id/ivBackMenu"
         android:layout_width="25dp"
         android:layout_height="25dp"
-        android:src="@drawable/iconback"
+        android:src="@drawable/icon_back"
         android:layout_marginTop="30dp"
         android:layout_marginStart="27dp"
         android:clickable="true"

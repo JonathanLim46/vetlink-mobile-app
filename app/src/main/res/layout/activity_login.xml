@@ -25,7 +25,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/logoApp"
-            android:src="@drawable/logovetlink"
+            android:src="@drawable/img_logo_vetlink"
             />
 
         <com.google.android.material.textfield.TextInputLayout
@@ -43,8 +43,8 @@
                 android:inputType="textEmailAddress"
                 android:paddingStart="20dp"
                 android:paddingEnd="20dp"
-                android:background="@drawable/rounded_edittext"
-                android:drawableStart="@drawable/iconuserlogin"
+                android:background="@drawable/layout_border_edit_text"
+                android:drawableStart="@drawable/icon_user_login"
                 android:drawableTint="@color/white"
                 android:drawablePadding="20dp"
                 android:hint="Email or Username"
@@ -75,10 +75,10 @@
                 android:layout_height="52dp"
                 android:layout_marginTop="18dp"
                 android:inputType="textPassword"
-                android:background="@drawable/rounded_edittext"
+                android:background="@drawable/layout_border_edit_text"
                 android:paddingStart="20dp"
                 android:paddingEnd="20dp"
-                android:drawableStart="@drawable/iconlocklogin"
+                android:drawableStart="@drawable/icon_lock_login"
                 android:drawablePadding="20dp"
                 android:hint="Password"
                 android:textColorHint="#98FFFFFF"

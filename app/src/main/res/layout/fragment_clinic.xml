@@ -51,7 +51,7 @@
             android:textStyle="bold"
             android:drawablePadding="5dp"
             android:drawableTint="@color/purple"
-            app:drawableRightCompat="@drawable/icongps"
+            app:drawableRightCompat="@drawable/icon_gps"
             app:layout_constraintHorizontal_bias="1"
             app:layout_constraintStart_toEndOf="@+id/searchBarClinic"
             app:layout_constraintEnd_toEndOf="parent"

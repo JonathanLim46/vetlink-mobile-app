@@ -1,6 +1,5 @@
 package com.example.vetlink.fragment
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import com.example.vetlink.adapter.ClinicList
 import com.example.vetlink.adapter.ClinicListAdapter
@@ -12,15 +11,12 @@ import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.vetlink.R
 import com.example.vetlink.activity.MainActivity
 import com.example.vetlink.adapter.RecyclerViewClickListener
-import com.example.vetlink.data.model.user.User
 import com.example.vetlink.databinding.FragmentHomeBinding
 import com.example.vetlink.viewModel.MainActivityViewModel
 import com.squareup.picasso.Picasso
-import java.util.Collections
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -75,7 +71,7 @@ class HomeFragment : Fragment(), RecyclerViewClickListener<ClinicList> {
                 if (user.photo != null){
                     Picasso.get().load(user.photo).resize(50, 50).centerCrop().into(binding.ivPhotoHome)
                 }else{
-                    binding.ivPhotoHome.setImageResource(R.drawable.default_profile)
+                    binding.ivPhotoHome.setImageResource(R.drawable.img_default_profile)
                 }
             }
 

@@ -25,7 +25,7 @@
                 android:textSize="24sp"
                 android:textStyle="bold"
                 android:drawablePadding="12dp"
-                app:drawableLeftCompat="@drawable/icondot"
+                app:drawableLeftCompat="@drawable/icon_dot"
                 app:drawableTint="@color/red"
                 app:layout_constraintVertical_bias="0"
                 app:layout_constraintTop_toTopOf="parent"
@@ -66,7 +66,7 @@
                 android:textSize="24sp"
                 android:textStyle="bold"
                 android:drawablePadding="12dp"
-                app:drawableLeftCompat="@drawable/icondot"
+                app:drawableLeftCompat="@drawable/icon_dot"
                 app:drawableTint="@color/activeIcon"
                 app:layout_constraintTop_toBottomOf="@id/rvUpComing"
                 app:layout_constraintStart_toStartOf="parent"/>

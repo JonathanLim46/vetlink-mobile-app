@@ -27,7 +27,7 @@ class ClinicListAdapter(private val clinicList : List<ClinicList>, private val i
         val layoutId = if(isClinicPage){
             R.layout.each_item_clinic_main
         } else {
-            R.layout.each_item_clinic
+            R.layout.each_item_clinic_home
         }
         val view = LayoutInflater.from(parent.context).inflate(layoutId,parent,false)
         return ClinicViewHolder(view)

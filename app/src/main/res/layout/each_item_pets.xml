@@ -6,7 +6,7 @@
     android:layout_marginVertical="12dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:background="@drawable/card_border_second">
+    android:background="@drawable/layout_border_card_second">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
@@ -38,7 +38,7 @@
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:layout_marginEnd="20dp"
-                android:src="@drawable/iconmenuhorizontal"
+                android:src="@drawable/icon_menu_horizontal"
                 app:layout_constraintTop_toTopOf="@+id/ivMyPetsList"
                 app:layout_constraintEnd_toEndOf="parent"
                 />
@@ -85,7 +85,7 @@
                         android:textSize="12sp"
                         android:fontFamily="sans-serif-light"
                         android:drawablePadding="6dp"
-                        app:drawableLeftCompat="@drawable/iconage" />
+                        app:drawableLeftCompat="@drawable/icon_age" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -131,7 +131,7 @@
                         android:textSize="12sp"
                         android:fontFamily="sans-serif-light"
                         android:drawablePadding="6dp"
-                        app:drawableLeftCompat="@drawable/iconweigth" />
+                        app:drawableLeftCompat="@drawable/icon_weigth" />
 
                     <TextView
                         android:layout_width="wrap_content"

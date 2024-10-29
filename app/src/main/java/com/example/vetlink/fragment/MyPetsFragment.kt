@@ -2,7 +2,6 @@ package com.example.vetlink.fragment
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -71,7 +70,7 @@ class MyPetsFragment : Fragment(), RecyclerViewClickListener<PetsList>{
         val secondLine = viewLayout.findViewById<TextView>(R.id.tvSecondLineDialog)
 
         firstLine.text = "Edit Pet"
-        firstLine.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.iconedit, 0, 0, 0)
+        firstLine.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.icon_edit, 0, 0, 0)
         secondLine.text = "Delete Pet"
 
         if (viewLayout.parent != null){
