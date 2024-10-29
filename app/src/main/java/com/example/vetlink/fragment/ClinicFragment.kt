@@ -11,6 +11,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
+import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -99,6 +101,11 @@ class ClinicFragment : Fragment() {
 
                 override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
 
+//                  Search Suggestions
+//                    val searchSuggest = arrayOf("Klinik IPB", "Klinik Sukmajaya", "Klinik Sempur")
+//
+//                    rvSearchView.layoutManager = LinearLayoutManager(requireContext())
+
                 }
 
                 override fun afterTextChanged(p0: Editable?) {
@@ -139,10 +146,15 @@ class ClinicFragment : Fragment() {
 
 
     private fun addDataToList(){
-        allClinicList.add(ClinicList(R.drawable.img_rspets, "Klinik IPB", "Sukmajaya, Depok", "Buka | 07.00 - 15.00"))
-        allClinicList.add(ClinicList(R.drawable.img_rspets, "Klinik IPB", "Sukmajaya, Depok", "Buka | 07.00 - 15.00"))
-        allClinicList.add(ClinicList(R.drawable.img_rspets, "Klinik IPB", "Sukmajaya, Depok", "Buka | 07.00 - 15.00"))
-        allClinicList.add(ClinicList(R.drawable.img_rspets, "Klinik Sukmajaya", "Sukmajaya, Depok", "Buka | 07.00 - 15.00"))
+        val intent = Intent(activity, MenuActivity::class.java)
+        intent.putExtra("MENU_TITLE", "Clinic")
+
+        allClinicList.add(ClinicList(R.drawable.img_rspets, "Klinik IPB",
+            "Sukmajaya, Depok", "Buka | 07.00 - 15.00",
+            View.OnClickListener {
+                startActivity(intent)
+            }))
+
 
     }
 
