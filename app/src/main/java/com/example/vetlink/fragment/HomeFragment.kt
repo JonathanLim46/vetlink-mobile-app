@@ -141,9 +141,10 @@ class HomeFragment : Fragment() {
     }
 
     private fun addDataToList(){
-        clinicList.add(ClinicList(R.drawable.img_rspets, "Klinik IPB", "Sukmajaya, Depok", "Buka | 07.00 - 15.00"))
-        clinicList.add(ClinicList(R.drawable.img_rspets, "Klinik IPB", "Sukmajaya, Depok", "Buka | 07.00 - 15.00"))
-        clinicList.add(ClinicList(R.drawable.img_rspets, "Klinik IPB", "Sukmajaya, Depok", "Buka | 07.00 - 15.00"))
-        clinicList.add(ClinicList(R.drawable.img_rspets, "Klinik IPB", "Sukmajaya, Depok", "Buka | 07.00 - 15.00"))
+        clinicList.add(ClinicList(R.drawable.img_rspets, "Klinik IPB",
+            "Sukmajaya, Depok", "Buka | 07.00 - 15.00",
+            View.OnClickListener {
+
+            }))
     }
 }

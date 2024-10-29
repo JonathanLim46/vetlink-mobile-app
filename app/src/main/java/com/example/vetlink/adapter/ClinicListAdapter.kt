@@ -37,5 +37,7 @@ class ClinicListAdapter(private val clinicList : List<ClinicList>, private val i
         holder.clinicNameTv.text = clinicList.clinicName
         holder.clinicLocationTv.text = clinicList.clinicLocation
         holder.clinicTimeOpenTv.text = clinicList.clinicTimeOpen
+
+        holder.itemView.setOnClickListener(clinicList.clickListener)
     }
 }

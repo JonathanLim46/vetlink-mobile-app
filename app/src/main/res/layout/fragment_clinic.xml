@@ -31,8 +31,15 @@
             android:hint="Search Clinic"
             style="@style/CustomSearchViewStyle"
             app:layout_anchor="@+id/searchBarClinic"
-            app:layout_constraintTop_toTopOf="parent"
-            />
+            app:layout_constraintTop_toTopOf="parent">
+
+<!--            <androidx.recyclerview.widget.RecyclerView-->
+<!--                android:id="@+id/rvSearchView"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                />-->
+
+        </com.google.android.material.search.SearchView>
 
         <TextView
             android:id="@+id/tvLocationClinic"

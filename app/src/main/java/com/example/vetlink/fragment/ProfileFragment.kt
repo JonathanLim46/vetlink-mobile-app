@@ -118,7 +118,7 @@ class ProfileFragment : Fragment() {
         val dialog = Dialog(requireContext())
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setCancelable(false)
-        dialog.setContentView(R.layout.layout_custom_dialog)
+        dialog.setContentView(R.layout.layout_center_logout_dialog)
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
         val tvDialogDescription: TextView = dialog.findViewById(R.id.tvDialogDescription)

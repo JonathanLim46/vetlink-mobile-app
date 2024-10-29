@@ -33,6 +33,13 @@
         <item name="cornerFamilyBottomLeft">rounded</item>
     </style>
 
+    <style name="ImageClinicPage">
+        <item name="cornerSizeTopRight">12dp</item>
+        <item name="cornerFamilyTopRight">rounded</item>
+        <item name="cornerSizeTopLeft">12dp</item>
+        <item name="cornerFamilyTopLeft">rounded</item>
+    </style>
+
     <style name="error_appearance" parent="@android:style/TextAppearance">
         <item name="android:textColor">@color/red</item>
         <item name="android:textSize">12sp</item>

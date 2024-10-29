@@ -12,6 +12,8 @@ import com.example.vetlink.R
 import com.example.vetlink.databinding.ActivityMenuBinding
 import com.example.vetlink.fragment.AccountFragment
 import com.example.vetlink.fragment.ChangePasswordFragment
+import com.example.vetlink.fragment.ClinicFragment
+import com.example.vetlink.fragment.ClinicPageFragment
 import com.example.vetlink.fragment.FaqCategoryFragment
 import com.example.vetlink.fragment.FaqFragment
 import com.example.vetlink.fragment.MyPetsFragment
@@ -46,6 +48,15 @@ class MenuActivity : AppCompatActivity() {
         val menuTitle = intent.getStringExtra("MENU_TITLE")
         binding.tvMenu.text = menuTitle ?: "Menu"
 
+        changeMenuView(menuTitle.toString())
+
+        binding.ivBackMenu.setOnClickListener{
+            finish()
+        }
+
+    }
+
+    private fun changeMenuView(menuTitle: String){
         if (menuTitle == "Account"){
             replaceFragmentWithOutIntance(AccountFragment())
         } else if (menuTitle == "Change Password"){
@@ -67,12 +78,9 @@ class MenuActivity : AppCompatActivity() {
         } else if(menuTitle == "FAQ Kehilangan"){
             val publikasiFragment = FaqCategoryFragment.newInstance("Publikasi")
             replaceFragment(publikasiFragment)
+        } else if(menuTitle == "Clinic"){
+            replaceFragmentWithOutIntance(ClinicPageFragment())
         }
-
-        binding.ivBackMenu.setOnClickListener{
-            finish()
-        }
-
     }
 
     private fun replaceFragmentWithOutIntance(fragment: Fragment){
