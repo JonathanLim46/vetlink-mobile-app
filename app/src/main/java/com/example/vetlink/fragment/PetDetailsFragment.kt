@@ -1,9 +1,14 @@
 package com.example.vetlink.fragment
 
 import android.annotation.SuppressLint
+import android.app.Activity
+import android.content.Intent
+import android.content.pm.PackageManager
 import android.content.res.ColorStateList
 import android.graphics.Color
+import android.net.Uri
 import android.os.Bundle
+import android.Manifest
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -12,12 +17,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
+import androidx.core.content.ContextCompat.checkSelfPermission
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.vetlink.R
+import com.example.vetlink.activity.SignupActivity
+import com.example.vetlink.activity.SignupActivity.Companion
+import com.example.vetlink.activity.SignupActivity.Companion.REQUEST_CODE_IMAGE_PICKER
 import com.example.vetlink.adapter.PetsCategoryList
 import com.example.vetlink.adapter.PetsCategoryListAdapter
 import com.example.vetlink.databinding.FragmentPetDetailsBinding
+import com.example.vetlink.util.toast
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 
@@ -36,6 +47,7 @@ class PetDetailsFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
     private lateinit var binding: FragmentPetDetailsBinding
+    private var selectedImageUri: Uri? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,8 +70,11 @@ class PetDetailsFragment : Fragment() {
     }
 
     private fun initView(){
-
         with(binding){
+
+            ivAddImagePets.setOnClickListener{
+                openImageChooser()
+            }
 
             btnSubmitPets.setOnClickListener{
                 val namePets = etNamePets.text.toString()
@@ -136,7 +151,6 @@ class PetDetailsFragment : Fragment() {
                     // No action needed after text change
                 }
             })
-
         }
     }
 
@@ -195,16 +209,28 @@ class PetDetailsFragment : Fragment() {
         petsCategory.add(PetsCategoryList("Ragdoll"))
     }
 
+    private fun openImageChooser() {
+        Intent(Intent.ACTION_PICK).also {
+            it.type = "image/*"
+            it.putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("image/jpeg", "image/jpg", "image/png"))
+            startActivityForResult(it, REQUEST_CODE_IMAGE_PICKER)
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == REQUEST_CODE_IMAGE_PICKER && resultCode == Activity.RESULT_OK) {
+            data?.data?.let { uri ->
+                selectedImageUri = uri
+                // You can set the image to an ImageView or handle it as needed
+                binding.ivAddImagePets.setImageURI(uri) // Replace with your actual ImageView
+            }
+        }
+    }
+
     companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment PetDetailsFragment.
-         */
-        // TODO: Rename and change types and number of parameters
+        const val REQUEST_CODE_IMAGE_PICKER = 101
+
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
             PetDetailsFragment().apply {

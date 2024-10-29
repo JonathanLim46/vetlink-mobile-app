@@ -2,8 +2,10 @@ package com.example.vetlink.activity
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -19,10 +21,23 @@ import com.example.vetlink.fragment.FaqFragment
 import com.example.vetlink.fragment.MyPetsFragment
 import com.example.vetlink.fragment.PetDetailsFragment
 import com.example.vetlink.fragment.ScheduleFragment
+import com.example.vetlink.helper.SessionManager
+import com.example.vetlink.repository.AuthRepository
+import com.example.vetlink.repository.PetRepository
+import com.example.vetlink.repository.QueueRepository
+import com.example.vetlink.util.toast
+import com.example.vetlink.viewModel.MenuActivityViewModel
+import com.example.vetlink.viewModel.ViewModelFactory
 
 class MenuActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMenuBinding
+
+    private lateinit var session: SessionManager
+
+    private val menuActivityViewModel: MenuActivityViewModel by viewModels{
+        ViewModelFactory(AuthRepository(session), PetRepository(session), QueueRepository(session))
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,6 +53,8 @@ class MenuActivity : AppCompatActivity() {
         window.decorView.apply {
             systemUiVisibility = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_FULLSCREEN
         }
+
+        session = SessionManager(this)
 
         initView()
 
@@ -62,6 +79,8 @@ class MenuActivity : AppCompatActivity() {
         } else if (menuTitle == "Change Password"){
             replaceFragmentWithOutIntance(ChangePasswordFragment())
         } else if (menuTitle == "My Pets"){
+            menuActivityViewModel.getPets()
+            menuActivityViewModel.getQueues()
             replaceFragmentWithOutIntance(MyPetsFragment())
         } else if (menuTitle == "Pet Details"){
             replaceFragmentWithOutIntance(PetDetailsFragment())

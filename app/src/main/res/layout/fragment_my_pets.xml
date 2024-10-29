@@ -36,7 +36,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="50dp"
-                    android:text="10"
+                    android:text="-"
                     android:textSize="18sp"
                     android:textStyle="bold"
                     android:textAlignment="center"/>
@@ -45,7 +45,7 @@
                     android:id="@+id/tvCountScheduledVisit"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="10"
+                    android:text="-"
                     android:textSize="18sp"
                     android:textStyle="bold"
                     android:textAlignment="center"/>

@@ -3,11 +3,15 @@ package com.example.vetlink.fragment
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.vetlink.R
@@ -17,28 +21,24 @@ import com.example.vetlink.adapter.PetsCategoryListAdapter
 import com.example.vetlink.adapter.PetsList
 import com.example.vetlink.adapter.PetsListAdapter
 import com.example.vetlink.adapter.RecyclerViewClickListener
+import com.example.vetlink.data.model.pets.Pet
 import com.example.vetlink.databinding.FragmentMyPetsBinding
+import com.example.vetlink.viewModel.MenuActivityViewModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [MyPetsFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-class MyPetsFragment : Fragment(), RecyclerViewClickListener<PetsList>{
-    // TODO: Rename and change types of parameters
+class MyPetsFragment : Fragment(), RecyclerViewClickListener<PetsList>, PetsCategoryListAdapter.OnItemClickListener {
+
     private var param1: String? = null
     private var param2: String? = null
     private lateinit var binding: FragmentMyPetsBinding
     private lateinit var petsList: ArrayList<PetsList>
     private lateinit var petsListAdapter: PetsListAdapter
-
+    private var selectedCategory:String? = null
+    private val sharedMenuActivityViewModel: MenuActivityViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,12 +52,9 @@ class MyPetsFragment : Fragment(), RecyclerViewClickListener<PetsList>{
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-
         binding = FragmentMyPetsBinding.inflate(inflater, container, false)
-
         initView()
-
+        setupObservers()
         return binding.root
     }
 
@@ -73,39 +70,28 @@ class MyPetsFragment : Fragment(), RecyclerViewClickListener<PetsList>{
         firstLine.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.icon_edit, 0, 0, 0)
         secondLine.text = "Delete Pet"
 
-        if (viewLayout.parent != null){
+        if (viewLayout.parent != null) {
             (viewLayout.parent as ViewGroup).removeView(viewLayout)
         }
 
-        //        Buat Dialog
         dialog?.apply {
             setCancelable(true)
             setContentView(viewLayout)
-
             show()
 
-//            Bottomsheet height & dragable
             val bottomSheetBehavior = BottomSheetBehavior.from(viewLayout.parent as View)
             bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
             bottomSheetBehavior.isHideable = true
-
         }
-
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    private fun initView(){
-        with(binding){
-
-
+    private fun initView() {
+        with(binding) {
             rvMyPetsList.layoutManager = LinearLayoutManager(requireContext())
             petsList = ArrayList()
-            addDataToList()
-
             petsListAdapter = PetsListAdapter(petsList)
-            petsListAdapter.notifyDataSetChanged()
             rvMyPetsList.adapter = petsListAdapter
-
             petsListAdapter.setClickListener(this@MyPetsFragment)
 
             srlPets.setOnRefreshListener {
@@ -113,87 +99,98 @@ class MyPetsFragment : Fragment(), RecyclerViewClickListener<PetsList>{
                 petsListAdapter.notifyDataSetChanged()
             }
 
-            tvAddPet.setOnClickListener{
+            tvAddPet.setOnClickListener {
                 val intent = Intent(activity, MenuActivity::class.java)
                 intent.putExtra("MENU_TITLE", "Pet Details")
                 startActivity(intent)
             }
 
-            tvFilter.setOnClickListener{
+            tvFilter.setOnClickListener {
                 showBottomSheetFilter()
             }
-
-
         }
     }
 
-    private fun showBottomSheetFilter(){
-
+    private fun showBottomSheetFilter() {
         val dialog = activity?.let { BottomSheetDialog(it) }
         val viewFilter = layoutInflater.inflate(R.layout.layout_bottom_sheet_filter_dialog, null, false)
 
         val recyclerView = viewFilter.findViewById<RecyclerView>(R.id.rvFilterList)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
-        val petsCategoryList : ArrayList<PetsCategoryList> = ArrayList()
-        addDataPetsCategoryToList(petsCategoryList)
+        // Create pets category list and adapter
+        val petsCategoryList = ArrayList<PetsCategoryList>()
+        sharedMenuActivityViewModel.pets.value?.let {
+            addDataPetsCategoryToList(petsCategoryList, it)
+        }
 
-        val petsCategoryListAdapter = PetsCategoryListAdapter(petsCategoryList)
+        val petsCategoryListAdapter = PetsCategoryListAdapter(petsCategoryList, this)
         recyclerView.adapter = petsCategoryListAdapter
 
-        //        Buat Dialog
+        // Init reset button
+        val buttonReset = viewFilter.findViewById<Button>(R.id.btnReset)
+        buttonReset.setOnClickListener {
+            selectedCategory = null // Clear selected category
+            petsCategoryListAdapter.resetSelection() // Reset the adapter selection
+        }
+
+        val buttonApply = viewFilter.findViewById<Button>(R.id.btnApply)
+        buttonApply.setOnClickListener {
+            if (selectedCategory == null) {
+                petsListAdapter.updateList(petsList)
+            } else {
+                val filteredList = petsList.filter { it.petType == selectedCategory }
+                petsListAdapter.updateList(filteredList) // Filter by the selected category
+            }
+            dialog?.dismiss()
+        }
+
         dialog?.apply {
             setCancelable(true)
             setContentView(viewFilter)
-
             show()
-
-//            Bottomsheet height & dragable
             val bottomSheetBehavior = BottomSheetBehavior.from(viewFilter.parent as View)
             bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
             bottomSheetBehavior.isHideable = true
+        }
+    }
 
+    override fun onItemClick(item: PetsCategoryList) {
+        selectedCategory = item.namePetsCategory
+        Toast.makeText(requireContext(), selectedCategory, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun setupObservers() {
+        sharedMenuActivityViewModel.pets.observe(viewLifecycleOwner) { pets ->
+            if (pets != null) {
+                petsList.clear() // Clear the list before adding new data
+                petsList.addAll(pets.map { pet ->
+                    PetsList(pet.photo, pet.type, pet.pet_name, pet.breed, pet.age.toString(), pet.weight)
+                })
+                binding.tvCountTotalPets.text = pets.size.toString()
+                petsListAdapter.notifyDataSetChanged() // Notify the adapter to refresh
+            }
         }
 
+        sharedMenuActivityViewModel.queues.observe(viewLifecycleOwner) { queues ->
+            if (queues != null) {
+                val ongoingCount = queues.count { it.status == "ongoing" }
+                binding.tvCountScheduledVisit.text = ongoingCount.toString()
+            } else {
+                Log.d("QUEUES", "null")
+            }
+        }
     }
 
-    private fun addDataToList(){
-        petsList.add(PetsList(R.drawable.img_cats, "Mball", "Persian",
-            5.toString(), 29.toString()
-        ))
-
-        petsList.add(PetsList(R.drawable.img_cats, "Mball", "Persian",
-            5.toString(), 29.toString()
-        ))
-
-        petsList.add(PetsList(R.drawable.img_cats, "Mball", "Persian",
-            5.toString(), 29.toString()
-        ))
-
-        petsList.add(PetsList(R.drawable.img_cats, "Mball", "Persian",
-            5.toString(), 29.toString()
-        ))
-
-        petsList.add(PetsList(R.drawable.img_cats, "Mball", "Persian",
-            5.toString(), 29.toString()
-        ))
-    }
-
-    private fun addDataPetsCategoryToList(petsCategory: ArrayList<PetsCategoryList>){
-        petsCategory.add(PetsCategoryList("Dogs"))
-        petsCategory.add(PetsCategoryList("Cats"))
+    private fun addDataPetsCategoryToList(petsCategory: ArrayList<PetsCategoryList>, pets: List<Pet>) {
+        petsCategory.clear()
+        val uniqueTypes = pets.map { it.type }.distinct()
+        uniqueTypes.forEach { type ->
+            petsCategory.add(PetsCategoryList(type))
+        }
     }
 
     companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment MyPetsFragment.
-         */
-        // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
             MyPetsFragment().apply {
