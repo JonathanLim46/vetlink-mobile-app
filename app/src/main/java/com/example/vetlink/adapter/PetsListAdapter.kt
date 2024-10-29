@@ -7,9 +7,10 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.vetlink.R
-import com.example.vetlink.databinding.FragmentMyPetsBinding
+import com.squareup.picasso.Picasso
 
-class PetsListAdapter(private val petsList: List<PetsList>) : RecyclerView.Adapter<PetsListAdapter.PetsViewHolder>() {
+class PetsListAdapter(private var petsList: List<PetsList>) :
+    RecyclerView.Adapter<PetsListAdapter.PetsViewHolder>() {
 
     private lateinit var listener: RecyclerViewClickListener<PetsList>
 
@@ -36,16 +37,24 @@ class PetsListAdapter(private val petsList: List<PetsList>) : RecyclerView.Adapt
     }
 
     override fun onBindViewHolder(holder: PetsViewHolder, position: Int) {
-        val petsList = petsList[position]
-        holder.petsImageView.setImageResource(petsList.petImage)
-        holder.petsName.text = petsList.petName
-        holder.petsBreed.text = petsList.petBreed
-        holder.petsAge.text = petsList.petAge
-        holder.petsWeigth.text = petsList.petWeigth
+        val pet = petsList[position]
+        holder.petsName.text = pet.petName
+        holder.petsBreed.text = pet.petBreed
+        holder.petsAge.text = pet.petAge
+        holder.petsWeigth.text = pet.petWeigth
 
-//        onclick
-        holder.petsMenu.setOnClickListener{
-            listener?.onItemClicke(it, petsList)
+        Picasso.get()
+            .load(pet.petImage)
+            .into(holder.petsImageView)
+
+        holder.petsMenu.setOnClickListener {
+            listener.onItemClicke(it, pet)
         }
+    }
+
+    // Function to update the list with filtered items
+    fun updateList(newList: List<PetsList>) {
+        petsList = newList
+        notifyDataSetChanged()
     }
 }

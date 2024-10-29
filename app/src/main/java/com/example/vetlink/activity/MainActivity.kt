@@ -22,6 +22,7 @@ import com.example.vetlink.fragment.HomeFragment
 import com.example.vetlink.fragment.ProfileFragment
 import com.example.vetlink.helper.SessionManager
 import com.example.vetlink.repository.AuthRepository
+import com.example.vetlink.repository.PetRepository
 import com.example.vetlink.viewModel.MainActivityViewModel
 import com.example.vetlink.viewModel.ViewModelFactory
 
@@ -31,7 +32,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var session: SessionManager
 
     private val mainActivityViewModel: MainActivityViewModel by viewModels {
-        ViewModelFactory(AuthRepository(session))
+        ViewModelFactory(AuthRepository(session), PetRepository(session))
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

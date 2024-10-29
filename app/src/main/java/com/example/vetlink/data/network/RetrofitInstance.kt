@@ -1,11 +1,15 @@
 package com.example.vetlink.data.network
 
+import com.example.vetlink.helper.DateDeserializer
 import com.example.vetlink.helper.Session
 import com.example.vetlink.helper.SessionManager
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.Date
 
 object RetrofitInstance {
 
@@ -33,12 +37,19 @@ object RetrofitInstance {
             .build()
     }
 
+    // Create custom Gson instance with Date deserializer
+    private fun getGson(): Gson {
+        return GsonBuilder()
+            .registerTypeAdapter(Date::class.java, DateDeserializer()) // Using the custom Date deserializer
+            .create()
+    }
+
     // Create Retrofit instance
     fun getRetrofit(session: SessionManager): Retrofit {
         return Retrofit.Builder()
-            .baseUrl("http://192.168.1.8:8000/api/") // Replace with your base URL
+            .baseUrl("http://192.168.100.69:8000/api/") // Replace with your base URL
             .client(getOkHttpClient(session))
-            .addConverterFactory(GsonConverterFactory.create()) // Use Gson for JSON conversion
+            .addConverterFactory(GsonConverterFactory.create(getGson())) // Use Gson for JSON conversion
             .build() // No need for CoroutineCallAdapterFactory
     }
 }

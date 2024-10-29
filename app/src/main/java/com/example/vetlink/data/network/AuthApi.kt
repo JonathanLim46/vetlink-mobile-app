@@ -19,7 +19,6 @@ import retrofit2.http.POST
 import retrofit2.http.Part
 
 interface AuthApi {
-
     @Multipart
     @POST("register")
     suspend fun register(

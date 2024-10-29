@@ -66,6 +66,8 @@ class ProfileFragment : Fragment() {
             }
         }
 
+
+
         // Observe error messages
         sharedMainActivityViewModel.errorMessageUser.observe(viewLifecycleOwner) { errorMessage ->
             errorMessage?.let {
