@@ -16,6 +16,7 @@ import com.example.vetlink.fragment.ClinicFragment
 import com.example.vetlink.fragment.ClinicPageFragment
 import com.example.vetlink.fragment.FaqCategoryFragment
 import com.example.vetlink.fragment.FaqFragment
+import com.example.vetlink.fragment.ForumFormFragment
 import com.example.vetlink.fragment.MyPetsFragment
 import com.example.vetlink.fragment.PetDetailsFragment
 import com.example.vetlink.fragment.ScheduleFragment
@@ -69,6 +70,10 @@ class MenuActivity : AppCompatActivity() {
             replaceFragmentWithOutIntance(ScheduleFragment())
         } else if(menuTitle == "FAQ VetLink"){
             replaceFragmentWithOutIntance(FaqFragment())
+        } else if(menuTitle == "Clinic"){
+            replaceFragmentWithOutIntance(ClinicPageFragment())
+        } else if(menuTitle == "Postingan Baru"){
+            replaceFragmentWithOutIntance(ForumFormFragment())
         } else if(menuTitle == "Panduan Aplikasi"){
             val panduanFragment = FaqCategoryFragment.newInstance("Panduan")
             replaceFragment(panduanFragment)
@@ -78,8 +83,6 @@ class MenuActivity : AppCompatActivity() {
         } else if(menuTitle == "FAQ Kehilangan"){
             val publikasiFragment = FaqCategoryFragment.newInstance("Publikasi")
             replaceFragment(publikasiFragment)
-        } else if(menuTitle == "Clinic"){
-            replaceFragmentWithOutIntance(ClinicPageFragment())
         }
     }
 

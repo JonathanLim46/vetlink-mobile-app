@@ -83,4 +83,8 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.6")
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.8.6")
     implementation(libs.retrofit2.kotlin.coroutines.adapter)
+
+    //ViewPager
+    implementation ("androidx.viewpager2:viewpager2:1.1.0")
+
 }

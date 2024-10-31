@@ -1,16 +1,201 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".fragment.ForumFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="FORUM"
-        android:textSize="26dp"
-        android:layout_gravity="center"/>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-</FrameLayout>
+        <!--    HEADER    -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layoutHeader"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="15dp"
+            android:background="@drawable/layout_border_card_main"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            >
+
+            <TextView
+                android:id="@+id/tvMessageHeader"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="36dp"
+                android:text="Hello, Mawar Putri "
+                android:textSize="13sp"
+                android:textColor="@color/hintColor"
+                android:textStyle="bold"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                />
+
+            <ImageView
+                android:layout_width="13dp"
+                android:layout_height="13dp"
+                android:layout_marginStart="3dp"
+                android:src="@drawable/img_wave"
+                app:layout_constraintStart_toEndOf="@id/tvMessageHeader"
+                app:layout_constraintTop_toTopOf="@id/tvMessageHeader"
+                app:layout_constraintBottom_toBottomOf="@id/tvMessageHeader"
+                />
+            
+            <TextView
+                android:id="@+id/tvQuoteHeader"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="KINDNESS STARTS \nWITH YOU"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:textColor="@color/white"
+                app:layout_constraintTop_toBottomOf="@id/tvMessageHeader"
+                app:layout_constraintStart_toStartOf="@id/tvMessageHeader"
+                />
+
+            <ImageView
+                android:id="@+id/ivAddPostForum"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_marginEnd="25dp"
+                android:src="@drawable/icon_add_post"
+                app:layout_constraintTop_toTopOf="@id/tvMessageHeader"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:tint="@color/white" />
+
+            <!-- SECOND CARD -->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginEnd="24dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="12dp"
+                android:background="@drawable/layout_border_card_second"
+                app:layout_constraintTop_toBottomOf="@id/tvQuoteHeader"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                >
+
+                <TextView
+                    android:id="@+id/tvTotalPost"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:text="TOTAL\nPOST"
+                    android:textSize="12sp"
+                    android:textAlignment="center"
+                    android:textColor="#858585"
+                    android:textStyle="bold"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/tvTotalPostInProgress"
+                    />
+
+                <TextView
+                    android:id="@+id/tvCountPost"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:text="1"
+                    android:textSize="12sp"
+                    android:textColor="#858585"
+                    android:textStyle="bold"
+                    app:layout_constraintTop_toBottomOf="@+id/tvTotalPost"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="@+id/tvTotalPost"
+                    app:layout_constraintEnd_toEndOf="@+id/tvTotalPost"
+                    />
+
+                <TextView
+                    android:id="@+id/tvTotalPostInProgress"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="POST IN\nPROGRESS"
+                    android:textSize="12sp"
+                    android:textAlignment="center"
+                    android:textColor="#858585"
+                    android:textStyle="bold"
+                    app:layout_constraintTop_toTopOf="@+id/tvTotalPost"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    />
+
+                <TextView
+                    android:id="@+id/tvCountPostInProgress"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="1"
+                    android:textSize="12sp"
+                    android:textColor="#858585"
+                    android:textStyle="bold"
+                    app:layout_constraintTop_toBottomOf="@id/tvTotalPostInProgress"
+                    app:layout_constraintStart_toStartOf="@id/tvTotalPostInProgress"
+                    app:layout_constraintEnd_toEndOf="@id/tvTotalPostInProgress"
+                    />
+
+                <TextView
+                    android:id="@+id/tvTotalPostFinished"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="POST\nFINISHED"
+                    android:textSize="12sp"
+                    android:textAlignment="center"
+                    android:textColor="#858585"
+                    android:textStyle="bold"
+                    app:layout_constraintTop_toTopOf="@+id/tvTotalPost"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/tvTotalPostInProgress"
+                    />
+
+                <TextView
+                    android:id="@+id/tvCountPostFinished"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="1"
+                    android:textSize="12sp"
+                    android:textColor="#858585"
+                    android:textStyle="bold"
+                    app:layout_constraintTop_toBottomOf="@+id/tvTotalPostFinished"
+                    app:layout_constraintStart_toStartOf="@id/tvTotalPostFinished"
+                    app:layout_constraintEnd_toEndOf="@id/tvTotalPostFinished"
+                    />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <!-- TAB LAYOUT & VIEW PAGER -->
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tabLayoutForum"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            app:tabIndicatorFullWidth="true"
+            app:layout_constraintTop_toBottomOf="@+id/layoutHeader"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            style="@style/CustomTabLayoutStyle"
+            />
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/viewPagerForum"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintTop_toBottomOf="@+id/tabLayoutForum"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</LinearLayout>
