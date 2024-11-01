@@ -102,6 +102,7 @@ class MyPetsFragment : Fragment(), RecyclerViewClickListener<PetsList>, PetsCate
             tvAddPet.setOnClickListener {
                 val intent = Intent(activity, MenuActivity::class.java)
                 intent.putExtra("MENU_TITLE", "Pet Details")
+                intent.putExtra("METHOD", "add")
                 startActivity(intent)
             }
 
@@ -165,7 +166,7 @@ class MyPetsFragment : Fragment(), RecyclerViewClickListener<PetsList>, PetsCate
             if (pets != null) {
                 petsList.clear() // Clear the list before adding new data
                 petsList.addAll(pets.map { pet ->
-                    PetsList(pet.photo, pet.type, pet.pet_name, pet.breed, pet.age.toString(), pet.weight)
+                    PetsList(pet.id, pet.photo, pet.type, pet.pet_name, pet.breed, pet.age.toString(), pet.weight)
                 })
                 binding.tvCountTotalPets.text = pets.size.toString()
                 petsListAdapter.notifyDataSetChanged() // Notify the adapter to refresh
@@ -177,7 +178,7 @@ class MyPetsFragment : Fragment(), RecyclerViewClickListener<PetsList>, PetsCate
                 val ongoingCount = queues.count { it.status == "ongoing" }
                 binding.tvCountScheduledVisit.text = ongoingCount.toString()
             } else {
-                Log.d("QUEUES", "null")
+                binding.tvCountScheduledVisit.text = "0"
             }
         }
     }

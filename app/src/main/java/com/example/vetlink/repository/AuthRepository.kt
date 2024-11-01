@@ -24,7 +24,14 @@ class AuthRepository(val session: SessionManager) {
         return authApi.login(identifier, password)
     }
 
-    suspend fun register(name: String, username: String, email: String, password: String, phoneNumber: String, photo: MultipartBody.Part? = null): RegisterResponse {
+    suspend fun register(
+        name: String,
+        username: String,
+        email: String,
+        password: String,
+        phoneNumber: String,
+        photo: MultipartBody.Part? = null
+    ): RegisterResponse {
         val nameRequestBody = RequestBody.create("text/plain".toMediaTypeOrNull(), name)
         val usernameRequestBody = RequestBody.create("text/plain".toMediaTypeOrNull(), username)
         val emailRequestBody = RequestBody.create("text/plain".toMediaTypeOrNull(), email)

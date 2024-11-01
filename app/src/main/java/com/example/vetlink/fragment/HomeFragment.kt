@@ -140,7 +140,8 @@ class HomeFragment : Fragment(), RecyclerViewClickListener<ClinicList> {
     }
 
     private fun addDataToList(){
-        clinicList.add(ClinicList(R.drawable.img_rspets, "Klinik IPB",
+        clinicList.add(ClinicList(
+            R.drawable.img_rspets.toString(), "Klinik IPB",
             "Sukmajaya, Depok", "Buka | 07.00 - 15.00"))
     }
 

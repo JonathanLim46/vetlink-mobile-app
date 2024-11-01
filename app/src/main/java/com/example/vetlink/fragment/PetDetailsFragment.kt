@@ -199,6 +199,15 @@ class PetDetailsFragment : Fragment() {
 
     }
 
+    private fun savePet(){
+        Toast.makeText(requireContext(), "save method", Toast.LENGTH_SHORT).show()
+    }
+
+    private fun updatePet(){
+        Toast.makeText(requireContext(), "update method", Toast.LENGTH_SHORT).show()
+    }
+
+
     private fun addDataPetsCategoryToList(petsCategory: ArrayList<PetsCategoryList>){
         petsCategory.add(PetsCategoryList("Dogs"))
         petsCategory.add(PetsCategoryList("Cats"))
