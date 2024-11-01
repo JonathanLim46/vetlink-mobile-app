@@ -15,6 +15,7 @@ import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView.LayoutManager
 import com.example.vetlink.R
@@ -23,6 +24,8 @@ import com.example.vetlink.adapter.ClinicList
 import com.example.vetlink.adapter.ClinicListAdapter
 import com.example.vetlink.adapter.RecyclerViewClickListener
 import com.example.vetlink.databinding.FragmentClinicBinding
+import com.example.vetlink.viewModel.MainActivityViewModel
+import java.text.SimpleDateFormat
 import java.util.Locale
 
 // TODO: Rename parameter arguments, choose names that match
@@ -40,10 +43,16 @@ class ClinicFragment : Fragment(), RecyclerViewClickListener<ClinicList>{
     private var param1: String? = null
     private var param2: String? = null
 
+    val inputFormat = SimpleDateFormat("HH:mm:ss", Locale.getDefault())
+    val outputFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
+
     private lateinit var binding: FragmentClinicBinding
     private lateinit var allClinicList: ArrayList<ClinicList>
     private lateinit var clinicList: ArrayList<ClinicList>
     private lateinit var clinicListAdapter: ClinicListAdapter
+
+    private val sharedMainActivityViewModel: MainActivityViewModel by activityViewModels()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,6 +70,7 @@ class ClinicFragment : Fragment(), RecyclerViewClickListener<ClinicList>{
         binding = FragmentClinicBinding.inflate(inflater, container, false)
 
         initView()
+        setupObservers()
 
         // Inflate the layout for this fragment
         return binding.root
@@ -69,14 +79,11 @@ class ClinicFragment : Fragment(), RecyclerViewClickListener<ClinicList>{
     fun initView() {
         with(binding){
             val isClinicPage = true
-
+            allClinicList = ArrayList()
+            clinicList = ArrayList()
             rvClinicPage.layoutManager = LinearLayoutManager(requireContext())
-
-            clinicData()
-
             clinicListAdapter = ClinicListAdapter(clinicList, isClinicPage)
             clinicListAdapter.notifyDataSetChanged()
-
             rvClinicPage.adapter = clinicListAdapter
             clinicListAdapter.clickListener(this@ClinicFragment)
 
@@ -121,6 +128,20 @@ class ClinicFragment : Fragment(), RecyclerViewClickListener<ClinicList>{
         }
     }
 
+    private fun setupObservers(){
+        sharedMainActivityViewModel.veteriners.observe(viewLifecycleOwner) { veteriners ->
+
+            allClinicList.clear()
+            veteriners?.forEach{ veteriner ->
+                val openTimeFormatted = outputFormat.format(inputFormat.parse(veteriner.open_time)!!)
+                val closeTimeFormatted = outputFormat.format(inputFormat.parse(veteriner.close_time)!!)
+                allClinicList.add(ClinicList(veteriner.clinic_image, veteriner.clinic_name, veteriner.city, "Buka | $openTimeFormatted - $closeTimeFormatted"))
+            }
+            clinicListAdapter.notifyDataSetChanged()
+            clinicList.addAll(allClinicList)
+        }
+    }
+
     private fun filterList(query: String){
         with(binding){
             clinicList.clear()
@@ -130,28 +151,13 @@ class ClinicFragment : Fragment(), RecyclerViewClickListener<ClinicList>{
                 for (clinic in allClinicList){
                     if (clinic.clinicName.lowercase().contains(query.lowercase())){
                         clinicList.add(clinic)
+                    } else if (clinic.clinicLocation.lowercase().contains(query.lowercase())){
+                        clinicList.add(clinic)
                     }
                 }
             }
             clinicListAdapter.notifyDataSetChanged()
         }
-
-    }
-
-    private fun clinicData(){
-        allClinicList = ArrayList()
-        clinicList = ArrayList()
-
-        addDataToList()
-        clinicList.addAll(allClinicList)
-    }
-
-
-    private fun addDataToList(){
-
-        allClinicList.add(ClinicList(R.drawable.img_rspets, "Klinik IPB",
-            "Sukmajaya, Depok", "Buka | 07.00 - 15.00"))
-
 
     }
 

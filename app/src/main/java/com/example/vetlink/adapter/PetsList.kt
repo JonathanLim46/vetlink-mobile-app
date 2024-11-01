@@ -1,6 +1,7 @@
 package com.example.vetlink.adapter
 
 data class PetsList(
+    val petId: Int,
     val petImage: String,
     val petType: String,
     val petName: String,

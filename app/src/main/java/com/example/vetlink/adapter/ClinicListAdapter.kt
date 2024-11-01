@@ -7,8 +7,14 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.vetlink.R
+import com.squareup.picasso.Picasso
+import java.text.SimpleDateFormat
+import java.util.Locale
 
-class ClinicListAdapter(private val clinicList : List<ClinicList>, private val isClinicPage: Boolean) : RecyclerView.Adapter<ClinicListAdapter.ClinicViewHolder>() {
+class ClinicListAdapter(
+    private val clinicList : List<ClinicList>,
+    private val isClinicPage: Boolean
+) : RecyclerView.Adapter<ClinicListAdapter.ClinicViewHolder>() {
 
     private lateinit var listener: RecyclerViewClickListener<ClinicList>
 
@@ -39,10 +45,13 @@ class ClinicListAdapter(private val clinicList : List<ClinicList>, private val i
 
     override fun onBindViewHolder(holder: ClinicViewHolder, position: Int) {
         val clinicList = clinicList[position]
-        holder.clinicImageView.setImageResource(clinicList.clinicImage)
+//        holder.clinicImageView.setImageResource(R.drawable.img_rspets)
         holder.clinicNameTv.text = clinicList.clinicName
         holder.clinicLocationTv.text = clinicList.clinicLocation
         holder.clinicTimeOpenTv.text = clinicList.clinicTimeOpen
+
+        Picasso.get().load(clinicList.clinicImage)
+            .into(holder.clinicImageView)
 
         holder.itemView.setOnClickListener{
             listener?.onItemClicke(it, clinicList)
