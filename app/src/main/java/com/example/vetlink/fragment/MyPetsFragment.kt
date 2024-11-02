@@ -67,11 +67,15 @@ class MyPetsFragment : Fragment(), RecyclerViewClickListener<PetsList>{
         val viewLayout = layoutInflater.inflate(R.layout.layout_bottom_sheet_post_dialog, null, false)
 
         val firstLine = viewLayout.findViewById<TextView>(R.id.tvFirstLineDialog)
+        val lineDone = viewLayout.findViewById<View>(R.id.lineDone)
         val secondLine = viewLayout.findViewById<TextView>(R.id.tvSecondLineDialog)
+        val thirdLine = viewLayout.findViewById<TextView>(R.id.tvThirdLineDialog)
 
-        firstLine.text = "Edit Pet"
-        firstLine.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.icon_edit, 0, 0, 0)
-        secondLine.text = "Delete Pet"
+        firstLine.visibility = View.GONE
+        lineDone.visibility = View.GONE
+
+        secondLine.text = "Edit Pet"
+        thirdLine.text = "Delete Pet"
 
         if (viewLayout.parent != null){
             (viewLayout.parent as ViewGroup).removeView(viewLayout)

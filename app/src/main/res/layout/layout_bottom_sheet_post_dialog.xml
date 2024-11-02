@@ -51,13 +51,39 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:layout_marginStart="30dp"
+            android:text="Edit Postingan"
+            android:textSize="16sp"
+            android:drawablePadding="12dp"
+            app:drawableLeftCompat="@drawable/icon_edit2"
+            app:layout_constraintTop_toBottomOf="@+id/lineDone"
+            app:layout_constraintStart_toStartOf="parent"
+            />
+
+        <View
+            android:id="@+id/lineEdit"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="30dp"
+            android:background="@color/defaultIcon"
+            app:layout_constraintTop_toBottomOf="@+id/tvSecondLineDialog"
+            app:layout_constraintStart_toStartOf="@+id/tvSecondLineDialog"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <TextView
+            android:id="@+id/tvThirdLineDialog"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginStart="30dp"
             android:text="Hapus Postingan"
             android:textSize="16sp"
             android:textColor="@color/red"
             android:drawablePadding="12dp"
             android:drawableTint="@color/red"
             app:drawableLeftCompat="@drawable/icon_delete"
-            app:layout_constraintTop_toBottomOf="@+id/lineDone"
+            app:layout_constraintTop_toBottomOf="@+id/lineEdit"
             app:layout_constraintStart_toStartOf="parent"
             />
 
@@ -72,8 +98,8 @@
             android:background="@color/defaultIcon"
             app:layout_constraintVertical_bias="0"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvSecondLineDialog"
-            app:layout_constraintStart_toStartOf="@+id/tvSecondLineDialog"
+            app:layout_constraintTop_toBottomOf="@+id/tvThirdLineDialog"
+            app:layout_constraintStart_toStartOf="@+id/tvThirdLineDialog"
             app:layout_constraintEnd_toEndOf="parent"/>
 
 
