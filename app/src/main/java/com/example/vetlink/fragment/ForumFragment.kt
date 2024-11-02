@@ -1,11 +1,21 @@
 package com.example.vetlink.fragment
 
+import android.content.Intent
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.viewpager.widget.ViewPager
+import com.example.vetlink.activity.MainActivity
+import com.example.vetlink.activity.MenuActivity
+import com.example.vetlink.adapter.ForumPageAdapter
 import com.example.vetlink.databinding.FragmentForumBinding
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayout.Tab
+import com.google.android.material.tabs.TabLayoutMediator
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -43,9 +53,31 @@ class ForumFragment : Fragment() {
         return binding.root
     }
 
-    fun initView() {
+    private fun initView() {
         with(binding){
 
+            setAdapter()
+
+            ivAddPostForum.setOnClickListener{
+                val intent = Intent(activity, MenuActivity::class.java)
+                intent.putExtra("MENU_TITLE", "Postingan Baru")
+                startActivity(intent)
+            }
+        }
+    }
+
+    private fun setAdapter(){
+        val tabArrayList = arrayOf("All Board", "My Board")
+        val adapter = ForumPageAdapter(requireActivity(), tabArrayList.size)
+        binding.apply {
+            viewPagerForum.adapter = adapter
+            TabLayoutMediator(tabLayoutForum, viewPagerForum) {tab, position ->
+                tab.text = tabArrayList[position]
+            }.attach()
+
+            tabLayoutForum.setSelectedTabIndicatorColor(Color.GRAY)
+            tabLayoutForum.setBackgroundColor(Color.TRANSPARENT)
+            tabLayoutForum.elevation = 0f
         }
     }
 

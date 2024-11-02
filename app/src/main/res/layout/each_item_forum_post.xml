@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/ivPostImageProfile"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginStart="15dp"
+        android:src="@drawable/img_tontawan"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        />
+
+    <TextView
+        android:id="@+id/tvPostUsername"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="mawarptr"
+        android:textSize="12sp"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        app:layout_constraintVertical_bias="0"
+        app:layout_constraintStart_toEndOf="@+id/ivPostImageProfile"
+        app:layout_constraintTop_toTopOf="@+id/ivPostImageProfile"
+        app:layout_constraintBottom_toBottomOf="@+id/ivPostImageProfile"
+        />
+
+    <View
+        android:id="@+id/dotProfile"
+        android:layout_width="4dp"
+        android:layout_height="4dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="2dp"
+        android:background="@drawable/layout_border_oval_purple"
+        android:backgroundTint="@color/defaultIcon"
+        app:layout_constraintStart_toEndOf="@+id/tvPostUsername"
+        app:layout_constraintTop_toTopOf="@+id/tvPostUsername"
+        app:layout_constraintBottom_toBottomOf="@+id/tvPostUsername"
+        />
+
+    <TextView
+        android:id="@+id/tvPostStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:text="In Progress"
+        android:textColor="@color/red"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@id/dotProfile"
+        app:layout_constraintTop_toTopOf="@id/tvPostUsername"
+        app:layout_constraintBottom_toBottomOf="@+id/tvPostUsername"
+        />
+
+    <TextView
+        android:id="@+id/tvPostLocation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Depok"
+        android:textSize="11sp"
+        android:fontFamily="sans-serif-light"
+        app:layout_constraintTop_toBottomOf="@id/tvPostUsername"
+        app:layout_constraintStart_toStartOf="@+id/tvPostUsername"
+        />
+
+    <View
+        android:id="@+id/dotProfile2"
+        android:layout_width="4dp"
+        android:layout_height="4dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="2dp"
+        android:background="@drawable/layout_border_oval_purple"
+        android:backgroundTint="@color/defaultIcon"
+        app:layout_constraintStart_toEndOf="@+id/tvPostLocation"
+        app:layout_constraintTop_toTopOf="@+id/tvPostLocation"
+        app:layout_constraintBottom_toBottomOf="@+id/tvPostLocation"
+        />
+    
+    <TextView
+        android:id="@+id/tvPostTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:text="1 mins ago"
+        android:textSize="11sp"
+        android:fontFamily="sans-serif-light"
+        app:layout_constraintStart_toEndOf="@id/dotProfile2"
+        app:layout_constraintTop_toTopOf="@+id/tvPostLocation"
+        app:layout_constraintBottom_toBottomOf="@id/tvPostLocation"
+        />
+
+    <ImageView
+        android:id="@+id/menuOptionalPost"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="18dp"
+        android:src="@drawable/icon_menu_horizontal"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
+    
+    <ImageView
+        android:id="@+id/ivPostImagePets"
+        android:layout_width="match_parent"
+        android:layout_height="350dp"
+        android:layout_marginTop="8dp"
+        android:src="@drawable/img_cats"
+        android:scaleType="fitXY"
+        app:layout_constraintTop_toBottomOf="@+id/ivPostImageProfile"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
+
+    <TextView
+        android:id="@+id/tvPostHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginTop="10dp"
+        android:text="Lorem ipsum dolor sit amet."
+        android:textSize="12sp"
+        android:textStyle="bold"
+        android:maxLength="52"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintTop_toBottomOf="@+id/ivPostImagePets"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
+
+    <TextView
+        android:id="@+id/tvPostDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
+        android:text="@string/long_text"
+        android:textSize="11sp"
+        android:textAlignment="textStart"
+        app:layout_constraintTop_toBottomOf="@+id/tvPostHeader"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
+
+    <!--  Komentar & Share  -->
+    <ImageView
+        android:id="@+id/ivSharePost"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginEnd="25dp"
+        android:src="@drawable/icon_share"
+        app:layout_constraintTop_toTopOf="@id/tvPostHeader"
+        app:layout_constraintBottom_toBottomOf="@id/tvPostHeader"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
+
+    <ImageView
+        android:id="@+id/ivCommentPost"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginTop="3dp"
+        android:layout_marginEnd="18dp"
+        android:src="@drawable/icon_comment"
+        app:layout_constraintTop_toTopOf="@id/ivSharePost"
+        app:layout_constraintBottom_toBottomOf="@id/ivSharePost"
+        app:layout_constraintEnd_toStartOf="@+id/ivSharePost"
+        />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

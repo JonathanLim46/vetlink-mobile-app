@@ -16,4 +16,6 @@
     <color name="mtrl_textinput_default_box_stroke_color" tools:override="true">
         #B08BBB
     </color>
+    <color name="colorTabs">#6E6E6E</color>
+    <color name="colorSelectedTabs">#806E6E6E</color>
 </resources>
