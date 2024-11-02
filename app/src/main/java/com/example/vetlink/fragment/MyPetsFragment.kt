@@ -1,12 +1,16 @@
 package com.example.vetlink.fragment
 
 import android.annotation.SuppressLint
+import android.app.Dialog
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
@@ -26,6 +30,7 @@ import com.example.vetlink.databinding.FragmentMyPetsBinding
 import com.example.vetlink.viewModel.MenuActivityViewModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import org.w3c.dom.Text
 
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
@@ -81,6 +86,12 @@ class MyPetsFragment : Fragment(), RecyclerViewClickListener<PetsList>, PetsCate
         dialog?.apply {
             setCancelable(true)
             setContentView(viewLayout)
+
+            thirdLine.setOnClickListener{
+                dialog.dismiss()
+                deletePet()
+            }
+
             show()
 
             val bottomSheetBehavior = BottomSheetBehavior.from(viewLayout.parent as View)
@@ -193,6 +204,33 @@ class MyPetsFragment : Fragment(), RecyclerViewClickListener<PetsList>, PetsCate
         uniqueTypes.forEach { type ->
             petsCategory.add(PetsCategoryList(type))
         }
+    }
+
+    private fun deletePet(){
+        val dialog = Dialog(requireContext())
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setCancelable(false)
+        dialog.setContentView(R.layout.layout_center_logout_dialog)
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+        val tvDialogTitle: TextView = dialog.findViewById(R.id.tvDialogHeader)
+        val tvDialogDescription: TextView = dialog.findViewById(R.id.tvDialogDescription)
+        val btnYes: Button = dialog.findViewById(R.id.btnDialogLogout)
+        val btnNo: Button = dialog.findViewById(R.id.btnDialogCancel)
+
+        tvDialogTitle.text = "Delete this pet?"
+        tvDialogDescription.text = "Are you sure you will permanently delete this pet."
+        btnYes.text = "Delete"
+        btnNo.text = "Cancel"
+
+        btnYes.setOnClickListener {
+
+        }
+        btnNo.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        dialog.show()
     }
 
     companion object {
