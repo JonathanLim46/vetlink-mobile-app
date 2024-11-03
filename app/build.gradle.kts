@@ -87,4 +87,7 @@ dependencies {
     //ViewPager
     implementation ("androidx.viewpager2:viewpager2:1.1.0")
 
+    //GPS Manager
+    implementation("com.google.android.gms:play-services-location:21.3.0")
+
 }

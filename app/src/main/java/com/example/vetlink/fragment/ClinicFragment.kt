@@ -1,6 +1,11 @@
 package com.example.vetlink.fragment
 
+import android.annotation.SuppressLint
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.location.Address
+import android.location.Geocoder
+import android.location.Location
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -14,6 +19,8 @@ import android.view.WindowManager
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.TextView
+import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -25,6 +32,9 @@ import com.example.vetlink.adapter.ClinicListAdapter
 import com.example.vetlink.adapter.RecyclerViewClickListener
 import com.example.vetlink.databinding.FragmentClinicBinding
 import com.example.vetlink.viewModel.MainActivityViewModel
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
+import okio.IOException
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -50,9 +60,18 @@ class ClinicFragment : Fragment(), RecyclerViewClickListener<ClinicList>{
     private lateinit var allClinicList: ArrayList<ClinicList>
     private lateinit var clinicList: ArrayList<ClinicList>
     private lateinit var clinicListAdapter: ClinicListAdapter
+    private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
 
     private val sharedMainActivityViewModel: MainActivityViewModel by activityViewModels()
 
+    private val requestPermissionLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()){ isGranted: Boolean ->
+            if (isGranted){
+                getLastLocation()
+            } else {
+                Toast.makeText(requireContext(), "Please provide the required permission", Toast.LENGTH_SHORT).show()
+            }
+        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -78,20 +97,24 @@ class ClinicFragment : Fragment(), RecyclerViewClickListener<ClinicList>{
 
     fun initView() {
         with(binding){
-            val isClinicPage = true
+
+            fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(requireContext())
+            getLastLocation()
+
             allClinicList = ArrayList()
             clinicList = ArrayList()
+
             rvClinicPage.layoutManager = LinearLayoutManager(requireContext())
-            clinicListAdapter = ClinicListAdapter(clinicList, isClinicPage)
-            clinicListAdapter.notifyDataSetChanged()
-            rvClinicPage.adapter = clinicListAdapter
-            clinicListAdapter.clickListener(this@ClinicFragment)
+
+
 
 //            searchbar dan searchview
 
             searchBarClinic.setOnClickListener{
                 searchView.show()
             }
+
+
 
             searchView.editText.setOnEditorActionListener(object: TextView.OnEditorActionListener{
                 override fun onEditorAction(p0: TextView?, p1: Int, p2: KeyEvent?): Boolean {
@@ -137,7 +160,7 @@ class ClinicFragment : Fragment(), RecyclerViewClickListener<ClinicList>{
                 val closeTimeFormatted = outputFormat.format(inputFormat.parse(veteriner.close_time)!!)
                 allClinicList.add(ClinicList(veteriner.clinic_image, veteriner.clinic_name, veteriner.city, "Buka | $openTimeFormatted - $closeTimeFormatted"))
             }
-            clinicListAdapter.notifyDataSetChanged()
+
             clinicList.addAll(allClinicList)
         }
     }
@@ -146,7 +169,7 @@ class ClinicFragment : Fragment(), RecyclerViewClickListener<ClinicList>{
         with(binding){
             clinicList.clear()
             if(query.isEmpty()){
-                clinicList.addAll(allClinicList)
+                dataClinic()
             }else {
                 for (clinic in allClinicList){
                     if (clinic.clinicName.lowercase().contains(query.lowercase())){
@@ -158,13 +181,94 @@ class ClinicFragment : Fragment(), RecyclerViewClickListener<ClinicList>{
             }
             clinicListAdapter.notifyDataSetChanged()
         }
+    }
 
+    private fun dataClinic(){
+        with(binding){
+            val isClinicPage = true
+
+            clinicList.clear()
+            for(clinic in allClinicList){
+                if (clinic.clinicLocation.lowercase().contains(tvLocationClinic.text.toString().lowercase())){
+                    clinicList.add(clinic)
+                }
+            }
+
+
+            if(!::clinicListAdapter.isInitialized){
+                clinicListAdapter = ClinicListAdapter(clinicList, isClinicPage)
+                rvClinicPage.adapter = clinicListAdapter
+            } else {
+                clinicListAdapter.notifyDataSetChanged()
+            }
+
+            clinicListAdapter.clickListener(this@ClinicFragment)
+        }
     }
 
     override fun onItemClicke(view: View, item: ClinicList) {
         val intent = Intent(activity, MenuActivity::class.java)
         intent.putExtra("MENU_TITLE", "Clinic")
         startActivity(intent)
+    }
+
+    // LOCATION
+    @SuppressLint("MissingPermission")
+    private fun getLastLocation(){
+        if(hasLocationPermission()){
+            fusedLocationProviderClient.lastLocation.addOnSuccessListener { location ->
+                if (location!=null){
+                    displayLocationDetails(location)
+                }
+                else {
+                    Toast.makeText(requireContext(), "Location not available", Toast.LENGTH_SHORT).show()
+                }
+            }
+        } else {
+            requestLocationPermission()
+        }
+    }
+
+    private fun hasLocationPermission(): Boolean{
+        return ContextCompat.checkSelfPermission(
+            requireContext(),
+            android.Manifest.permission.ACCESS_COARSE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED
+    }
+
+    private fun requestLocationPermission() {
+        requestPermissionLauncher.launch(android.Manifest.permission.ACCESS_COARSE_LOCATION)
+    }
+
+    private fun displayLocationDetails(location: Location){
+
+        if(location != null){
+            Log.d("Location", "Latitude: ${location.latitude}, Longitude: ${location.longitude}")
+            try {
+                val geocoder = Geocoder(requireContext(), Locale.getDefault())
+                val address: MutableList<Address>? = geocoder.getFromLocation(location.latitude, location.longitude, 1)
+
+                if(address?.isNotEmpty() == true){
+                    val addressDetails = address[0]
+                    Log.d("Location Details", "Address: ${addressDetails.getAddressLine(0)}," +
+                            "City: ${addressDetails.locality}, Country: ${addressDetails.countryName}")
+                    binding.tvLocationClinic.text = addressDetails.subAdminArea?.replace("Kota", "")
+                        ?.replace("Kabupaten", "")?.trim() ?: addressDetails.locality?.replace("Kecamatan", "")?.trim()
+
+                    dataClinic()
+                } else {
+                    Toast.makeText(requireContext(), "Unable to get current city", Toast.LENGTH_SHORT).show()
+                    binding.tvLocationClinic.text = "Unknown"
+                }
+            } catch (e: IOException){
+                Toast.makeText(requireContext(), "Geocoder service not available", Toast.LENGTH_SHORT).show()
+                Log.e("Loation", "Geocoder Failed", e)
+            }
+        } else {
+            Toast.makeText(requireContext(), "Location not available", Toast.LENGTH_SHORT).show()
+            binding.tvLocationClinic.text = "Unknown"
+        }
+
     }
 
     companion object {
