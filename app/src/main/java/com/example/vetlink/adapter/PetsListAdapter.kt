@@ -21,6 +21,7 @@ class PetsListAdapter(private var petsList: List<PetsList>) :
         val petsBreed : TextView = itemView.findViewById(R.id.tvBreedMyPetList)
         val petsAge : TextView = itemView.findViewById(R.id.tvAgePets)
         val petsWeigth : TextView = itemView.findViewById(R.id.tvWeigthPets)
+        val petGender: TextView = itemView.findViewById(R.id.tvGenderPets)
     }
 
     fun setClickListener(clickListener: RecyclerViewClickListener<PetsList>){
@@ -42,6 +43,7 @@ class PetsListAdapter(private var petsList: List<PetsList>) :
         holder.petsBreed.text = pet.petBreed
         holder.petsAge.text = pet.petAge
         holder.petsWeigth.text = pet.petWeigth
+        holder.petGender.text = pet.petGender
 
         Picasso.get()
             .load(pet.petImage)

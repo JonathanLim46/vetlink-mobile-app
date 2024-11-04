@@ -3,219 +3,226 @@ package com.example.vetlink.fragment
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
-import android.Manifest
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
-import androidx.core.content.ContextCompat.checkSelfPermission
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.vetlink.R
-import com.example.vetlink.activity.SignupActivity
-import com.example.vetlink.activity.SignupActivity.Companion
-import com.example.vetlink.activity.SignupActivity.Companion.REQUEST_CODE_IMAGE_PICKER
-import com.example.vetlink.adapter.PetsCategoryList
-import com.example.vetlink.adapter.PetsCategoryListAdapter
+import com.example.vetlink.adapter.BreedListAdapter
+import com.example.vetlink.adapter.PetTypeListAdapter
+import com.example.vetlink.data.model.pets.PetBreed
+import com.example.vetlink.data.model.pets.PetType
 import com.example.vetlink.databinding.FragmentPetDetailsBinding
-import com.example.vetlink.util.toast
+import com.example.vetlink.viewModel.MenuActivityViewModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+private const val PET_ID = "PET_ID"
+private const val METHOD = "METHOD"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [PetDetailsFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class PetDetailsFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    private var pet_id: Int? = null
+    private var method: String? = null
     private lateinit var binding: FragmentPetDetailsBinding
+    private val sharedMenuActivityViewModel: MenuActivityViewModel by activityViewModels()
     private var selectedImageUri: Uri? = null
+    private var selectedPetType: PetType? = null
+    private var selectedGender: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+            pet_id = it.getInt(PET_ID)
+            method = it.getString(METHOD)
         }
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
+    ): View {
         binding = FragmentPetDetailsBinding.inflate(inflater, container, false)
-
         initView()
-
+        setupObservers()
         return binding.root
     }
 
-    private fun initView(){
-        with(binding){
+    private fun setupObservers() {
+        sharedMenuActivityViewModel.petTypes.observe(viewLifecycleOwner) { petTypes ->
+            binding.btnChoosePet.setOnClickListener {
+                showButtonSheetCategoryDialog(
+                    title = "Choose Pet",
+                    options = petTypes,
+                    onSelect = { selectedPet ->
+                        selectedPetType = selectedPet as? PetType // Cast selectedPet to PetType
+                        binding.btnChoosePet.text = selectedPetType?.name // Access name property
+                    }
+                )
+            }
+        }
+    }
 
-            ivAddImagePets.setOnClickListener{
-                openImageChooser()
+    private fun initView() {
+        with(binding) {
+
+
+
+            btnMaleGender.setOnClickListener {
+                selectGender("Male")
             }
 
-            btnSubmitPets.setOnClickListener{
+            btnFemaleGender.setOnClickListener {
+                selectGender("Female")
+            }
+
+            ivAddImagePets.setOnClickListener { openImageChooser() }
+
+            btnChooseBreed.setOnClickListener {
+                selectedPetType?.let { petType ->
+                    showBreedSelectionDialog(petType)
+                } ?: Toast.makeText(requireContext(), "Please choose a pet type first.", Toast.LENGTH_SHORT).show()
+            }
+
+            btnSubmitPets.setOnClickListener {
                 val namePets = etNamePets.text.toString()
                 val agePets = etAgePets.text.toString()
                 val weightPets = etWeightPets.text.toString()
                 val colorError = ColorStateList.valueOf(Color.RED)
 
-                if(namePets.isEmpty()){
+                // Validation
+                if (namePets.isEmpty()) {
                     textInputLayoutNamePets.error = "Name is required"
                     textInputLayoutNamePets.setErrorTextColor(colorError)
-                    textInputLayoutNamePets.setErrorIconTintList(colorError)
                     etNamePets.requestFocus()
                 } else {
-                    textInputLayoutNamePets.error = null
                     textInputLayoutNamePets.isErrorEnabled = false
                 }
 
-                if(agePets.isEmpty()){
+                if (agePets.isEmpty()) {
                     textInputLayoutAgePets.error = "Age is required"
                     textInputLayoutAgePets.setErrorTextColor(colorError)
-                    textInputLayoutAgePets.setErrorIconTintList(colorError)
                     etAgePets.requestFocus()
                 } else {
-                    textInputLayoutAgePets.error = null
                     textInputLayoutAgePets.isErrorEnabled = false
                 }
 
-                if(weightPets.isEmpty()){
+                if (weightPets.isEmpty()) {
                     textInputLayoutWeightPets.error = "Weight is required"
                     textInputLayoutWeightPets.setErrorTextColor(colorError)
-                    textInputLayoutWeightPets.setErrorIconTintList(colorError)
                     etWeightPets.requestFocus()
                 } else {
-                    textInputLayoutWeightPets.error = null
                     textInputLayoutWeightPets.isErrorEnabled = false
                 }
+
+                if (namePets.isNotEmpty() && agePets.isNotEmpty() && weightPets.isNotEmpty()) {
+                    Toast.makeText(requireContext(), "method: $method, id pet: $pet_id", Toast.LENGTH_SHORT).show()
+                }
             }
 
-            btnChoosePet.setOnClickListener{
-                val title = "Choose Pet"
-                showButtonSheetCategoryDialog(title)
-            }
-
-            btnChooseBreed.setOnClickListener{
-                val title = "Choose Breed"
-                showButtonSheetCategoryDialog(title)
-            }
-
-            etNotePets.addTextChangedListener(object : TextWatcher{
+            etNotePets.addTextChangedListener(object : TextWatcher {
                 private var isLineBreakAllowed = false
 
-                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                    // No action needed before text change
-                }
-
+                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                    // Check if the first line is complete
                     if (!isLineBreakAllowed && s?.contains("\n") == true) {
-                        // If a line break is detected before the first line is complete, remove it
                         val newText = s.toString().replace("\n", "")
                         etNotePets.setText(newText)
-                        etNotePets.setSelection(newText.length) // Move cursor to the end
-                    } else if (etNotePets.layout != null) {
-                        // Check if the text exceeds the first line width
-                        if (etNotePets.layout.lineCount > 1 || (etNotePets.text?.length
-                                ?: 0) >= etNotePets.width
-                        ){
-                            isLineBreakAllowed = true
-                        }
+                        etNotePets.setSelection(newText.length)
+                    } else if (etNotePets.layout != null && etNotePets.layout.lineCount > 1) {
+                        isLineBreakAllowed = true
                     }
                 }
 
-                override fun afterTextChanged(s: Editable?) {
-                    // No action needed after text change
-                }
+                override fun afterTextChanged(s: Editable?) {}
             })
         }
     }
 
-    @SuppressLint("InflateParams")
-    private fun showButtonSheetCategoryDialog(title: String){
+    private fun selectGender(gender: String) {
+        selectedGender = gender
+        binding.btnMaleGender.isSelected = gender == "Male"
+        binding.btnFemaleGender.isSelected = gender == "Female"
 
+        // Optionally, you can change the background to reflect selection
+        updateButtonBackgrounds()
+        Log.d("PetDetailsFragment", "Selected Gender: $selectedGender")
+    }
 
-//        dialog
-        val dialog = activity?.let { BottomSheetDialog(it) }
-        val view = layoutInflater.inflate(R.layout.layout_bottom_sheet_pet_dialog, null, false)
-
-//        Inisialisasi view
-        val headerDialog = view.findViewById<TextView>(R.id.tvDialog)
-        val reyclerView = view.findViewById<RecyclerView>(R.id.rvPetCategoryList)
-
-        reyclerView.layoutManager = LinearLayoutManager(requireContext())
-
-//        Data reycler view
-        val petsCategoryList: ArrayList<PetsCategoryList> = ArrayList()
-
-        if (title == "Choose Pet") {
-            headerDialog.text = title
-            addDataPetsCategoryToList(petsCategoryList)
-        } else if (title == "Choose Breed"){
-            headerDialog.text = title
-            addDataBreedToList(petsCategoryList)
+    private fun updateButtonBackgrounds() {
+        if (binding.btnMaleGender.isSelected) {
+            binding.btnMaleGender.setBackgroundResource(R.drawable.button_selector) // Selected background
+        } else {
+            binding.btnMaleGender.setBackgroundResource(R.drawable.outline_input) // Default background
         }
 
-        val petsCategoryListAdapter = PetsCategoryListAdapter(petsCategoryList)
-        reyclerView.adapter = petsCategoryListAdapter
+        if (binding.btnFemaleGender.isSelected) {
+            binding.btnFemaleGender.setBackgroundResource(R.drawable.button_selector) // Selected background
+        } else {
+            binding.btnFemaleGender.setBackgroundResource(R.drawable.outline_input) // Default background
+        }
+    }
 
+    @SuppressLint("InflateParams")
+    private fun showButtonSheetCategoryDialog(
+        title: String,
+        options: List<Any>, // Change type to Any to accommodate both PetType and Breed
+        onSelect: (Any) -> Unit
+    ) {
+        val dialog = activity?.let { BottomSheetDialog(it) }
+        val view = layoutInflater.inflate(R.layout.layout_bottom_sheet_pet_dialog, null, false)
+        val headerDialog = view.findViewById<TextView>(R.id.tvDialog)
+        val recyclerView = view.findViewById<RecyclerView>(R.id.rvPetCategoryList)
+        headerDialog.text = title
+        recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
-//        Buat Dialog
+        val adapter = if (options.isNotEmpty() && options[0] is PetType) {
+            PetTypeListAdapter(options as List<PetType>) { selectedOption ->
+                Log.d("PetDetailsFragment", "Selected Pet Type ID: ${(selectedOption as PetType).id}")
+                onSelect(selectedOption)
+                dialog?.dismiss()
+            }
+        } else {
+            BreedListAdapter(options as List<PetBreed>) { selectedOption ->
+                Log.d("PetDetailsFragment", "Selected Breed ID: ${(selectedOption as PetBreed).id}")
+                onSelect(selectedOption)
+                dialog?.dismiss()
+            }
+        }
+
+        recyclerView.adapter = adapter
+
         dialog?.apply {
             setCancelable(true)
             setContentView(view)
-
             show()
-
-//            Bottomsheet height & dragable
             val bottomSheetBehavior = BottomSheetBehavior.from(view.parent as View)
             bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
-            bottomSheetBehavior.isHideable = true
-
         }
-
     }
 
-    private fun savePet(){
-        Toast.makeText(requireContext(), "save method", Toast.LENGTH_SHORT).show()
-    }
-
-    private fun updatePet(){
-        Toast.makeText(requireContext(), "update method", Toast.LENGTH_SHORT).show()
-    }
-
-
-    private fun addDataPetsCategoryToList(petsCategory: ArrayList<PetsCategoryList>){
-        petsCategory.add(PetsCategoryList("Dogs"))
-        petsCategory.add(PetsCategoryList("Cats"))
-    }
-
-    private fun addDataBreedToList(petsCategory: ArrayList<PetsCategoryList>){
-        petsCategory.add(PetsCategoryList("Persian"))
-        petsCategory.add(PetsCategoryList("Ragdoll"))
+    private fun showBreedSelectionDialog(petType: PetType?) {
+        petType?.let {
+            showButtonSheetCategoryDialog(
+                title = "Choose Breed",
+                options = it.breeds,
+                onSelect = { selectedBreed ->
+                    binding.btnChooseBreed.text = (selectedBreed as? PetBreed)?.breed_name // Access breed_name property
+                }
+            )
+        } ?: Toast.makeText(requireContext(), "Please choose a pet type first.", Toast.LENGTH_SHORT).show()
     }
 
     private fun openImageChooser() {
@@ -231,22 +238,19 @@ class PetDetailsFragment : Fragment() {
         if (requestCode == REQUEST_CODE_IMAGE_PICKER && resultCode == Activity.RESULT_OK) {
             data?.data?.let { uri ->
                 selectedImageUri = uri
-                // You can set the image to an ImageView or handle it as needed
-                binding.ivAddImagePets.setImageURI(uri) // Replace with your actual ImageView
+                binding.ivAddImagePets.setImageURI(uri)
             }
         }
     }
 
     companion object {
         const val REQUEST_CODE_IMAGE_PICKER = 101
-
         @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            PetDetailsFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
+        fun newInstance(pet_id: Int, method: String) = PetDetailsFragment().apply {
+            arguments = Bundle().apply {
+                putInt(PET_ID, pet_id)
+                putString(METHOD, method)
             }
+        }
     }
 }

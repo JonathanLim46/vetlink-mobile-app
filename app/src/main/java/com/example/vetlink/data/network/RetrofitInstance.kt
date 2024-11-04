@@ -1,7 +1,6 @@
 package com.example.vetlink.data.network
 
 import com.example.vetlink.helper.DateDeserializer
-import com.example.vetlink.helper.Session
 import com.example.vetlink.helper.SessionManager
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
@@ -47,9 +46,9 @@ object RetrofitInstance {
     // Create Retrofit instance
     fun getRetrofit(session: SessionManager): Retrofit {
         return Retrofit.Builder()
-            .baseUrl("http://192.168.1.9:8000/api/") // Replace with your base URL
+            .baseUrl("http://192.168.100.69:8000/api/") // Replace with your base URL
             .client(getOkHttpClient(session))
             .addConverterFactory(GsonConverterFactory.create(getGson())) // Use Gson for JSON conversion
-            .build() // No need for CoroutineCallAdapterFactory
+            .build()
     }
 }
