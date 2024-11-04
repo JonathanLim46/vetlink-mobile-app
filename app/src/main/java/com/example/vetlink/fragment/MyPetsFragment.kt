@@ -35,7 +35,9 @@ import org.w3c.dom.Text
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
-class MyPetsFragment : Fragment(), RecyclerViewClickListener<PetsList>, PetsCategoryListAdapter.OnItemClickListener {
+class MyPetsFragment : Fragment(),
+    RecyclerViewClickListener<PetsList>,
+    PetsCategoryListAdapter.OnItemClickListener {
 
     private var param1: String? = null
     private var param2: String? = null
@@ -87,9 +89,15 @@ class MyPetsFragment : Fragment(), RecyclerViewClickListener<PetsList>, PetsCate
             setCancelable(true)
             setContentView(viewLayout)
 
+            //tombol edit
+            secondLine.setOnClickListener{
+                dialog.dismiss()
+            }
+
+            //tombol hapus
             thirdLine.setOnClickListener{
                 dialog.dismiss()
-                deletePet()
+                deletePet(item.petId)
             }
 
             show()
@@ -181,10 +189,21 @@ class MyPetsFragment : Fragment(), RecyclerViewClickListener<PetsList>, PetsCate
             if (pets != null) {
                 petsList.clear() // Clear the list before adding new data
                 petsList.addAll(pets.map { pet ->
-                    PetsList(pet.id, pet.photo, pet.type, pet.pet_name, pet.breed, pet.age.toString(), pet.weight)
+                    PetsList(pet.id, pet.photo, pet.type, pet.pet_name, pet.breed, pet.age.toString(), pet.weight, pet.gender)
                 })
                 binding.tvCountTotalPets.text = pets.size.toString()
                 petsListAdapter.notifyDataSetChanged() // Notify the adapter to refresh
+            }
+        }
+
+        sharedMenuActivityViewModel.petDetail.observe(viewLifecycleOwner){ pet ->
+            if (pet != null) {
+                val intent = Intent(activity, MenuActivity::class.java)
+                intent.putExtra("MENU_TITLE", "Pet Details")
+                intent.putExtra("METHOD", "edit")
+                startActivity(intent)
+            }else{ //if error was ocured
+                Toast.makeText(requireContext(), "Terjadi Kesalahan!", Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -194,6 +213,19 @@ class MyPetsFragment : Fragment(), RecyclerViewClickListener<PetsList>, PetsCate
                 binding.tvCountScheduledVisit.text = ongoingCount.toString()
             } else {
                 binding.tvCountScheduledVisit.text = "0"
+            }
+        }
+
+        sharedMenuActivityViewModel.deletePetMessage.observe(viewLifecycleOwner){message ->
+            if (message != null) {
+                Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+                sharedMenuActivityViewModel.getPets()
+            }
+        }
+
+        sharedMenuActivityViewModel._errorMessageDeletePet.observe(viewLifecycleOwner){ message ->
+            if (message != null){
+                Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -206,7 +238,7 @@ class MyPetsFragment : Fragment(), RecyclerViewClickListener<PetsList>, PetsCate
         }
     }
 
-    private fun deletePet(){
+    private fun deletePet(petId: Int){
         val dialog = Dialog(requireContext())
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setCancelable(false)
@@ -224,8 +256,10 @@ class MyPetsFragment : Fragment(), RecyclerViewClickListener<PetsList>, PetsCate
         btnNo.text = "Cancel"
 
         btnYes.setOnClickListener {
-
+            sharedMenuActivityViewModel.deletePet(petId)
+            dialog.dismiss()
         }
+
         btnNo.setOnClickListener {
             dialog.dismiss()
         }

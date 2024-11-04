@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -84,7 +85,20 @@ class MenuActivity : AppCompatActivity() {
             menuActivityViewModel.getQueues()
             replaceFragmentWithOutIntance(MyPetsFragment())
         } else if (menuTitle == "Pet Details"){
-            replaceFragmentWithOutIntance(PetDetailsFragment())
+            val petId = intent.getIntExtra("PET_ID", 0)
+            val method = intent.getStringExtra("METHOD")
+            menuActivityViewModel.getPetTypeBreed()
+            val fragment = PetDetailsFragment().apply {
+                arguments = Bundle().apply {
+                    putInt("PET_ID", petId)
+                    putString("METHOD", method)
+                }
+            }
+            replaceFragmentWithOutIntance(fragment)
+            if (method.equals("edit")){
+                menuActivityViewModel.getPetDetails(petId)
+                Log.d("PET_ID_Edit", petId.toString())
+            }
         } else if (menuTitle == "Schedule"){
             replaceFragmentWithOutIntance(ScheduleFragment())
         } else if(menuTitle == "FAQ VetLink"){

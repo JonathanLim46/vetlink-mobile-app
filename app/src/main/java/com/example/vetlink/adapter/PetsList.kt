@@ -7,5 +7,6 @@ data class PetsList(
     val petName: String,
     val petBreed: String,
     val petAge: String,
-    val petWeigth: String
+    val petWeigth: String,
+    val petGender: String
 )
