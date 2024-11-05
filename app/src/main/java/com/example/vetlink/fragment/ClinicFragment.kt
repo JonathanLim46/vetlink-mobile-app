@@ -221,7 +221,9 @@ class ClinicFragment : Fragment(), RecyclerViewClickListener<ClinicList>{
                     displayLocationDetails(location)
                 }
                 else {
-                    Toast.makeText(requireContext(), "Location not available", Toast.LENGTH_SHORT).show()
+                    if(isAdded){
+                        Toast.makeText(requireContext(), "Location not available", Toast.LENGTH_SHORT).show()
+                    }
                 }
             }
         } else {
@@ -245,28 +247,36 @@ class ClinicFragment : Fragment(), RecyclerViewClickListener<ClinicList>{
         if(location != null){
             Log.d("Location", "Latitude: ${location.latitude}, Longitude: ${location.longitude}")
             try {
-                val geocoder = Geocoder(requireContext(), Locale.getDefault())
-                val address: MutableList<Address>? = geocoder.getFromLocation(location.latitude, location.longitude, 1)
+                if (isAdded){
+                    val geocoder = Geocoder(requireContext(), Locale.getDefault())
+                    val address: MutableList<Address>? = geocoder.getFromLocation(location.latitude, location.longitude, 1)
 
-                if(address?.isNotEmpty() == true){
-                    val addressDetails = address[0]
-                    Log.d("Location Details", "Address: ${addressDetails.getAddressLine(0)}," +
-                            "City: ${addressDetails.locality}, Country: ${addressDetails.countryName}")
-                    binding.tvLocationClinic.text = addressDetails.subAdminArea?.replace("Kota", "")
-                        ?.replace("Kabupaten", "")?.trim() ?: addressDetails.locality?.replace("Kecamatan", "")?.trim()
+                    if(address?.isNotEmpty() == true){
+                        val addressDetails = address[0]
+                        Log.d("Location Details", "Address: ${addressDetails.getAddressLine(0)}," +
+                                "City: ${addressDetails.locality}, Country: ${addressDetails.countryName}")
+                        binding.tvLocationClinic.text = addressDetails.subAdminArea?.replace("Kota", "")
+                            ?.replace("Kabupaten", "")?.trim() ?: addressDetails.locality?.replace("Kecamatan", "")?.trim()
 
-                    dataClinic()
-                } else {
-                    Toast.makeText(requireContext(), "Unable to get current city", Toast.LENGTH_SHORT).show()
-                    binding.tvLocationClinic.text = "Unknown"
+                        dataClinic()
+                    } else {
+                        if (isAdded){
+                            Toast.makeText(requireContext(), "Unable to get current city", Toast.LENGTH_SHORT).show()
+                            binding.tvLocationClinic.text = "Unknown"
+                        }
+                    }
                 }
             } catch (e: IOException){
-                Toast.makeText(requireContext(), "Geocoder service not available", Toast.LENGTH_SHORT).show()
-                Log.e("Loation", "Geocoder Failed", e)
+                if (isAdded){
+                    Toast.makeText(requireContext(), "Geocoder service not available", Toast.LENGTH_SHORT).show()
+                    Log.e("Location", "Geocoder Failed", e)
+                }
             }
         } else {
-            Toast.makeText(requireContext(), "Location not available", Toast.LENGTH_SHORT).show()
-            binding.tvLocationClinic.text = "Unknown"
+            if (isAdded){
+                Toast.makeText(requireContext(), "Location not available", Toast.LENGTH_SHORT).show()
+                binding.tvLocationClinic.text = "Unknown"
+            }
         }
 
     }
