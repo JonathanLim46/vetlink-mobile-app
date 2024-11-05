@@ -3,6 +3,7 @@ package com.example.vetlink.fragment
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.net.Uri
@@ -29,6 +30,14 @@ import com.example.vetlink.databinding.FragmentPetDetailsBinding
 import com.example.vetlink.viewModel.MenuActivityViewModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import okhttp3.MultipartBody
+import androidx.core.content.ContextCompat
+import com.example.vetlink.activity.SignupActivity
+import com.example.vetlink.activity.SignupActivity.Companion
+import com.example.vetlink.util.toast
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.RequestBody
+import java.io.File
 
 private const val PET_ID = "PET_ID"
 private const val METHOD = "METHOD"
@@ -40,6 +49,7 @@ class PetDetailsFragment : Fragment() {
     private val sharedMenuActivityViewModel: MenuActivityViewModel by activityViewModels()
     private var selectedImageUri: Uri? = null
     private var selectedPetType: PetType? = null
+    private var selectedPetBreed: PetBreed? = null
     private var selectedGender: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -77,9 +87,6 @@ class PetDetailsFragment : Fragment() {
 
     private fun initView() {
         with(binding) {
-
-
-
             btnMaleGender.setOnClickListener {
                 selectGender("Male")
             }
@@ -97,38 +104,9 @@ class PetDetailsFragment : Fragment() {
             }
 
             btnSubmitPets.setOnClickListener {
-                val namePets = etNamePets.text.toString()
-                val agePets = etAgePets.text.toString()
-                val weightPets = etWeightPets.text.toString()
-                val colorError = ColorStateList.valueOf(Color.RED)
-
-                // Validation
-                if (namePets.isEmpty()) {
-                    textInputLayoutNamePets.error = "Name is required"
-                    textInputLayoutNamePets.setErrorTextColor(colorError)
-                    etNamePets.requestFocus()
-                } else {
-                    textInputLayoutNamePets.isErrorEnabled = false
-                }
-
-                if (agePets.isEmpty()) {
-                    textInputLayoutAgePets.error = "Age is required"
-                    textInputLayoutAgePets.setErrorTextColor(colorError)
-                    etAgePets.requestFocus()
-                } else {
-                    textInputLayoutAgePets.isErrorEnabled = false
-                }
-
-                if (weightPets.isEmpty()) {
-                    textInputLayoutWeightPets.error = "Weight is required"
-                    textInputLayoutWeightPets.setErrorTextColor(colorError)
-                    etWeightPets.requestFocus()
-                } else {
-                    textInputLayoutWeightPets.isErrorEnabled = false
-                }
-
-                if (namePets.isNotEmpty() && agePets.isNotEmpty() && weightPets.isNotEmpty()) {
-                    Toast.makeText(requireContext(), "method: $method, id pet: $pet_id", Toast.LENGTH_SHORT).show()
+                if (method!!.equals("add")){ // add
+                    validateAdd()
+                }else{// edit
                 }
             }
 
@@ -148,6 +126,100 @@ class PetDetailsFragment : Fragment() {
 
                 override fun afterTextChanged(s: Editable?) {}
             })
+        }
+    }
+
+    private fun validateAdd() {
+        with(binding){
+            val namePets = etNamePets.text.toString()
+            val agePets = etAgePets.text.toString()
+            val weightPets = etWeightPets.text.toString()
+            var petType = selectedPetType?.id
+            val petBreed = selectedPetBreed?.id
+            val genderPets = selectedGender
+            val notePets = etNotePets.text.toString()
+            val photoPet: MultipartBody.Part = selectedImageUri.let { uri ->
+                val filePath = uri?.let { getFilePathFromUri(it) } // Get the file path from URI
+                val file = File(filePath) // Handle the file path correctly
+                val requestFile = RequestBody.create("image/*".toMediaTypeOrNull(), file)
+                MultipartBody.Part.createFormData("photo", file.name, requestFile)
+            }
+
+
+            val colorError = ColorStateList.valueOf(Color.RED)
+            var isFormAddValid = true
+
+            // Validation
+            if (namePets.isEmpty()) {
+                textInputLayoutNamePets.error = "Name is required"
+                textInputLayoutNamePets.setErrorTextColor(colorError)
+                etNamePets.requestFocus()
+                isFormAddValid = false
+            } else {
+                textInputLayoutNamePets.isErrorEnabled = false
+            }
+
+            if (agePets.isEmpty()) {
+                textInputLayoutAgePets.error = "Age is required"
+                textInputLayoutAgePets.setErrorTextColor(colorError)
+                etAgePets.requestFocus()
+                isFormAddValid = false
+            } else {
+                textInputLayoutAgePets.isErrorEnabled = false
+            }
+
+            if (weightPets.isEmpty()) {
+                textInputLayoutWeightPets.error = "Weight is required"
+                textInputLayoutWeightPets.setErrorTextColor(colorError)
+                etWeightPets.requestFocus()
+                isFormAddValid = false
+
+            } else {
+                textInputLayoutWeightPets.isErrorEnabled = false
+            }
+
+            if (petType == null) {
+                Toast.makeText(requireContext(), "Please choose a pet type.", Toast.LENGTH_SHORT).show()
+                isFormAddValid = false
+            }
+
+            if (petBreed == null) {
+                Toast.makeText(requireContext(), "Please choose a pet breed.", Toast.LENGTH_SHORT).show()
+                isFormAddValid = false
+            }
+
+            if (genderPets == null) {
+                Toast.makeText(requireContext(), "Please select a gender.", Toast.LENGTH_SHORT).show()
+                isFormAddValid = false
+            }
+
+            if (selectedImageUri == null) {
+                Toast.makeText(requireContext(), "Please add an image.", Toast.LENGTH_SHORT).show()
+                isFormAddValid = false
+            }
+
+            // If form is valid, display a toast with all parameters
+            if (isFormAddValid) {
+                sharedMenuActivityViewModel.addPet(namePets, petType.toString(), photoPet, petBreed.toString(), agePets, weightPets, genderPets!!, notePets)
+                Toast.makeText(
+                    requireContext(),
+                    "Pet added with details:\nName: $namePets\nAge: $agePets\nWeight: $weightPets\nType: $petType\nBreed: $petBreed\nGender: $genderPets\nNote: $notePets",
+                    Toast.LENGTH_LONG
+                ).show()
+                Log.d("data-add", "Pet added with details:\nName: $namePets\nAge: $agePets\nWeight: $weightPets\nType: $petType\nBreed: $petBreed\nGender: $genderPets\nNote: $notePets",)
+            }
+        }
+    }
+
+    private fun getFilePathFromUri(uri: Uri): String? {
+        val cursor = requireContext().contentResolver.query(uri, arrayOf(android.provider.MediaStore.Images.Media.DATA), null, null, null)
+        return cursor?.use {
+            if (it.moveToFirst()) {
+                val columnIndex = it.getColumnIndex(android.provider.MediaStore.Images.Media.DATA)
+                it.getString(columnIndex)
+            } else {
+                null
+            }
         }
     }
 
@@ -191,12 +263,15 @@ class PetDetailsFragment : Fragment() {
         val adapter = if (options.isNotEmpty() && options[0] is PetType) {
             PetTypeListAdapter(options as List<PetType>) { selectedOption ->
                 Log.d("PetDetailsFragment", "Selected Pet Type ID: ${(selectedOption as PetType).id}")
+                selectedPetType = selectedOption
+                selectedPetBreed = null // Reset breed selection
                 onSelect(selectedOption)
                 dialog?.dismiss()
             }
         } else {
             BreedListAdapter(options as List<PetBreed>) { selectedOption ->
                 Log.d("PetDetailsFragment", "Selected Breed ID: ${(selectedOption as PetBreed).id}")
+                selectedPetBreed = selectedOption
                 onSelect(selectedOption)
                 dialog?.dismiss()
             }
@@ -229,16 +304,29 @@ class PetDetailsFragment : Fragment() {
         Intent(Intent.ACTION_PICK).also {
             it.type = "image/*"
             it.putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("image/jpeg", "image/jpg", "image/png"))
-            startActivityForResult(it, REQUEST_CODE_IMAGE_PICKER)
+            startActivityForResult(it, SignupActivity.REQUEST_CODE_IMAGE_PICKER)
         }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == REQUEST_CODE_IMAGE_PICKER && resultCode == Activity.RESULT_OK) {
-            data?.data?.let { uri ->
-                selectedImageUri = uri
+        if (resultCode == Activity.RESULT_OK && requestCode == SignupActivity.REQUEST_CODE_IMAGE_PICKER) {
+            selectedImageUri = data?.data
+            selectedImageUri?.let { uri ->
+                // Set the selected image URI to the ImageView
                 binding.ivAddImagePets.setImageURI(uri)
+            }
+        }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == SignupActivity.REQUEST_CODE_IMAGE_PICKER) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permission granted, open the image chooser
+                openImageChooser()
+            } else {
+                Toast.makeText(requireContext(),"Permission denied to access images.", Toast.LENGTH_SHORT).show()
             }
         }
     }

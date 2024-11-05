@@ -23,15 +23,20 @@ class PetRepository(val session: SessionManager) {
         file: MultipartBody.Part,
         breed: String,
         age: String,
-        weight: String
+        weight: String,
+        gender: String,
+        note: String?
     ): Result<PetAddResponse> {
         val petNameRequestBody = RequestBody.create("text/plain".toMediaTypeOrNull(), pet_name)
         val typeRequestBody = RequestBody.create("text/plain".toMediaTypeOrNull(), type)
         val breedRequestBody = RequestBody.create("text/plain".toMediaTypeOrNull(), breed)
         val ageRequestBody = RequestBody.create("text/plain".toMediaTypeOrNull(), age)
         val weightRequestBody = RequestBody.create("text/plain".toMediaTypeOrNull(), weight)
+        val genderRequestBody = RequestBody.create("text/plain".toMediaTypeOrNull(), gender)
+        val noteRequestBody = RequestBody.create("text/plain".toMediaTypeOrNull(), note ?: "")
+
         return try {
-            val response = petApi.addPet(petNameRequestBody, typeRequestBody, file, breedRequestBody, ageRequestBody, weightRequestBody)
+            val response = petApi.addPet(petNameRequestBody, typeRequestBody, file, breedRequestBody, ageRequestBody, weightRequestBody, genderRequestBody, noteRequestBody)
             Result.success(response)
         }catch (e: Exception){
             Result.failure(e)

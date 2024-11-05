@@ -130,9 +130,7 @@ class SignupActivity : AppCompatActivity() {
                 val requestFile = RequestBody.create("image/*".toMediaTypeOrNull(), file)
                 MultipartBody.Part.createFormData("photo", file.name, requestFile)
             }
-
             loadingAlert.startAlertDialog()
-
             registerViewModel.registerUser(name, username, email, password, phone, photoPart)
         }
     }
