@@ -125,6 +125,7 @@ class SignupActivity : AppCompatActivity() {
                 val requestFile = RequestBody.create("image/*".toMediaTypeOrNull(), file)
                 MultipartBody.Part.createFormData("photo", file.name, requestFile)
             }
+            Log.d("API_RESPONSE", "Photo Part: $photoPart")
             registerViewModel.registerUser(name, username, email, password, phone, photoPart)
         }
     }

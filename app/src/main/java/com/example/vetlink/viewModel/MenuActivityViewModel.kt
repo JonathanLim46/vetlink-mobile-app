@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.vetlink.data.model.pets.Pet
+import com.example.vetlink.data.model.pets.PetAddResponse
 import com.example.vetlink.data.model.pets.PetType
 import com.example.vetlink.data.model.queue.Queue
 import com.example.vetlink.data.model.user.User
@@ -14,6 +15,7 @@ import com.example.vetlink.repository.AuthRepository
 import com.example.vetlink.repository.PetRepository
 import com.example.vetlink.repository.QueueRepository
 import kotlinx.coroutines.launch
+import okhttp3.MultipartBody
 import java.net.ConnectException
 
 class MenuActivityViewModel(
@@ -27,6 +29,9 @@ class MenuActivityViewModel(
 
     private val _errorMessageUser = MutableLiveData<String>()
     val errorMessageUser: LiveData<String> get() = _errorMessageUser
+
+    val addPetResponse = MutableLiveData<PetAddResponse?>()
+    val errorMessageAddPet = MutableLiveData<String>()
 
     private val _pets = MutableLiveData<List<Pet>>()
     val pets: LiveData<List<Pet>> get() = _pets
@@ -55,6 +60,36 @@ class MenuActivityViewModel(
     private val _deletePetMessage = MutableLiveData<String>()
     val deletePetMessage: LiveData<String> get() = _deletePetMessage
     val _errorMessageDeletePet = MutableLiveData<String>()
+
+    fun addPet(
+        name: String,
+        type: String,
+        file: MultipartBody.Part,
+        breed: String,
+        age: String,
+        weight: String,
+        gender: String,
+        note: String? = null
+    ){
+        viewModelScope.launch {
+            try {
+                val response = petRepository?.addPet(name, type, file, breed, age, weight, gender, note)
+                if (response!!.isSuccess){
+                    addPetResponse.postValue(response.getOrNull())
+                    Log.d("API_RESPONSE", "Pet added successfully: $addPetResponse")
+                } else {
+                    errorMessageAddPet.postValue("Failed to add pet. Please try again.")
+                    Log.e("API_ERROR", "Add Pet failed: ${response?.exceptionOrNull()}")
+                }
+            }catch (e: ConnectException) {
+                _errorMessageUser.postValue("Unable to connect to the server. Please check your internet connection.")
+                Log.e("API_ERROR", "Network error: ${e.message}")
+            } catch (e: Exception) {
+                _errorMessageUser.postValue("An error occurred. Please try again.")
+                Log.e("API_ERROR", "Pet Add error: ${e.message}")
+            }
+        }
+    }
 
 
     fun getPets(){

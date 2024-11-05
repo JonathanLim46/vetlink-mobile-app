@@ -21,10 +21,12 @@ interface PetApi {
     suspend fun addPet(
         @Part("pet_name") pet_name: RequestBody,
         @Part("type") type: RequestBody,
-        @Part("file") file: MultipartBody.Part,
+        @Part photo: MultipartBody.Part,
         @Part("breed") breed: RequestBody,
         @Part("age") age: RequestBody,
-        @Part("weight") weight: RequestBody
+        @Part("weight") weight: RequestBody,
+        @Part("gender") gender: RequestBody,
+        @Part("note") note: RequestBody? = null
     ): PetAddResponse
 
     //get all pet
