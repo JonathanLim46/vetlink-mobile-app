@@ -24,6 +24,7 @@ import com.example.vetlink.viewModel.ViewModelFactory
 import android.Manifest
 import android.content.pm.PackageManager
 import android.util.Log
+import com.example.vetlink.LoadingAlert
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -34,6 +35,7 @@ class SignupActivity : AppCompatActivity() {
     private var selectedImageUri: Uri? = null
     private lateinit var binding: ActivitySignupBinding
     private lateinit var session: SessionManager
+    private lateinit var loadingAlert: LoadingAlert
 
     private val registerViewModel: RegisterActivityViewModel by viewModels {
         ViewModelFactory(AuthRepository(session))
@@ -44,6 +46,8 @@ class SignupActivity : AppCompatActivity() {
         enableEdgeToEdge()
         binding = ActivitySignupBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        loadingAlert = LoadingAlert(this)
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -61,6 +65,7 @@ class SignupActivity : AppCompatActivity() {
 
         registerViewModel.errorMessage.observe(this) { message ->
             message?.let {
+                loadingAlert.stopAlertDialog()
                 toast(message)
             }
         }
@@ -125,6 +130,9 @@ class SignupActivity : AppCompatActivity() {
                 val requestFile = RequestBody.create("image/*".toMediaTypeOrNull(), file)
                 MultipartBody.Part.createFormData("photo", file.name, requestFile)
             }
+
+            loadingAlert.startAlertDialog()
+
             registerViewModel.registerUser(name, username, email, password, phone, photoPart)
         }
     }
