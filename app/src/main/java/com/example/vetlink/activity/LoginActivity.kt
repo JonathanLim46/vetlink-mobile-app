@@ -8,12 +8,17 @@ import android.provider.ContactsContract.CommonDataKinds.Email
 import android.text.TextWatcher
 import android.util.Log
 import android.util.Patterns
+import android.view.LayoutInflater
+import android.view.View
+import android.view.WindowManager
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.example.vetlink.LoadingAlert
 import com.example.vetlink.R
 import com.example.vetlink.data.model.auth.LoginResponse
 import com.example.vetlink.data.network.AuthApi
@@ -36,6 +41,9 @@ class LoginActivity : AppCompatActivity() {
 
     private lateinit var session: SessionManager
 
+    private lateinit var loadingAlert: LoadingAlert
+
+
     private val loginViewModel: LoginActivityViewModel by viewModels {
         ViewModelFactory(AuthRepository(session))
     }
@@ -53,6 +61,8 @@ class LoginActivity : AppCompatActivity() {
             insets
         }
 
+        loadingAlert = LoadingAlert(this)
+
         session = SessionManager(this)
         loginViewModel.loginResponse.observe(this) { loginResponse ->
             loginResponse?.let {
@@ -61,6 +71,7 @@ class LoginActivity : AppCompatActivity() {
                     startActivity(intent)
                     toast(loginResponse.data.token)
                 }else{
+                    loadingAlert.stopAlertDialog()
                     toast(loginResponse.message)
                 }
             }
@@ -109,6 +120,7 @@ class LoginActivity : AppCompatActivity() {
                     textInputLayoutPasswordLog.isErrorEnabled = false
                 }
 
+                loadingAlert.startAlertDialog()
                 loginViewModel.loginUser(identifier, password)
 
             }
@@ -119,6 +131,7 @@ class LoginActivity : AppCompatActivity() {
             }
         }
     }
+
 
     /*
     * TODO
