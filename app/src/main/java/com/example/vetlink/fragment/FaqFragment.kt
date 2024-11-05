@@ -85,50 +85,51 @@ class FaqFragment : Fragment(), RecyclerViewClickListener<FaqCategoryList>{
         faqCategoryList.add(
             FaqCategoryList(
                 R.drawable.img_guide,
-                "Panduan \n Menggunakan \n Aplikasi",
-                "Panduan Aplikasi"
+                "Guide to Using\nthe App",
+                "Guide App"
             )
         )
         faqCategoryList.add(
             FaqCategoryList(
                 R.drawable.img_cancel,
-                "Pembatalan \n Kunjungan \n Klinik",
-                "FAQ Pembatalan"
+                "Clinic Visit\nCancellation",
+                "Visit Cancellation"
             )
         )
         faqCategoryList.add(
             FaqCategoryList(
                 R.drawable.img_how_to_post,
-                "Publikasi \n Kehilangan \n Hewan",
-                "FAQ Kehilangan"
+                "Animal Loss\nPublications",
+                "Loss Publications"
             )
         )
     }
 
     private fun addDataToFaq(){
-        faqList.add(FaqList("Bagaimana cara membalas atau berinteraksi dengan postingan lain di Forum ?",
-                "Untuk membalas atau berinteraksi dengan postingan di Forum VetLink, buka aplikasi dan pilih menu " +
-                        "Forum, lalu cari postingan yang relevan. Tekan ikon komentar di bawah postingan untuk membuka kolom " +
-                        "komentar, tulis balasan Anda di kotak yang tersedia, dan tekan tombol Kirim untuk memposting komentar tersebut"))
+        faqList.add(FaqList("How to reply or interact with other posts in the Forum?",
+                "To reply to or interact with a post on the VetLink Forum, open the app and " +
+                        "select the ‘Forum’ menu, then search for the relevant post. Tap the comment icon " +
+                        "below the post to open the comment field, write your reply in the box provided, and " +
+                        "tap the ‘Submit’ button to post the comment."))
 
-        faqList.add(FaqList("Bagaimana cara menandai postingan di forum yang sudah ditemukan atau tidak relevan lagi?",
-            "Untuk menandai postingan Anda di forum VetLink sebagai sudah ditemukan atau tidak relevan, buka aplikasi dan pilih menu " +
-                    "Forum, lalu akses My Board untuk melihat postingan yang pernah Anda buat. Cari postingan yang ingin ditandai, tekan " +
-                    "ikon titik tiga di pojok kanan atas, dan pilih Selesaikan Postingan untuk menandainya sebagai selesai."))
+        faqList.add(FaqList("How do I mark forum posts that have been found or are no longer relevant?",
+            "To mark your posts on the VetLink forums as found or irrelevant, open the app and select the ‘Forums’ " +
+                    "menu, then access ‘My Board’ to view your past posts. Find the post you want to mark, tap the three-dot " +
+                    "icon in the top right corner, and select ‘Finish Post’ to mark it as finished."))
 
-        faqList.add(FaqList("Apakah reservasi kunjungan memerlukan biaya tambahan?",
-            "Tidak, reservasi kunjungan tidak memungut biaya. Seluruh aktivitas aplikasi sudah dibebani kepada Klinik Hewan yang terdaftar."))
+        faqList.add(FaqList("Do visit reservations require additional fees?",
+            "No, the visit reservation is free of charge. All application activities are charged to the registered Veterinary Clinic."))
 
-        faqList.add(FaqList("Bagaimana cara memberi rating atau ulasan untuk klinik hewan yang pernah saya kunjungi?",
-            "Saat ini, fitur tersebut masih dalam tahap pengembangan. Kami akan menghadirkan fitur ini secara bertahap dan akan diinformasikan melalui informasi pembaruan aplikasi."))
+        faqList.add(FaqList("How do I rate or review a veterinary clinic I have visited?",
+            "Currently, the feature is still under development. We will bring this feature gradually and will be informed through app update information."))
 
-        faqList.add(FaqList("Apakah saya bisa mengunduh bukti reservasi atau konfirmasi kunjungan dari aplikasi?",
-            "Proses kunjungan tidak memerlukan bukti reservasi atau konfirmasi kunjungan, karena sudah diurus oleh pihak Klinik Hewan yang Anda tuju."))
+        faqList.add(FaqList("Can I download my reservation or visit confirmation from the app?",
+            "The visit process does not require proof of reservation or confirmation of the visit, as it is already taken care of by the Veterinary Clinic you are visiting."))
 
-        faqList.add(FaqList("Bagaimana cara menemukan kembali postingan saya di forum jika sudah lama dibuat?",
-            "Untuk melihat kembali postingan yang pernah Anda buat di VetLink, buka aplikasi dan pilih menu Forum, " +
-                    "lalu akses opsi My Board untuk menampilkan seluruh postingan Anda. Tekan tombol Postingan Terselesaikan " +
-                    "untuk melihat daftar postingan yang sudah ditandai sebagai selesai atau tidak relevan."))
+        faqList.add(FaqList("How do I find my posts back on the forum if they were made a long time ago?",
+            "To look back at the posts you've made on VetLink, open the app and select the Forum menu, + " +
+                    "then access the My Board option to display all your posts. Tap the Completed Posts button “ + " +
+                    "button to see a list of posts that have been marked as completed or irrelevant."))
     }
 
     companion object {

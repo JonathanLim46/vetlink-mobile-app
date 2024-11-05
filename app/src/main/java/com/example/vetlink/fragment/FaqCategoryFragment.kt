@@ -63,12 +63,12 @@ class FaqCategoryFragment : Fragment() {
             rvFAQCategory.layoutManager = LinearLayoutManager(requireContext())
             val isFaqCategory = true
 
-            if(data == "Panduan"){
+            if(data == "Guide App"){
                 ivFAQCategory.setImageResource(R.drawable.img_guide)
-                tvFAQCategoryHeader.text = "Panduan Menggunakan Aplikasi"
-                tvFAQCategoryDesc.text = "VetLink adalah aplikasi yang dirancang untuk memudahkan " +
-                        "pemilik hewan peliharaan dalam menemukan klinik hewan, melakukan reservasi " +
-                        "kunjungan, serta berinteraksi di forum komunitas."
+                tvFAQCategoryHeader.text = "Guide to Using the App"
+                tvFAQCategoryDesc.text = "VetLink is an app designed to make it easier for pet " +
+                        "owners to find veterinary clinics, book visits, and interact on community " +
+                        "forums. Here is a quick guide to using the main features of VetLink:"
                 tvDesc.setMargins(0, 15, 0, 0)
 
                 faqList = ArrayList()
@@ -78,12 +78,12 @@ class FaqCategoryFragment : Fragment() {
                 rvFAQCategory.adapter = faqListAdapter
 
             }
-            else if (data == "Pembatalan"){
+            else if (data == "Cancellation"){
                 val constraintSet = ConstraintSet()
                 constraintSet.clone(constraintLayout)
 
                 ivFAQCategory.setImageResource(R.drawable.img_cancel)
-                tvFAQCategoryHeader.text = "Pembatalan Kunjungan Klinik"
+                tvFAQCategoryHeader.text = "Clinic Visit Cancellation"
 
                 faqList = ArrayList()
                 addDataToFAQPembatalan()
@@ -91,9 +91,9 @@ class FaqCategoryFragment : Fragment() {
                 faqListAdapter = FaqListAdapter(faqList, isFaqCategory)
                 rvFAQCategory.adapter = faqListAdapter
 
-                tvFAQCategoryDesc.text = "Notifikasi Pembatalan: Klinik terkait akan menerima " +
-                        "notifikasi pembatalan Anda secara otomatis, dan Anda juga akan mendapatkan " +
-                        "pemberitahuan bahwa kunjungan telah dibatalkan."
+                tvFAQCategoryDesc.text = "Cancellation Notification: The relevant clinic will receive " +
+                        "your cancellation notification automatically, and you will also get a notification " +
+                        "that the visit has been cancelled."
 
                 constraintSet.connect(
                     R.id.tvFAQCategoryDesc,
@@ -118,14 +118,14 @@ class FaqCategoryFragment : Fragment() {
 
 
             }
-            else if (data == "Publikasi"){
+            else if (data == "Loss"){
 
                 ivFAQCategory.setImageResource(R.drawable.img_how_to_post)
-                tvFAQCategoryHeader.text = "Publikasi Kehilangan Hewan"
-                tvFAQCategoryDesc.text = "VetLink memiliki fitur Forum yang memungkinkan Anda untuk " +
-                        "melaporkan hewan peliharaan yang hilang dan membantu orang lain dalam menemukannya. " +
-                        "Dengan fitur ini, Anda dapat membuat postingan yang mencakup informasi penting seperti " +
-                        "deskripsi hewan dan foto hewan tersebut."
+                tvFAQCategoryHeader.text = "Animal Loss Publications"
+                tvFAQCategoryDesc.text = "On VetLink, the Lost Animal Publication feature allows you " +
+                        "to report lost pets and assist others in finding them. With this feature, you " +
+                        "can create a post that includes important information such as a description of " +
+                        "the animal and a photo of the animal."
                 tvDesc.setMargins(0, 15, 0, 0)
 
                 faqList = ArrayList()
@@ -139,60 +139,57 @@ class FaqCategoryFragment : Fragment() {
     }
 
     private fun addDataToFAQPanduan(){
-        faqList.add(FaqList("1. Reservasi Kunjungan",
-            "Anda dapat mencari dan memilih klinik hewan terdekat, melihat jadwal dokter, " +
-                    "dan membuat reservasi kunjungan langsung melalui aplikasi. Terdapat juga opsi " +
-                    "untuk membatalkan atau mengubah jadwal jika diperlukan."))
+        faqList.add(FaqList("1. Visit Reservation",
+            "You can search and select nearby veterinary clinics, view doctors' schedules, " +
+                    "and make a reservation for a visit directly through the app. There is also an " +
+                    "option to cancel or change the schedule if needed."))
 
-        faqList.add(FaqList("2. Forum Kehilangan Hewan",
-            "Forum ini memungkinkan Anda untuk membuat postingan tentang hewan yang hilang " +
-                    "atau memberikan informasi jika Anda menemukan hewan. Anda juga bisa membalas " +
-                    "atau berinteraksi dengan postingan lain untuk membantu pengguna lain dalam " +
-                    "menemukan hewan peliharaan mereka."))
+        faqList.add(FaqList("2. Animal Loss Forum",
+            "This forum allows you to make posts about lost animals or provide information " +
+                    "if you find an animal. You can also reply or interact with other posts to help " +
+                    "other users find their pets."))
 
-        faqList.add(FaqList("3. Pengelolaan Postingan",
-            "Semua postingan yang pernah Anda buat dapat dikelola melalui menu My Board, " +
-                    "di mana Anda dapat menandai postingan sebagai selesai atau melihat riwayat " +
-                    "postingan sebelumnya."))
+        faqList.add(FaqList("3. Post Management",
+            "All the posts you've ever made can be managed through the ‘My Board’ menu, " +
+                    "where you can mark posts as completed or view a history of previous posts."))
 
-        faqList.add(FaqList("4. Riwayat Kunjungan",
-            "Fitur ini memungkinkan Anda untuk melihat catatan kunjungan ke klinik hewan " +
-                    "yang pernah Anda lakukan, sehingga Anda dapat memantau kesehatan hewan " +
-                    "peliharaan dengan lebih baik."))
+        faqList.add(FaqList("4. Visit History",
+            "This feature allows you to see a record of your past veterinary clinic visits, " +
+                    "so you can better monitor your pet's health."))
 
-        faqList.add(FaqList("5. Pembaruan Fitur",
-            "Beberapa fitur tambahan, seperti memberi rating atau ulasan klinik," +
-                    "sedang dikembangkan dan akan segera tersedia dalam pembaruan mendatang."))
+        faqList.add(FaqList("5. Feature Updates",
+            "Some additional features, such as rating or reviewing clinics, are in development " +
+                    "and will be available in future updates."))
     }
 
     private fun addDataToFAQPembatalan(){
-        faqList.add(FaqList("1. Masuk ke Aplikasi VetLink",
-            "Buka aplikasi dan login ke akun Anda."))
+        faqList.add(FaqList("1. Log in to the VetLink App",
+            "Open the app and login to your account."))
 
-        faqList.add(FaqList("2. Akses Menu Profile dan Pilih Menu Schedule",
-            "Periksa daftar kunjungan yang telah anda pesan."))
+        faqList.add(FaqList("2. Access Profile Menu and Select Schedule Menu",
+            "Check the list of excursions you have booked."))
 
-        faqList.add(FaqList("3. Periksa Bagian Upcoming",
-            "Pilih kunjungan yang ingin dibatalkan dengan tekan lama pada kunjungan tersebut."))
+        faqList.add(FaqList("3. Check the Upcoming Section",
+            "Select the visit you want to cancel by long-pressing on the visit."))
 
-        faqList.add(FaqList("4. Klik Opsi Batalkan Kunjungan",
-            "Anda akan diminta untuk mengonfirmasi pembatalan, setelah dikonfirmasi kunjungan tersebut akan dibatalkan."))
+        faqList.add(FaqList("4. Click the Cancel Visit Option",
+            "You will be asked to confirm the cancellation, once confirmed the visit will be cancelled."))
     }
 
     private fun addDataToPublikasi(){
-        faqList.add(FaqList("1. Membuat Postingan",
-            "Masuk ke menu \"Forum\" dan tekan tanda tambah untuk membuat postingan baru." +
-                    "Isi detail mengenai hewan yang hilang, termasuk ciri-ciri fisik, lokasi, dan " +
-                    "waktu terakhir terlihat. Jangan lupa untuk menambahkan foto agar lebih mudah dikenali."))
+        faqList.add(FaqList("1. Making Posts",
+            "Go to the ‘Forum’ menu and tap the plus sign to create a new post. Fill in the " +
+                    "details about the missing animal, including physical characteristics, location, " +
+                    "and when it was last seen. Don't forget to add a photo to make it easier to recognise."))
 
-        faqList.add(FaqList("2. Berinteraksi dengan Pengguna Lain",
-            "Anda dapat membalas komentar atau pertanyaan dari pengguna lain yang mungkin" +
-                    "memiliki informasi terkait keberadaan hewan. Fitur ini memudahkan komunikasi " +
-                    "dan meningkatkan peluang hewan ditemukan."))
+        faqList.add(FaqList("2. Interact with Other Users",
+            "You can reply to comments or questions from other users who may have information " +
+                    "related to the whereabouts of the animal. This feature facilitates communication and " +
+                    "increases the chances of the animal being found."))
 
-        faqList.add(FaqList("3. Menandai Postingan sebagai Selesai",
-            "Jika hewan Anda telah ditemukan, Anda bisa menandai postingan sebagai \"Selesai\" " +
-                    "untuk memberi tahu komunitas bahwa masalah sudah terselesaikan."))
+        faqList.add(FaqList("3. Marking a Post as Completed",
+            "If your animal has been found, you can mark the post as ‘Completed’ to let the " +
+                    "community know that the issue is resolved."))
     }
 
     companion object {

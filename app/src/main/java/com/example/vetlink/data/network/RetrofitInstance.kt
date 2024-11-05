@@ -46,7 +46,7 @@ object RetrofitInstance {
     // Create Retrofit instance
     fun getRetrofit(session: SessionManager): Retrofit {
         return Retrofit.Builder()
-            .baseUrl("http://192.168.100.69:8000/api/") // Replace with your base URL
+            .baseUrl("https://vetlink-edfsdff6e3e8bhcy.westindia-01.azurewebsites.net/api/") // Replace with your base URL
             .client(getOkHttpClient(session))
             .addConverterFactory(GsonConverterFactory.create(getGson())) // Use Gson for JSON conversion
             .build()

@@ -1,22 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+
+    <!-- Apps Color -->
+    <color name="colorPrimary">#7D26F8</color>
     <color name="defaultIcon">#BABABA</color>
     <color name="activeIcon">#3FA2F6</color>
-    <color name="secondText">#727272</color>
-    <color name="purple">#B08BBB</color>
-    <color name="transparant">#10000000</color>
-    <color name="statusBar">#95ffffff</color>
-    <color name="lightwhite">#D0D0D0</color>
-    <color name="buttonColor">#B08BBB</color>
-    <color name="red">#EA3C3D</color>
-    <color name="cancelbtn">#F0F0F2</color>
     <color name="hintColor">#98FFFFFF</color>
+    <color name="statusBar">#95ffffff</color>
+    <color name="buttonColor">#B08BBB</color>
+    <color name="cancelbtn">#F0F0F2</color>
+    <color name="colorTabs">#6E6E6E</color>
+    <color name="colorSelectedTabs">#806E6E6E</color>
+    <color name="secondText">#727272</color>
     <color name="mtrl_textinput_default_box_stroke_color" tools:override="true">
         #B08BBB
     </color>
-    <color name="colorTabs">#6E6E6E</color>
-    <color name="colorSelectedTabs">#806E6E6E</color>
-    <color name="colorPrimary">#7D26F8</color>
+
+    <!-- Colors -->
+    <color name="transparant">#10000000</color>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="lightwhite">#D0D0D0</color>
+    <color name="purple">#B08BBB</color>
+    <color name="green">#5AAF51</color>
+    <color name="red">#EA3C3D</color>
+
 </resources>

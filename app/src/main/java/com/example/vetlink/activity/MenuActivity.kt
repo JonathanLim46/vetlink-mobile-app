@@ -107,14 +107,14 @@ class MenuActivity : AppCompatActivity() {
             replaceFragmentWithOutIntance(ClinicPageFragment())
         } else if(menuTitle == "Postingan Baru"){
             replaceFragmentWithOutIntance(ForumFormFragment())
-        } else if(menuTitle == "Panduan Aplikasi"){
-            val panduanFragment = FaqCategoryFragment.newInstance("Panduan")
+        } else if(menuTitle == "Guide App"){
+            val panduanFragment = FaqCategoryFragment.newInstance("Guide App")
             replaceFragment(panduanFragment)
-        } else if(menuTitle == "FAQ Pembatalan"){
-            val pembatalanFragment = FaqCategoryFragment.newInstance("Pembatalan")
+        } else if(menuTitle == "Visit Cancellation"){
+            val pembatalanFragment = FaqCategoryFragment.newInstance("Cancellation")
             replaceFragment(pembatalanFragment)
-        } else if(menuTitle == "FAQ Kehilangan"){
-            val publikasiFragment = FaqCategoryFragment.newInstance("Publikasi")
+        } else if(menuTitle == "Loss Publications"){
+            val publikasiFragment = FaqCategoryFragment.newInstance("Loss")
             replaceFragment(publikasiFragment)
         }
     }
