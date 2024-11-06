@@ -83,6 +83,11 @@ class PetDetailsFragment : Fragment() {
                 )
             }
         }
+        sharedMenuActivityViewModel.addPetResponse.observe(viewLifecycleOwner){ addResponse ->
+            if (addResponse?.status == 200){
+                activity?.finish()
+            }
+        }
     }
 
     private fun initView() {
