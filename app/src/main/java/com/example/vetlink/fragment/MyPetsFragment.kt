@@ -55,6 +55,11 @@ class MyPetsFragment : Fragment(),
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        sharedMenuActivityViewModel.getPets() // Trigger data refresh
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -118,8 +123,9 @@ class MyPetsFragment : Fragment(),
             petsListAdapter.setClickListener(this@MyPetsFragment)
 
             srlPets.setOnRefreshListener {
-                srlPets.isRefreshing = false
+
                 petsListAdapter.notifyDataSetChanged()
+                srlPets.isRefreshing = false
             }
 
             tvAddPet.setOnClickListener {
