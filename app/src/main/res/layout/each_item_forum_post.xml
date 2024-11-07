@@ -49,7 +49,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="5dp"
-        android:text="In Progress"
+        android:text="Lost"
         android:textColor="@color/red"
         android:textSize="12sp"
         android:textStyle="bold"
@@ -126,26 +126,73 @@
         android:layout_marginEnd="15dp"
         android:layout_marginTop="10dp"
         android:text="Lorem ipsum dolor sit amet."
-        android:textSize="12sp"
+        android:textSize="14sp"
         android:textStyle="bold"
-        android:maxLength="52"
+        android:maxLength="48"
         app:layout_constraintHorizontal_bias="0"
         app:layout_constraintTop_toBottomOf="@+id/ivPostImagePets"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         />
+    
+    <TextView
+        android:id="@+id/tvLastSeenLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
+        android:text="Last Seen:"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@+id/tvPostHeader"
+        app:layout_constraintStart_toStartOf="parent"
+        />
 
+    <TextView
+        android:id="@+id/tvLastSeenData"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:text="-"
+        android:textSize="12sp"
+        app:layout_constraintStart_toEndOf="@id/tvLastSeenLabel"
+        app:layout_constraintTop_toTopOf="@+id/tvLastSeenLabel"
+        />
+
+    <TextView
+        android:id="@+id/tvCharacteristicsLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:text="Characteristics:"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@id/tvLastSeenLabel"
+        app:layout_constraintStart_toStartOf="@id/tvLastSeenLabel"
+    />
+
+    <TextView
+        android:id="@+id/tvCharacteristicsData"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:text="-"
+        android:textSize="12sp"
+        app:layout_constraintTop_toTopOf="@id/tvCharacteristicsLabel"
+        app:layout_constraintStart_toEndOf="@id/tvCharacteristicsLabel"
+        />
     <TextView
         android:id="@+id/tvPostDescription"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="5dp"
         android:layout_marginStart="15dp"
         android:layout_marginEnd="15dp"
         android:text="@string/long_text"
         android:textSize="11sp"
         android:textAlignment="textStart"
-        app:layout_constraintTop_toBottomOf="@+id/tvPostHeader"
+        app:layout_constraintTop_toBottomOf="@+id/tvCharacteristicsLabel"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         />

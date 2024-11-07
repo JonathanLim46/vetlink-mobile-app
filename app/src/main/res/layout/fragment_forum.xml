@@ -90,8 +90,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
-                    android:text="TOTAL\nPOST"
-                    android:textSize="12sp"
+                    android:text="Total\nPosts"
+                    android:textSize="14sp"
                     android:textAlignment="center"
                     android:textColor="#858585"
                     android:textStyle="bold"
@@ -119,8 +119,8 @@
                     android:id="@+id/tvTotalPostInProgress"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="POST IN\nPROGRESS"
-                    android:textSize="12sp"
+                    android:text="Pets You've\nLost"
+                    android:textSize="14sp"
                     android:textAlignment="center"
                     android:textColor="#858585"
                     android:textStyle="bold"
@@ -146,8 +146,8 @@
                     android:id="@+id/tvTotalPostFinished"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="POST\nFINISHED"
-                    android:textSize="12sp"
+                    android:text="Pets You've\nFound"
+                    android:textSize="14sp"
                     android:textAlignment="center"
                     android:textColor="#858585"
                     android:textStyle="bold"
@@ -186,11 +186,28 @@
             app:layout_constraintEnd_toEndOf="parent"
             style="@style/CustomTabLayoutStyle"
             />
+        
+        <TextView
+            android:id="@+id/tvPageInformation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="15dp"
+            android:text="This page for find information and support for locating lost pets"
+            android:textSize="11sp"
+            android:drawablePadding="5dp"
+            app:drawableLeftCompat="@drawable/icon_alert"
+            app:drawableTint="@color/red"
+            app:layout_constraintTop_toBottomOf="@id/tabLayoutForum"
+            app:layout_constraintStart_toStartOf="parent"
+            />
 
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            app:layout_constraintTop_toBottomOf="@+id/tabLayoutForum"
+            android:layout_marginTop="12dp"
+            android:visibility="visible"
+            app:layout_constraintTop_toBottomOf="@+id/tvPageInformation"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent">
@@ -202,6 +219,19 @@
                 />
 
         </ScrollView>
+
+        <TextView
+            android:id="@+id/tvDataNull"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="No posts have been found yet."
+            android:textSize="12sp"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@+id/tvPageInformation"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

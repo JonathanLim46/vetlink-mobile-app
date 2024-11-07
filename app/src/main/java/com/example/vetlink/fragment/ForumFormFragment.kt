@@ -9,8 +9,14 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.vetlink.R
+import com.example.vetlink.adapter.PetsSelectList
+import com.example.vetlink.adapter.PetsSelectListAdapter
 import com.example.vetlink.databinding.FragmentForumFormBinding
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -27,6 +33,8 @@ class ForumFormFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
     private lateinit var binding : FragmentForumFormBinding
+    private lateinit var petsSelectList: ArrayList<PetsSelectList>
+    private lateinit var petsSelectListAdapter: PetsSelectListAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -83,9 +91,44 @@ class ForumFormFragment : Fragment() {
                 }
             })
 
+            tvSelectPhotoOwnPets.setOnClickListener{
+                selectPetsDialog()
+            }
+
 
         }
     }
+
+    private fun selectPetsDialog(){
+        val dialog = activity?.let { BottomSheetDialog(it) }
+        val view = layoutInflater.inflate(R.layout.layout_bottom_sheet_select_pet_dialog, null, false)
+
+        val recyclerView = view.findViewById<RecyclerView>(R.id.rvSelectPetForum)
+        recyclerView.layoutManager = LinearLayoutManager(requireContext())
+
+        petsSelectList = ArrayList()
+        addDataToPetList()
+
+        petsSelectListAdapter = PetsSelectListAdapter(petsSelectList)
+        recyclerView.adapter = petsSelectListAdapter
+
+        dialog?.apply {
+            setCancelable(true)
+            setContentView(view)
+            show()
+            val bottomSheetBehavior = BottomSheetBehavior.from(view.parent as View)
+            bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+        }
+
+    }
+
+    private fun addDataToPetList(){
+        petsSelectList.add(PetsSelectList("Mball", "Cat", R.drawable.img_cats))
+        petsSelectList.add(PetsSelectList("Mball", "Cat", R.drawable.img_cats))
+        petsSelectList.add(PetsSelectList("Mball", "Cat", R.drawable.img_cats))
+        petsSelectList.add(PetsSelectList("Mball", "Cat", R.drawable.img_cats))
+    }
+
 
     companion object {
         /**

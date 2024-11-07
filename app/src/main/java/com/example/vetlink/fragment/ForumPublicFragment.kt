@@ -78,21 +78,23 @@ class ForumPublicFragment : Fragment(), RecyclerViewClickListener<ForumPostList>
 
     private fun addDataToPost(){
         forumPostList.add(ForumPostList(R.drawable.img_tontawan, R.drawable.img_cats, "mawarptr",
-            "Depok", "In Progress", "Mball Hilang",
+            "Depok", "Lost", "Mball Hilang",
             "Lorem ipsum dolor sit amet, consectetur adipiscing elit." +
                     "Fusce iaculis mattis leo id commodo. Etiam sed pretium leo. Nulla molestie orci ut varius" +
                     "porta. Nullam eu justo lacinia, faucibus eros vel, lacinia dolor. Etiam sollicitudin ligula" +
                     "vitae lorem tristique, eget ultricies elit tincidunt. Mauris eget diam nisl. Fusce at purus" +
                     "semper, placerat tortor ac, ultrices arcu. Ut orci orci, interdum vitae arcu quis, bibendum" +
-                    "blandit felis. In ornare tellus quis quam ornare, malesuada gravida augue lobortis."))
+                    "blandit felis. In ornare tellus quis quam ornare, malesuada gravida augue lobortis.",
+            "Depan gerbang utama UI", "Orange putih, mata hitam kuning, pecicilan"))
         forumPostList.add(ForumPostList(R.drawable.img_tontawan, R.drawable.img_cats, "mawarptr",
-            "Depok", "In Progress", "Mball Hilang",
+            "Depok", "Lost", "Mball Hilang",
             "Lorem ipsum dolor sit amet, consectetur adipiscing elit." +
                     "Fusce iaculis mattis leo id commodo. Etiam sed pretium leo. Nulla molestie orci ut varius" +
                     "porta. Nullam eu justo lacinia, faucibus eros vel, lacinia dolor. Etiam sollicitudin ligula" +
                     "vitae lorem tristique, eget ultricies elit tincidunt. Mauris eget diam nisl. Fusce at purus" +
                     "semper, placerat tortor ac, ultrices arcu. Ut orci orci, interdum vitae arcu quis, bibendum" +
-                    "blandit felis. In ornare tellus quis quam ornare, malesuada gravida augue lobortis."))
+                    "blandit felis. In ornare tellus quis quam ornare, malesuada gravida augue lobortis.",
+            "Depan gerbang utama UI", "Orange putih, mata hitam kuning, pecicilan"))
     }
     override fun onItemClicke(view: View, item: ForumPostList) {
         val dialog = activity?.let { BottomSheetDialog(it) }

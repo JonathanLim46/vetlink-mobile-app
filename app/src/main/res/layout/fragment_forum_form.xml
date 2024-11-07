@@ -9,7 +9,9 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:paddingBottom="25dp"
+        >
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/ivPostImagePets"
@@ -81,7 +83,7 @@
             app:hintTextColor="@color/black"
             app:errorEnabled="true"
             app:counterEnabled="true"
-            app:counterMaxLength="52"
+            app:counterMaxLength="48"
             app:layout_constraintTop_toBottomOf="@+id/tvSelectPhotoOwnPets"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -100,7 +102,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/textInputLayoutPostDescription"
+            android:id="@+id/textInputLayoutPostLastSeen"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
@@ -109,6 +111,58 @@
             app:hintTextColor="@color/black"
             app:errorEnabled="true"
             app:layout_constraintTop_toBottomOf="@+id/textInputLayoutPostTitle"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            >
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etPostLastSeen"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/outline_input"
+                android:hint="Last Seen"
+                android:textColorHint="@color/hintColor"
+                android:textColor="@color/black"
+                />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputLayoutPostCharacteristics"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            app:hintTextColor="@color/black"
+            app:errorEnabled="true"
+            app:layout_constraintTop_toBottomOf="@+id/textInputLayoutPostLastSeen"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            >
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etPostCharacteristics"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/outline_input"
+                android:hint="Characteristics"
+                android:textColorHint="@color/black"
+                android:textColor="@color/black"
+                />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputLayoutPostDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            app:hintTextColor="@color/black"
+            app:errorEnabled="true"
+            app:layout_constraintTop_toBottomOf="@+id/textInputLayoutPostCharacteristics"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             >
