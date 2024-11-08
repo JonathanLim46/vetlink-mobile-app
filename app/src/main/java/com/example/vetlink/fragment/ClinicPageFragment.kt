@@ -8,8 +8,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.vetlink.R
 import com.example.vetlink.activity.MenuActivity
+import com.example.vetlink.adapter.PetsSelectList
+import com.example.vetlink.adapter.PetsSelectListAdapter
 import com.example.vetlink.databinding.FragmentClinicPageBinding
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -19,7 +23,7 @@ import java.util.Calendar
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
-private lateinit var binding : FragmentClinicPageBinding
+
 
 /**
  * A simple [Fragment] subclass.
@@ -30,7 +34,9 @@ class ClinicPageFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
-
+    private lateinit var binding : FragmentClinicPageBinding
+    private lateinit var petsSelectList: ArrayList<PetsSelectList>
+    private lateinit var petsSelectListAdapter: PetsSelectListAdapter
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -81,39 +87,81 @@ class ClinicPageFragment : Fragment() {
             }
 
             btnVisit.setOnClickListener{
-                val dialog = activity?.let { it1 -> BottomSheetDialog(it1) }
-                val viewLayout = layoutInflater.inflate(R.layout.layout_bottom_sheet_success_dialog, null, false)
-
-                val intent = Intent(activity, MenuActivity::class.java)
-                intent.putExtra("MENU_TITLE", "Schedule")
-
-                dialog?.apply {
-
-                    setCancelable(true)
-                    setContentView(viewLayout)
-
-                    show()
-
-                    val bottomSheetBehavior = BottomSheetBehavior.from(viewLayout.parent as View)
-                    bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
-                    bottomSheetBehavior.isHideable = true
-
-                    val btnDone = viewLayout.findViewById<Button>(R.id.btnDone)
-                    btnDone.setOnClickListener{
-                        startActivity(intent)
-                        activity?.finish()
-                    }
-                }
-
-                dialog?.setOnDismissListener{
-                    startActivity(intent)
-                    activity?.finish()
-                }
-
+                visitClinic()
             }
+
+            tvSelectPetsDialog.setOnClickListener {
+                selectPetsDialog()
+            }
+
         }
 
 
+    }
+
+    private fun visitClinic(){
+        val dialog = activity?.let { it1 -> BottomSheetDialog(it1) }
+        val viewLayout = layoutInflater.inflate(R.layout.layout_bottom_sheet_success_dialog, null, false)
+
+        val intent = Intent(activity, MenuActivity::class.java)
+        intent.putExtra("MENU_TITLE", "Schedule")
+
+        dialog?.apply {
+
+            setCancelable(true)
+            setContentView(viewLayout)
+
+            show()
+
+            val bottomSheetBehavior = BottomSheetBehavior.from(viewLayout.parent as View)
+            bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+            bottomSheetBehavior.isHideable = true
+
+            val btnDone = viewLayout.findViewById<Button>(R.id.btnDone)
+            btnDone.setOnClickListener{
+                startActivity(intent)
+                activity?.finish()
+            }
+        }
+
+        dialog?.setOnDismissListener{
+            startActivity(intent)
+            activity?.finish()
+        }
+    }
+
+    private fun selectPetsDialog(){
+        val dialog = activity?.let { BottomSheetDialog(it) }
+
+        val view = layoutInflater.inflate(R.layout.layout_bottom_sheet_select_pet_dialog, null, false)
+
+        val rvSelectPet = view.findViewById<RecyclerView>(R.id.rvSelectPetForum)
+        rvSelectPet.layoutManager = LinearLayoutManager(requireContext())
+
+        petsSelectList = ArrayList()
+        addDataToPetList()
+
+        petsSelectListAdapter = PetsSelectListAdapter(petsSelectList)
+        rvSelectPet.adapter = petsSelectListAdapter
+
+
+        dialog?.apply {
+            setCancelable(true)
+            setContentView(view)
+
+            show()
+
+            val bottomSheetBehavior = BottomSheetBehavior.from(view.parent as View)
+            bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+            bottomSheetBehavior.isHideable = true
+        }
+    }
+
+    private fun addDataToPetList(){
+        petsSelectList.add(PetsSelectList("Mball", "Cat", R.drawable.img_cats))
+        petsSelectList.add(PetsSelectList("Mball", "Cat", R.drawable.img_cats))
+        petsSelectList.add(PetsSelectList("Mball", "Cat", R.drawable.img_cats))
+        petsSelectList.add(PetsSelectList("Mball", "Cat", R.drawable.img_cats))
     }
 
     companion object {
