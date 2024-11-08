@@ -134,56 +134,109 @@
                             app:layout_constraintStart_toStartOf="parent"
                             />
 
-                        <com.google.android.material.imageview.ShapeableImageView
-                            android:id="@+id/ivClinicHistory"
-                            android:layout_width="103dp"
-                            android:layout_height="100dp"
-                            android:src="@drawable/img_rspets"
-                            android:scaleType="fitXY"
-                            android:layout_marginTop="5dp"
-                            android:layout_marginBottom="26dp"
-                            app:shapeAppearanceOverlay="@style/RoundedSquare"
-                            app:layout_constraintStart_toStartOf="@+id/tvHistoryVisit"
-                            app:layout_constraintTop_toBottomOf="@+id/tvHistoryVisit"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            />
-
-                        <TextView
-                            android:id="@+id/tvClinicNameHistory"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/default_clinic"
-                            android:textSize="15sp"
-                            android:layout_marginStart="10dp"
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/layoutVisitHistory"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="22dp"
+                            android:layout_marginEnd="22dp"
                             android:layout_marginTop="15dp"
-                            app:layout_constraintStart_toEndOf="@+id/ivClinicHistory"
-                            app:layout_constraintTop_toBottomOf="@+id/tvHistoryVisit"/>
+                            android:layout_marginBottom="20dp"
+                            android:visibility="visible"
+                            app:layout_constraintTop_toBottomOf="@+id/tvHistoryVisit"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            >
 
-                        <TextView
-                            android:id="@+id/tvClinicLocationHistory"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Jl. Bogor Baru 02"
-                            android:textSize="12sp"
-                            android:fontFamily="sans-serif-light"
-                            app:layout_constraintTop_toBottomOf="@id/tvClinicNameHistory"
-                            app:layout_constraintStart_toStartOf="@id/tvClinicNameHistory"/>
+                            <com.google.android.material.imageview.ShapeableImageView
+                                android:id="@+id/ivClinicHistory"
+                                android:layout_width="103dp"
+                                android:layout_height="100dp"
+                                android:src="@drawable/img_rspets"
+                                android:scaleType="fitXY"
+                                app:shapeAppearanceOverlay="@style/RoundedSquare"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                />
 
-                        <Button
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Return Visit"
-                            android:textSize="12sp"
-                            android:layout_marginTop="5dp"
-                            android:backgroundTint="@color/buttonColor"
-                            app:layout_constraintTop_toBottomOf="@id/tvClinicLocationHistory"
-                            app:layout_constraintStart_toStartOf="@id/tvClinicLocationHistory"/>
+                            <TextView
+                                android:id="@+id/tvClinicNameHistory"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/default_clinic"
+                                android:textSize="15sp"
+                                android:layout_marginStart="10dp"
+                                app:layout_constraintStart_toEndOf="@+id/ivClinicHistory"
+                                app:layout_constraintTop_toTopOf="parent"/>
 
+                            <TextView
+                                android:id="@+id/tvClinicLocationHistory"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Jl. Bogor Baru 02"
+                                android:textSize="12sp"
+                                android:fontFamily="sans-serif-light"
+                                app:layout_constraintTop_toBottomOf="@id/tvClinicNameHistory"
+                                app:layout_constraintStart_toStartOf="@id/tvClinicNameHistory"/>
+
+                            <Button
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Return Visit"
+                                android:textSize="12sp"
+                                android:layout_marginTop="12dp"
+                                android:backgroundTint="@color/buttonColor"
+                                app:layout_constraintTop_toBottomOf="@id/tvClinicLocationHistory"
+                                app:layout_constraintStart_toStartOf="@id/tvClinicLocationHistory"/>
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        <!-- IF DATA NULL  -->
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/layoutVisitHistoryNull"
+                            android:layout_width="match_parent"
+                            android:layout_height="100dp"
+                            android:layout_marginStart="22dp"
+                            android:layout_marginEnd="22dp"
+                            android:layout_marginTop="25dp"
+                            android:visibility="gone"
+                            app:layout_constraintTop_toBottomOf="@+id/tvHistoryVisit"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            >
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:src="@drawable/img_home_visit_label"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                />
+
+                            <TextView
+                                android:id="@+id/tvVisitHistoryNullLabel"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="No visit history yet."
+                                android:textSize="12sp"
+                                android:textAlignment="center"
+                                android:textStyle="bold"
+                                app:layout_constraintVertical_bias="0.4"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                />
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
+
                 </androidx.cardview.widget.CardView>
-
-
 
                 <TextView
                     android:id="@+id/tvListClinic"
