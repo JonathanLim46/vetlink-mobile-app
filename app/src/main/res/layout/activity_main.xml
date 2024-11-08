@@ -5,17 +5,16 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.MainActivity"
-    >
+    tools:context=".activity.MainActivity">
 
     <FrameLayout
         android:id="@+id/frame_layout"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/bottom_navigation">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
     </FrameLayout>
 
@@ -25,17 +24,16 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="@color/white"
-        app:menu="@menu/menu_nav_bottom"
-        app:itemTextColor="@drawable/bottom_navigation_colors"
-        app:itemIconTint="@drawable/bottom_navigation_colors"
         app:itemActiveIndicatorStyle="@android:color/transparent"
-        app:itemPaddingTop="20dp"
+        app:itemIconTint="@drawable/bottom_navigation_colors"
         app:itemPaddingBottom="20dp"
+        app:itemPaddingTop="20dp"
+        app:itemTextColor="@drawable/bottom_navigation_colors"
         app:labelVisibilityMode="labeled"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"/>
-
+        app:layout_constraintStart_toStartOf="parent"
+        app:menu="@menu/menu_nav_bottom" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
