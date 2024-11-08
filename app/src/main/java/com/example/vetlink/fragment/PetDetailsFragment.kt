@@ -14,7 +14,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -31,12 +30,12 @@ import com.example.vetlink.viewModel.MenuActivityViewModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import okhttp3.MultipartBody
-import androidx.core.content.ContextCompat
 import com.example.vetlink.activity.SignupActivity
-import com.example.vetlink.activity.SignupActivity.Companion
-import com.example.vetlink.util.toast
+import com.example.vetlink.data.model.pets.PetDetails
+import com.squareup.picasso.Picasso
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.File
 
 private const val PET_ID = "PET_ID"
@@ -51,6 +50,7 @@ class PetDetailsFragment : Fragment() {
     private var selectedPetType: PetType? = null
     private var selectedPetBreed: PetBreed? = null
     private var selectedGender: String? = null
+    private var currentPet: PetDetails? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -88,6 +88,29 @@ class PetDetailsFragment : Fragment() {
                 activity?.finish()
             }
         }
+        sharedMenuActivityViewModel.petDetail.observe(viewLifecycleOwner){ petDetail ->
+            if (petDetail != null){
+                with(binding){
+                    Picasso.get().load(petDetail.photo).centerCrop().fit().into(ivAddImagePets)
+                    etNamePets.setText(petDetail.pet_name)
+                    etAgePets.setText(petDetail.age.toString())
+                    etWeightPets.setText(petDetail.weight)
+                    btnChoosePet.text = petDetail.type
+                    btnChooseBreed.text = petDetail.breed
+                    selectGender(petDetail.gender)
+                    etNotePets.setText(petDetail.notes)
+
+                    currentPet = petDetail
+                }
+            }else{
+                Toast.makeText(requireContext(), "An error was occurred!", Toast.LENGTH_SHORT).show()
+            }
+        }
+        sharedMenuActivityViewModel.updateMessagePetUpdate.observe(viewLifecycleOwner){ updateStatus ->
+            if (updateStatus != null){
+                activity?.finish()
+            }
+        }
     }
 
     private fun initView() {
@@ -111,7 +134,8 @@ class PetDetailsFragment : Fragment() {
             btnSubmitPets.setOnClickListener {
                 if (method!!.equals("add")){ // add
                     validateAdd()
-                }else{// edit
+                }else{
+                    validateEdit()
                 }
             }
 
@@ -131,6 +155,64 @@ class PetDetailsFragment : Fragment() {
 
                 override fun afterTextChanged(s: Editable?) {}
             })
+        }
+    }
+
+    private fun validateEdit() {
+        with(binding) {
+            val pet = currentPet ?: return
+
+            val updates = mutableMapOf<String, Any>()
+            var photoPart: MultipartBody.Part? = null
+
+            // Handling the pet name
+            if (etNamePets.text.toString() != pet.pet_name) {
+                updates["pet_name"] = etNamePets.text.toString()
+            }
+
+            // Handling other fields like age, weight, etc.
+            if (etAgePets.text.toString().toIntOrNull() != pet.age) {
+                updates["age"] = etAgePets.text.toString().toIntOrNull() ?: pet.age
+            }
+
+            // Image handling
+            selectedImageUri?.let {
+                photoPart = handleImageUri(it)  // Handle the photo as a MultipartBody.Part
+            }
+
+            if (etWeightPets.text.toString() != pet.weight) {
+                updates["weight"] = etWeightPets.text.toString()
+            }
+
+            // Pet Type and Breed handling
+            if (btnChoosePet.text.toString() != pet.type) {
+                updates["type"] = selectedPetType?.id.toString()  // Send PetType ID
+            }
+
+            if (btnChooseBreed.text.toString() != pet.breed) {
+                updates["breed"] = selectedPetBreed?.id.toString()  // Send PetBreed ID
+            }
+
+            if (selectedGender != pet.gender) {
+                updates["gender"] = selectedGender!!
+            }
+
+            if (etNotePets.text.toString().takeIf { it.isNotBlank() } != pet.notes?.takeIf { it.isNotBlank() }) {
+                updates["notes"] = etNotePets.text.toString().ifEmpty { "" }
+            }
+
+            // Proceed with updating the pet if any fields have changed
+            if (updates.isNotEmpty() || photoPart != null) {
+                val params = mutableMapOf<String, RequestBody>()
+
+                // Convert updates to RequestBody, excluding the photo field
+                updates.forEach { (key, value) ->
+                    val requestBody = value.toString().toRequestBody("text/plain".toMediaTypeOrNull())
+                    params[key] = requestBody
+                }
+
+                sharedMenuActivityViewModel.updatePet(pet.id, params, photoPart)
+            }
         }
     }
 
@@ -206,14 +288,18 @@ class PetDetailsFragment : Fragment() {
             // If form is valid, display a toast with all parameters
             if (isFormAddValid) {
                 sharedMenuActivityViewModel.addPet(namePets, petType.toString(), photoPet, petBreed.toString(), agePets, weightPets, genderPets!!, notePets)
-                Toast.makeText(
-                    requireContext(),
-                    "Pet added with details:\nName: $namePets\nAge: $agePets\nWeight: $weightPets\nType: $petType\nBreed: $petBreed\nGender: $genderPets\nNote: $notePets",
-                    Toast.LENGTH_LONG
-                ).show()
-                Log.d("data-add", "Pet added with details:\nName: $namePets\nAge: $agePets\nWeight: $weightPets\nType: $petType\nBreed: $petBreed\nGender: $genderPets\nNote: $notePets",)
             }
         }
+    }
+
+    private fun handleImageUri(uri: Uri): MultipartBody.Part? {
+        val filePath = getFilePathFromUri(uri)
+        filePath?.let {
+            val file = File(filePath)
+            val requestFile = RequestBody.create("image/*".toMediaTypeOrNull(), file)
+            return MultipartBody.Part.createFormData("photo", file.name, requestFile)
+        }
+        return null
     }
 
     private fun getFilePathFromUri(uri: Uri): String? {

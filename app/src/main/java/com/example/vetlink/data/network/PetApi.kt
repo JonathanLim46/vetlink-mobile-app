@@ -12,6 +12,7 @@ import retrofit2.http.GET
 import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.Part
+import retrofit2.http.PartMap
 import retrofit2.http.Path
 
 interface PetApi {
@@ -26,7 +27,7 @@ interface PetApi {
         @Part("age") age: RequestBody,
         @Part("weight") weight: RequestBody,
         @Part("gender") gender: RequestBody,
-        @Part("note") note: RequestBody? = null
+        @Part("notes") note: RequestBody? = null
     ): PetAddResponse
 
     //get all pet
@@ -40,6 +41,14 @@ interface PetApi {
     //detail pet
     @GET("customer/pet/{petId}")
     suspend fun getPetDetails(@Path("petId") petId: Int): PetDetailsResponse
+
+    @Multipart
+    @POST("customer/pet/{petId}")
+    suspend fun editPet(
+        @Path("petId") petId: Int,
+        @PartMap params: Map<String, @JvmSuppressWildcards RequestBody>,
+        @Part photo: MultipartBody.Part? = null,
+    ): PetDetailsResponse
 
     //delete pet
     @DELETE("customer/pet/{petId}")
