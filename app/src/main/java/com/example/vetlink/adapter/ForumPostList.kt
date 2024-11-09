@@ -7,5 +7,7 @@ data class ForumPostList(
     val postLocation: String,
     val postStatus: String,
     val postHeader: String,
-    val postDescription: String
+    val postDescription: String,
+    val postLastSeen: String,
+    val postCharacteristics: String
 )

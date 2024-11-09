@@ -66,15 +66,15 @@ class ForumPrivateFragment : Fragment() {
             btnAll.setTextColor(mainTextColor)
 
             btnAll.setOnClickListener{
-                buttonState(btnAll, listOf(btnDone, btnInProgress))
+                buttonState(btnAll, listOf(btnFound, btnLost))
             }
 
-            btnDone.setOnClickListener{
-                buttonState(btnDone, listOf(btnAll, btnInProgress))
+            btnFound.setOnClickListener{
+                buttonState(btnFound, listOf(btnAll, btnLost))
             }
 
-            btnInProgress.setOnClickListener{
-                buttonState(btnInProgress, listOf(btnAll, btnDone))
+            btnLost.setOnClickListener{
+                buttonState(btnLost, listOf(btnAll, btnFound))
             }
 
         }

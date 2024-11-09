@@ -11,6 +11,7 @@ import com.example.vetlink.helper.SessionManager
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.HttpException
 import java.io.IOException
 
@@ -66,6 +67,19 @@ class PetRepository(val session: SessionManager) {
             val response = petApi.getPetDetails(petId)
             Result.success(response)
         }catch (e: Exception){
+            Result.failure(e)
+        }
+    }
+
+    suspend fun editPet(
+        petId: Int,
+        params: MutableMap<String, RequestBody>,
+        photoPart: MultipartBody.Part?
+    ): Result<PetDetailsResponse>{
+        return try {
+            val response = petApi.editPet(petId, params, photoPart)
+            Result.success(response)
+        } catch (e: Exception) {
             Result.failure(e)
         }
     }

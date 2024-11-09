@@ -7,6 +7,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.vetlink.R
+import org.w3c.dom.Text
 
 class ForumPostListAdapter(private val forumPostList: List<ForumPostList>): RecyclerView.Adapter<ForumPostListAdapter.ForumPostViewHolder>(){
 
@@ -21,6 +22,8 @@ class ForumPostListAdapter(private val forumPostList: List<ForumPostList>): Recy
         val postStatus: TextView = itemView.findViewById(R.id.tvPostStatus)
         val postHeader: TextView = itemView.findViewById(R.id.tvPostHeader)
         val postDescription: TextView = itemView.findViewById(R.id.tvPostDescription)
+        val postLastSeen: TextView = itemView.findViewById(R.id.tvLastSeenData)
+        val postCharacteristics: TextView = itemView.findViewById(R.id.tvCharacteristicsData)
         val postComment: ImageView = itemView.findViewById(R.id.ivCommentPost)
     }
 
@@ -51,6 +54,8 @@ class ForumPostListAdapter(private val forumPostList: List<ForumPostList>): Recy
         holder.postStatus.text = forumPostList.postStatus
         holder.postHeader.text = forumPostList.postHeader
         holder.postDescription.text = forumPostList.postDescription
+        holder.postLastSeen.text = forumPostList.postLastSeen
+        holder.postCharacteristics.text = forumPostList.postCharacteristics
 
         holder.postMenu.tag = "postMenu"
         holder.postComment.tag = "postComment"

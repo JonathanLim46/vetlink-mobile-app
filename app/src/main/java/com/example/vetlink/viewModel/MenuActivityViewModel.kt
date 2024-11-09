@@ -1,13 +1,14 @@
 package com.example.vetlink.viewModel
 
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.vetlink.data.model.pets.Pet
 import com.example.vetlink.data.model.pets.PetAddResponse
+import com.example.vetlink.data.model.pets.PetDetails
 import com.example.vetlink.data.model.pets.PetType
 import com.example.vetlink.data.model.queue.Queue
 import com.example.vetlink.data.model.user.User
@@ -16,6 +17,7 @@ import com.example.vetlink.repository.PetRepository
 import com.example.vetlink.repository.QueueRepository
 import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import java.net.ConnectException
 
 class MenuActivityViewModel(
@@ -39,8 +41,14 @@ class MenuActivityViewModel(
     private val _errorMessagePet = MutableLiveData<String>()
     val errorMessagePet: LiveData<String> get() = _errorMessagePet
 
-    private val _petDetail = MutableLiveData<Pet>()
-    val petDetail: LiveData<Pet> get() = _petDetail
+    private val _petDetail = MutableLiveData<PetDetails>()
+    val petDetail: LiveData<PetDetails> get() = _petDetail
+
+    private val _updateMessagePetUpdate = MutableLiveData<String>()
+    val updateMessagePetUpdate: LiveData<String> get() = _updateMessagePetUpdate
+
+    private val _errorMessagePetUpdate = MutableLiveData<String>()
+    val errorMessagePetUpdate: LiveData<String> get() = _errorMessagePetUpdate
 
     private val _errorMessagePetDetail = MutableLiveData<String>()
     val errorMessagePetDetail: LiveData<String> get() = _errorMessagePetDetail
@@ -82,14 +90,15 @@ class MenuActivityViewModel(
                     Log.e("API_ERROR", "Add Pet failed: ${response?.exceptionOrNull()}")
                 }
             }catch (e: ConnectException) {
-                _errorMessageUser.postValue("Unable to connect to the server. Please check your internet connection.")
+                _errorMessagePet.postValue("Unable to connect to the server. Please check your internet connection.")
                 Log.e("API_ERROR", "Network error: ${e.message}")
             } catch (e: Exception) {
-                _errorMessageUser.postValue("An error occurred. Please try again.")
+                _errorMessagePet.postValue("An error occurred. Please try again.")
                 Log.e("API_ERROR", "Pet Add error: ${e.message}")
             }
         }
     }
+
 
 
     fun getPets(){
@@ -103,10 +112,10 @@ class MenuActivityViewModel(
                     _errorMessagePet.postValue("An error occurred. Please try again.")
                 }
             }catch (e: ConnectException) {
-                _errorMessageUser.postValue("Unable to connect to the server. Please check your internet connection.")
+                _errorMessagePet.postValue("Unable to connect to the server. Please check your internet connection.")
                 Log.e("API_ERROR", "Network error: ${e.message}")
             } catch (e: Exception) {
-                _errorMessageUser.postValue("An error occurred. Please try again.")
+                _errorMessagePet.postValue("An error occurred. Please try again.")
                 Log.e("API_ERROR", "Pet error: ${e.message}")
             }
         }
@@ -124,10 +133,10 @@ class MenuActivityViewModel(
                     Log.e("API_ERROR", "Fetch failed: ${response?.exceptionOrNull()}")
                 }
             }catch (e: ConnectException) {
-                _errorMessageUser.postValue("Unable to connect to the server. Please check your internet connection.")
+                _errorMessagePetTypeBreed.postValue("Unable to connect to the server. Please check your internet connection.")
                 Log.e("API_ERROR", "Network error: ${e.message}")
             } catch (e: Exception) {
-                _errorMessageUser.postValue("An error occurred. Please try again.")
+                _errorMessagePetTypeBreed.postValue("An error occurred. Please try again.")
                 Log.e("API_ERROR", "Pet error: ${e.message}")
             }
         }
@@ -142,13 +151,34 @@ class MenuActivityViewModel(
                     Log.d("API_RESPONSE", "Pet details fetched successfully: ${response.getOrNull()?.data}")
                 }else{
                     _errorMessagePetDetail.postValue("An error occurred. Please try again.")
+                    Toast.makeText(null, "An error occurred. Please try again.", Toast.LENGTH_SHORT).show()
                 }
             }catch (e: ConnectException){
-                _errorMessageUser.postValue("Unable to connect to the server. Please check your internet connection.")
+                _errorMessagePetDetail.postValue("Unable to connect to the server. Please check your internet connection.")
                 Log.e("API_ERROR", "Network error: ${e.message}")
             }catch (e: Exception){
-                _errorMessageUser.postValue("An error occurred. Please try again.")
+                _errorMessagePetDetail.postValue("An error occurred. Please try again.")
                 Log.e("API_ERROR", "Delete Pet error: ${e.message}")
+            }
+        }
+    }
+
+    fun updatePet(
+        id: Int,
+        params: MutableMap<String, RequestBody>,
+        photoPart: MultipartBody.Part?
+    ) {
+        viewModelScope.launch {
+            try {
+                val response = petRepository?.editPet(id, params, photoPart)
+                if (response!!.isSuccess){
+                    _updateMessagePetUpdate.postValue("Update success!")
+                }
+            }catch (e: ConnectException){
+                _errorMessagePetUpdate.postValue("Unable to connect to the server. Please check your internet connection.")
+                Log.e("API_ERROR", "Network error: ${e.message}")
+            }catch (e: Exception){
+
             }
         }
     }
@@ -163,10 +193,10 @@ class MenuActivityViewModel(
                     _errorMessageDeletePet.postValue("An error occurred. Please try again.")
                 }
             }catch (e: ConnectException) {
-                _errorMessageUser.postValue("Unable to connect to the server. Please check your internet connection.")
+                _errorMessageDeletePet.postValue("Unable to connect to the server. Please check your internet connection.")
                 Log.e("API_ERROR", "Network error: ${e.message}")
             } catch (e: Exception) {
-                _errorMessageUser.postValue("An error occurred. Please try again.")
+                _errorMessageDeletePet.postValue("An error occurred. Please try again.")
                 Log.e("API_ERROR", "Delete Pet error: ${e.message}")
             }
         }
@@ -198,6 +228,5 @@ class MenuActivityViewModel(
             }
         }
     }
-
 
 }

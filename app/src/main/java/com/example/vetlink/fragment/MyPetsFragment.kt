@@ -96,6 +96,11 @@ class MyPetsFragment : Fragment(),
 
             //tombol edit
             secondLine.setOnClickListener{
+                val intent = Intent(activity, MenuActivity::class.java)
+                intent.putExtra("MENU_TITLE", "Pet Details")
+                intent.putExtra("PET_ID", item.petId)
+                intent.putExtra("METHOD", "edit")
+                startActivity(intent)
                 dialog.dismiss()
             }
 

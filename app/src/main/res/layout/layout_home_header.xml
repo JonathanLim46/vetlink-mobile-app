@@ -11,72 +11,67 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/layout_border_card_main"
-        app:layout_constraintTop_toTopOf="parent"
-
-        >
+        app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
+            android:id="@+id/layoutHome"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="100dp"
             android:layout_marginStart="25dp"
+            android:layout_marginTop="100dp"
             android:layout_marginEnd="25dp"
             android:layout_marginBottom="40dp"
             android:background="@drawable/layout_border_card_second"
-            >
+            android:orientation="horizontal"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <LinearLayout
                 android:id="@+id/boxDate"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:background="@drawable/outline_active"
-                android:layout_marginTop="20dp"
                 android:layout_marginStart="30dp"
+                android:layout_marginTop="20dp"
                 android:layout_marginBottom="20dp"
-                android:orientation="vertical"
-                >
+                android:background="@drawable/outline_active"
+                android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/tvTanggal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="25dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginEnd="25dp"
+                    android:layout_weight="0.5"
+                    android:gravity="center"
                     android:text="03"
                     android:textSize="15sp"
-                    android:textStyle="bold"
-                    android:layout_weight="0.5"
-                    android:layout_marginTop="15dp"
-                    android:layout_marginStart="25dp"
-                    android:layout_marginEnd="25dp"
-                    android:gravity="center"
-                    />
+                    android:textStyle="bold" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="15dp"
+                    android:layout_weight="0.2"
+                    android:gravity="center"
                     android:text="March"
                     android:textSize="12sp"
-                    android:textStyle="bold"
-                    android:layout_weight="0.2"
-                    android:layout_marginBottom="15dp"
-                    android:gravity="center"
-                    />
+                    android:textStyle="bold" />
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/LayerVisit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginTop="25dp"
                 android:layout_marginStart="15dp"
-                android:layout_marginBottom="25dp"
+                android:layout_marginTop="25dp"
                 android:layout_marginEnd="15dp"
-                >
+                android:layout_marginBottom="25dp"
+                android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/tvVisit"
@@ -84,40 +79,106 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="2sp"
                     android:text="There is 1 visit for your pets."
-                    android:textSize="14sp"
-                    />
+                    android:textSize="14sp" />
 
                 <TextView
                     android:id="@+id/tvPetName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="2sp"
+                    android:drawablePadding="5dp"
+                    android:fontFamily="sans-serif-light"
                     android:text="Mbal"
                     android:textSize="11sp"
-                    android:fontFamily="sans-serif-light"
-                    app:drawableLeftCompat="@drawable/icon_pets"
-                    android:drawablePadding="5dp"
-                    />
+                    app:drawableLeftCompat="@drawable/icon_pets" />
 
                 <TextView
                     android:id="@+id/tvClinicName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2sp"
+                    android:drawablePadding="5dp"
+                    android:fontFamily="sans-serif-light"
                     android:text="Klinik Hewan IPB"
                     android:textSize="11sp"
-                    android:fontFamily="sans-serif-light"
-                    app:drawableLeftCompat="@drawable/icon_location"
-                    android:drawablePadding="5dp"
-                    />
+                    app:drawableLeftCompat="@drawable/icon_location" />
 
             </LinearLayout>
 
         </LinearLayout>
 
+        <!--    Layout if null    -->
+        <LinearLayout
+            android:id="@+id/layoutHomeNull"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="25dp"
+            android:layout_marginTop="100dp"
+            android:layout_marginEnd="25dp"
+            android:layout_marginBottom="40dp"
+            android:background="@drawable/layout_border_card_second"
+            android:orientation="horizontal"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="25dp"
+                android:layout_marginBottom="25dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                >
+
+                <TextView
+                    android:id="@+id/tvHomeLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:text="Ensure Your Pet’s Health"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toStartOf="@+id/ivCreateSchedule"
+                    app:layout_constraintHorizontal_bias="0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+
+                <TextView
+                    android:id="@+id/tvHomeDescLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="Schedule a Check-Up with Our Partners on the Next Visit!"
+                    android:textSize="11sp"
+                    android:maxWidth="200dp"
+                    app:layout_constraintHorizontal_bias="0"
+                    app:layout_constraintStart_toStartOf="@+id/tvHomeLabel"
+                    app:layout_constraintTop_toBottomOf="@id/tvHomeLabel"
+                    app:layout_constraintEnd_toStartOf="@id/ivCreateSchedule"
+                    />
+
+                <ImageView
+                    android:id="@+id/ivCreateSchedule"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginEnd="15dp"
+                    android:src="@drawable/icon_add_post"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/tvHomeLabel"
+                    app:layout_constraintBottom_toBottomOf="@+id/tvHomeDescLabel"
+                    app:tint="@color/activeIcon" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </LinearLayout>
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
