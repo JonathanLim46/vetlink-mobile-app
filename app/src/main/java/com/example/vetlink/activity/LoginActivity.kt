@@ -79,6 +79,7 @@ class LoginActivity : AppCompatActivity() {
 
         loginViewModel.errorMessage.observe(this) { message ->
             message?.let {
+                loadingAlert.stopAlertDialog()
                 toast(message)
             }
         }
