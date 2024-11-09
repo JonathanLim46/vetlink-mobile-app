@@ -1,29 +1,40 @@
 package com.example.vetlink.fragment
 
+import android.app.Activity
 import android.content.Intent
+import android.location.Location
+import android.location.LocationManager
 import com.example.vetlink.adapter.ClinicList
 import com.example.vetlink.adapter.ClinicListAdapter
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.vetlink.LocationPermissionHelper
 import com.example.vetlink.R
 import com.example.vetlink.activity.MainActivity
+import com.example.vetlink.activity.MenuActivity
 import com.example.vetlink.adapter.RecyclerViewClickListener
 import com.example.vetlink.databinding.FragmentHomeBinding
 import com.example.vetlink.viewModel.MainActivityViewModel
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import com.squareup.picasso.Picasso
+import java.io.IOException
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
-private lateinit var clinicList: ArrayList<ClinicList>
-private lateinit var clinicListAdapter: ClinicListAdapter
+
 
 /**
  * A simple [Fragment] subclass.
@@ -33,8 +44,15 @@ private lateinit var clinicListAdapter: ClinicListAdapter
 class HomeFragment : Fragment(), RecyclerViewClickListener<ClinicList> {
 
     private lateinit var binding: FragmentHomeBinding
+    private lateinit var clinicList: ArrayList<ClinicList>
+    private lateinit var allClinicList: ArrayList<ClinicList>
+    private lateinit var clinicListAdapter: ClinicListAdapter
+
+    private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
 
     private val sharedMainActivityViewModel: MainActivityViewModel by activityViewModels()
+    val inputFormat = SimpleDateFormat("HH:mm:ss", Locale.getDefault())
+    val outputFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
 
     // TODO: Rename and change types of parameters
     private var param1: String? = null
@@ -48,6 +66,31 @@ class HomeFragment : Fragment(), RecyclerViewClickListener<ClinicList> {
         }
     }
 
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when (requestCode){
+            LocationPermissionHelper.BASIC_PERMISSION_REQUESTCODE -> {
+                if (!LocationPermissionHelper.hasAccessCoarsePermission(requireActivity())){
+                    Toast.makeText(requireContext(),
+                        "Location Permission is needed, please turn on to run this App",
+                        Toast.LENGTH_SHORT).show()
+
+                    if (!LocationPermissionHelper.shouldShowRequestPermissionRationale(requireActivity())){
+                        LocationPermissionHelper.launchPermissionSettings(requireActivity())
+                        requireActivity().finish()
+                    } else {
+                        LocationPermissionHelper.checkLocationPermission(requireActivity())
+                    }
+                } else {
+                    Toast.makeText(requireContext(), "Location Permission is Granted", Toast.LENGTH_LONG).show()
+                }
+            }
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -74,24 +117,36 @@ class HomeFragment : Fragment(), RecyclerViewClickListener<ClinicList> {
                     binding.ivPhotoHome.setImageResource(R.drawable.img_default_profile)
                 }
             }
+        }
 
+        // veteriner
+        sharedMainActivityViewModel.veteriners.observe(viewLifecycleOwner) { veteriners ->
+            veteriners?.take(2)?.forEach{ veteriner ->
+
+                val openTimeFormatted = outputFormat.format(inputFormat.parse(veteriner.open_time)!!)
+                val closeTimeFormatted = outputFormat.format(inputFormat.parse(veteriner.close_time)!!)
+                allClinicList.add(ClinicList(veteriner.clinic_image, veteriner.clinic_name, veteriner.city, "Buka | $openTimeFormatted - $closeTimeFormatted"))
+            }
+            clinicList.clear()
+            clinicList.addAll(allClinicList)
+            clinicListAdapter.notifyDataSetChanged()
+
+            getLastLocation()
         }
     }
 
     private fun initView() {
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(requireContext())
         with(binding){
-            val isClinicPage = false
 
             rvClinicList.setHasFixedSize(true)
             rvClinicList.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
 
             clinicList = ArrayList()
-            addDataToList()
+            allClinicList = ArrayList()
 
-            clinicListAdapter = ClinicListAdapter(clinicList, isClinicPage)
-            clinicListAdapter.notifyDataSetChanged()
+            clinicListAdapter = ClinicListAdapter(clinicList, false)
             rvClinicList.adapter = clinicListAdapter
-
             clinicListAdapter.clickListener(this@HomeFragment)
 
             srlList.setOnRefreshListener {
@@ -118,6 +173,76 @@ class HomeFragment : Fragment(), RecyclerViewClickListener<ClinicList> {
         }
     }
 
+    private fun dataClinic(city: String){
+
+        clinicList.clear()
+        for (clinic in allClinicList){
+            if (clinic.clinicLocation.lowercase().contains(city.lowercase())){
+                clinicList.add(clinic)
+            }
+        }
+        clinicListAdapter.notifyDataSetChanged()
+    }
+
+    // LOCATION
+    private fun getLastLocation(){
+        LocationPermissionHelper.checkLocationPermission(requireActivity())
+
+        if(LocationPermissionHelper.hasAccessCoarsePermission(requireActivity())){
+            fusedLocationProviderClient.lastLocation.addOnSuccessListener { location ->
+                if(location != null){
+                    displayLocationDetails(location)
+                } else {
+                    clearClinicList("Location not available")
+                }
+            }
+        } else {
+            LocationPermissionHelper.requestCoarseLocationPermission(requireActivity())
+            clearClinicList("Location permission is needed")
+        }
+    }
+
+    private fun displayLocationDetails(location: Location){
+        if(location != null){
+            try {
+                if (isAdded){
+                    val city = LocationPermissionHelper.getCityFromLocation(requireContext(), location.latitude, location.longitude)
+
+                    if(city != null){
+                        Log.d("Location City : ", "$city")
+                        dataClinic(city)
+                    } else {
+                        if (isAdded) {
+                            Toast.makeText(requireContext(), "Unable to get current city", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }
+            }catch (e: IOException){
+                if (isAdded){
+                    Toast.makeText(requireContext(), "Geocoder service not available", Toast.LENGTH_SHORT).show()
+                    Log.e("Location", "Geocoder Failed", e)
+                }
+            }
+        } else {
+            if (isAdded){
+                Toast.makeText(requireContext(), "Location not available", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun clearClinicList(message: String) {
+        clinicList.clear()
+        clinicListAdapter.notifyDataSetChanged()
+        if (isAdded) {
+            Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
+        }
+    }
+
+    override fun onItemClicke(view: View, item: ClinicList) {
+        val intent = Intent(activity, MenuActivity::class.java)
+        intent.putExtra("MENU_TITLE", "Clinic")
+        startActivity(intent)
+    }
 
     companion object {
         /**
@@ -139,13 +264,4 @@ class HomeFragment : Fragment(), RecyclerViewClickListener<ClinicList> {
             }
     }
 
-    private fun addDataToList(){
-        clinicList.add(ClinicList(
-            R.drawable.img_rspets.toString(), "Klinik IPB",
-            "Sukmajaya, Depok", "Buka | 07.00 - 15.00"))
-    }
-
-    override fun onItemClicke(view: View, item: ClinicList) {
-
-    }
 }
