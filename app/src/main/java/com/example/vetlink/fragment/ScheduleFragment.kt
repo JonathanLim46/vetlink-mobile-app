@@ -2,16 +2,22 @@ package com.example.vetlink.fragment
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.vetlink.R
 import com.example.vetlink.adapter.ScheduleList
 import com.example.vetlink.adapter.ScheduleListAdapter
+import com.example.vetlink.data.model.queue.Queue
 import com.example.vetlink.databinding.FragmentScheduleBinding
+import com.example.vetlink.viewModel.MenuActivityViewModel
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -30,6 +36,9 @@ class ScheduleFragment : Fragment() {
     private lateinit var binding: FragmentScheduleBinding
     private lateinit var scheduleList: ArrayList<ScheduleList>
     private lateinit var scheduleListAdapter: ScheduleListAdapter
+    private val sharedMenuActivityViewModel: MenuActivityViewModel by activityViewModels()
+    val dateFormat = SimpleDateFormat("d", Locale.getDefault())
+    val fullDateFormat = SimpleDateFormat("EEEE, MMMM yyyy", Locale.getDefault())
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,8 +56,57 @@ class ScheduleFragment : Fragment() {
         binding = FragmentScheduleBinding.inflate(inflater, container, false)
 
         initView()
-
+        setupObservers()
         return binding.root
+    }
+
+    private fun setupObservers(){
+        sharedMenuActivityViewModel.queues.observe(viewLifecycleOwner){ queues ->
+            var upComing = queues.filter { it.status == "ongoing" }
+            var history = queues.filter { it.status == "finished" }
+            var cancel = queues.filter { it.status == "canceled" }
+
+            binding.tvCountUpcoming.text = if (upComing.isNotEmpty()) "(" + upComing.size.toString() + ")" else "(0)"
+            binding.tvCountHistorySchedule.text = if (history.isNotEmpty()) "(" + history.size.toString() + ")" else "(0)"
+            binding.tvCountCancelSchedule.text = if (cancel.isNotEmpty()) "(" + cancel.size.toString() + ")" else "(0)"
+
+            var upComingList = ArrayList(upComing.map { queue ->
+                ScheduleList(
+                    scheduleDate = dateFormat.format(queue.appointment_time),
+                    scheduleFullDate = fullDateFormat.format(queue.appointment_time),
+                    scheduleClinicName = queue.veteriner.clinic_name,
+                    schedulePetName = queue.pet.name,
+                    scheduleClinicFullLocation = queue.veteriner.city
+                )
+            })
+            binding.rvUpComing.adapter = ScheduleListAdapter(upComingList)
+            binding.rvUpComing.adapter?.notifyDataSetChanged()
+
+            var historyList = ArrayList(history.map { queue ->
+                ScheduleList(
+                    scheduleDate = dateFormat.format(queue.appointment_time),
+                    scheduleFullDate = fullDateFormat.format(queue.appointment_time),
+                    scheduleClinicName = queue.veteriner.clinic_name,
+                    schedulePetName = queue.pet.name,
+                    scheduleClinicFullLocation = queue.veteriner.city
+                )
+            })
+            binding.rvHistory.adapter = ScheduleListAdapter(historyList)
+            binding.rvHistory.adapter?.notifyDataSetChanged()
+
+            var cancelList = ArrayList(cancel.map { queue ->
+                ScheduleList(
+                    scheduleDate = dateFormat.format(queue.appointment_time),
+                    scheduleFullDate = fullDateFormat.format(queue.appointment_time),
+                    scheduleClinicName = queue.veteriner.clinic_name,
+                    schedulePetName = queue.pet.name,
+                    scheduleClinicFullLocation = queue.veteriner.city
+                )
+            })
+
+            binding.rvCancel.adapter = ScheduleListAdapter(cancelList)
+            binding.rvCancel.adapter?.notifyDataSetChanged()
+        }
     }
 
     @SuppressLint("NotifyDataSetChanged")

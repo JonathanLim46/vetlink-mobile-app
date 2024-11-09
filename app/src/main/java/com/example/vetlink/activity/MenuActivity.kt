@@ -100,6 +100,7 @@ class MenuActivity : AppCompatActivity() {
                 Log.d("PET_ID_Edit", petId.toString())
             }
         } else if (menuTitle == "Schedule"){
+            menuActivityViewModel.getQueues()
             replaceFragmentWithOutIntance(ScheduleFragment())
         } else if(menuTitle == "FAQ VetLink"){
             replaceFragmentWithOutIntance(FaqFragment())
