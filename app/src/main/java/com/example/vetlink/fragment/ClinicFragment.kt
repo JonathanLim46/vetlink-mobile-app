@@ -25,6 +25,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView.LayoutManager
+import com.example.vetlink.LocationPermissionHelper
 import com.example.vetlink.R
 import com.example.vetlink.activity.MenuActivity
 import com.example.vetlink.adapter.ClinicList
@@ -63,15 +64,6 @@ class ClinicFragment : Fragment(), RecyclerViewClickListener<ClinicList>{
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
 
     private val sharedMainActivityViewModel: MainActivityViewModel by activityViewModels()
-
-    private val requestPermissionLauncher =
-        registerForActivityResult(ActivityResultContracts.RequestPermission()){ isGranted: Boolean ->
-            if (isGranted){
-                getLastLocation()
-            } else {
-                Toast.makeText(requireContext(), "Please provide the required permission", Toast.LENGTH_SHORT).show()
-            }
-        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -215,7 +207,8 @@ class ClinicFragment : Fragment(), RecyclerViewClickListener<ClinicList>{
     // LOCATION
     @SuppressLint("MissingPermission")
     private fun getLastLocation(){
-        if(hasLocationPermission()){
+        LocationPermissionHelper.checkLocationPermission(requireActivity())
+        if(LocationPermissionHelper.hasAccessCoarsePermission(requireActivity())){
             fusedLocationProviderClient.lastLocation.addOnSuccessListener { location ->
                 if (location!=null){
                     displayLocationDetails(location)
@@ -227,46 +220,30 @@ class ClinicFragment : Fragment(), RecyclerViewClickListener<ClinicList>{
                 }
             }
         } else {
-            requestLocationPermission()
+            LocationPermissionHelper.requestCoarseLocationPermission(requireActivity())
         }
     }
 
-    private fun hasLocationPermission(): Boolean{
-        return ContextCompat.checkSelfPermission(
-            requireContext(),
-            android.Manifest.permission.ACCESS_COARSE_LOCATION
-        ) == PackageManager.PERMISSION_GRANTED
-    }
-
-    private fun requestLocationPermission() {
-        requestPermissionLauncher.launch(android.Manifest.permission.ACCESS_COARSE_LOCATION)
-    }
-
     private fun displayLocationDetails(location: Location){
-
         if(location != null){
-            Log.d("Location", "Latitude: ${location.latitude}, Longitude: ${location.longitude}")
             try {
                 if (isAdded){
-                    val geocoder = Geocoder(requireContext(), Locale.getDefault())
-                    val address: MutableList<Address>? = geocoder.getFromLocation(location.latitude, location.longitude, 1)
+                    val city = LocationPermissionHelper.getCityFromLocation(requireContext(), location.latitude, location.longitude)
 
-                    if(address?.isNotEmpty() == true){
-                        val addressDetails = address[0]
-                        Log.d("Location Details", "Address: ${addressDetails.getAddressLine(0)}," +
-                                "City: ${addressDetails.locality}, Country: ${addressDetails.countryName}")
-                        binding.tvLocationClinic.text = addressDetails.subAdminArea?.replace("Kota", "")
-                            ?.replace("Kabupaten", "")?.trim() ?: addressDetails.locality?.replace("Kecamatan", "")?.trim()
+                    if(city != null){
+                        Log.d("Location City : ", "$city")
+
+                        binding.tvLocationClinic.text = city
 
                         dataClinic()
                     } else {
-                        if (isAdded){
+                        if (isAdded) {
                             Toast.makeText(requireContext(), "Unable to get current city", Toast.LENGTH_SHORT).show()
                             binding.tvLocationClinic.text = "Unknown"
                         }
                     }
                 }
-            } catch (e: IOException){
+            }catch (e: java.io.IOException){
                 if (isAdded){
                     Toast.makeText(requireContext(), "Geocoder service not available", Toast.LENGTH_SHORT).show()
                     Log.e("Location", "Geocoder Failed", e)
@@ -275,10 +252,8 @@ class ClinicFragment : Fragment(), RecyclerViewClickListener<ClinicList>{
         } else {
             if (isAdded){
                 Toast.makeText(requireContext(), "Location not available", Toast.LENGTH_SHORT).show()
-                binding.tvLocationClinic.text = "Unknown"
             }
         }
-
     }
 
     companion object {
