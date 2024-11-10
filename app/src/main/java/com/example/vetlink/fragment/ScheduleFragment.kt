@@ -128,8 +128,8 @@ class ScheduleFragment : Fragment() {
             rvCancel.adapter = scheduleListAdapter
 
             srlSchedule.setOnRefreshListener {
-                srlSchedule.isRefreshing = false
                 scheduleListAdapter.notifyDataSetChanged()
+                srlSchedule.isRefreshing = false
             }
 
         }

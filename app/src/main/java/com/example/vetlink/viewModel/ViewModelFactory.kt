@@ -24,7 +24,7 @@ class ViewModelFactory(
                 RegisterActivityViewModel(authRepository) as T
             }
             modelClass.isAssignableFrom(MainActivityViewModel::class.java) -> {
-                MainActivityViewModel(authRepository, veterinerRepository) as T
+                MainActivityViewModel(authRepository, veterinerRepository, queueRepository) as T
             }
             modelClass.isAssignableFrom(ProfileFragmentViewModel::class.java) -> {
                 ProfileFragmentViewModel(authRepository) as T

@@ -6,10 +6,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.vetlink.data.model.pets.Pet
+import com.example.vetlink.data.model.queue.Queue
 import com.example.vetlink.data.model.user.User
 import com.example.vetlink.data.model.veteriner.Veteriner
 import com.example.vetlink.repository.AuthRepository
 import com.example.vetlink.repository.PetRepository
+import com.example.vetlink.repository.QueueRepository
 import com.example.vetlink.repository.VeterinerRepository
 import kotlinx.coroutines.launch
 import okhttp3.Response
@@ -18,7 +20,8 @@ import kotlin.math.log
 
 class MainActivityViewModel(
     private val authRepository: AuthRepository,
-    private val veterinerRepository: VeterinerRepository?
+    private val veterinerRepository: VeterinerRepository?,
+    private val queueRepository: QueueRepository?
 ): ViewModel() {
 
     private val _user = MutableLiveData<User>()
@@ -38,6 +41,12 @@ class MainActivityViewModel(
 
     private val _errorMessageVeteriner = MutableLiveData<String>()
     val errorMessageVeteriner: LiveData<String> get() = _errorMessageVeteriner
+
+    private val _queues = MutableLiveData<List<Queue>>()
+    val queues: LiveData<List<Queue>> get() = _queues
+
+    private val _errorMessageQueues = MutableLiveData<String>()
+    val errorMessageQueues: LiveData<String> get() = _errorMessageQueues
 
     private val _logoutSuccess = MutableLiveData<Boolean>()
     val logoutSuccess: LiveData<Boolean> = _logoutSuccess
@@ -75,6 +84,33 @@ class MainActivityViewModel(
             } catch (e: Exception) {
                 _errorMessageUser.postValue("An error occurred. Please try again.")
                 Log.e("API_ERROR", "Fetch user error: ${e.message}")
+            }
+        }
+    }
+
+    fun getQueues() {
+        if (queueRepository == null) {
+            Log.e("API_ERROR", "QueueRepository is null")
+            _errorMessageQueues.postValue("QueueRepository is not initialized.")
+            return
+        }
+
+        viewModelScope.launch {
+            try {
+                val responseQueues = queueRepository.getQueues()
+                if (responseQueues.isSuccess) {
+                    _queues.postValue(responseQueues.getOrNull()?.data)
+                    Log.d("API_RESPONSE", "Queues fetched successfully: ${responseQueues.getOrNull()?.data}")
+                } else {
+                    _errorMessageQueues.postValue("An error occurred while fetching queues. Please try again.")
+                    Log.e("API_ERROR", "Queue fetch failed: ${responseQueues.exceptionOrNull()}")
+                }
+            } catch (e: ConnectException) {
+                _errorMessageQueues.postValue("Unable to connect to the server. Please check your internet connection.")
+                Log.e("API_ERROR", "Network error: ${e.message}")
+            } catch (e: Exception) {
+                _errorMessageQueues.postValue("An error occurred while fetching queues. Please try again.")
+                Log.e("API_ERROR", "Queue Error: ${e.message}", e)
             }
         }
     }
