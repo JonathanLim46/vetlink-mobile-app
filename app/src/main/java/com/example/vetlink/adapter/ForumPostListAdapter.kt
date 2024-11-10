@@ -18,7 +18,6 @@ class ForumPostListAdapter(private val forumPostList: List<ForumPostList>): Recy
         val postImageProfile: ImageView = itemView.findViewById(R.id.ivPostImageProfile)
         val postImagePets: ImageView = itemView.findViewById(R.id.ivPostImagePets)
         val postUsername: TextView = itemView.findViewById(R.id.tvPostUsername)
-        val postLocation: TextView = itemView.findViewById(R.id.tvPostLocation)
         val postStatus: TextView = itemView.findViewById(R.id.tvPostStatus)
         val postHeader: TextView = itemView.findViewById(R.id.tvPostHeader)
         val postDescription: TextView = itemView.findViewById(R.id.tvPostDescription)
@@ -50,7 +49,6 @@ class ForumPostListAdapter(private val forumPostList: List<ForumPostList>): Recy
         holder.postImageProfile.setImageResource(forumPostList.postImageProfile)
         holder.postImagePets.setImageResource(forumPostList.postImagePets)
         holder.postUsername.text = forumPostList.postUsername
-        holder.postLocation.text = forumPostList.postLocation
         holder.postStatus.text = forumPostList.postStatus
         holder.postHeader.text = forumPostList.postHeader
         holder.postDescription.text = forumPostList.postDescription
