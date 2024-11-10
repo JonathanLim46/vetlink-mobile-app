@@ -70,6 +70,7 @@ class LoginActivity : AppCompatActivity() {
                     val intent = Intent(this, MainActivity::class.java)
                     startActivity(intent)
                     toast(loginResponse.data.token)
+                    finish()
                 }else{
                     loadingAlert.stopAlertDialog()
                     toast(loginResponse.message)

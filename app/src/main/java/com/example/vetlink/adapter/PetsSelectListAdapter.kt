@@ -7,13 +7,24 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.vetlink.R
+import com.squareup.picasso.Picasso
 
-class PetsSelectListAdapter(private val petsSelectList: List<PetsSelectList>): RecyclerView.Adapter<PetsSelectListAdapter.PetsSelectListViewHolder>() {
+class PetsSelectListAdapter(
+    private val petsSelectList: List<PetsSelectList>,
+    private val onPetClick: (String, Int) -> Unit,
+) : RecyclerView.Adapter<PetsSelectListAdapter.PetsSelectListViewHolder>() {
 
-    class PetsSelectListViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
+    inner class PetsSelectListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val petName: TextView = itemView.findViewById(R.id.tvPetName)
         val petCategory: TextView = itemView.findViewById(R.id.tvPetCategory)
         val petImage: ImageView = itemView.findViewById(R.id.ivPet)
+
+        // Attach the click listener to the itemView
+        init {
+            itemView.setOnClickListener {
+                onPetClick(petsSelectList[adapterPosition].petName,petsSelectList[adapterPosition].petId) // Pass the pet ID to the listener
+            }
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PetsSelectListViewHolder {
@@ -21,14 +32,12 @@ class PetsSelectListAdapter(private val petsSelectList: List<PetsSelectList>): R
         return PetsSelectListViewHolder(view)
     }
 
-    override fun getItemCount(): Int {
-        return petsSelectList.size
-    }
+    override fun getItemCount(): Int = petsSelectList.size
 
     override fun onBindViewHolder(holder: PetsSelectListViewHolder, position: Int) {
-        val petsSelectList = petsSelectList[position]
-        holder.petName.text = petsSelectList.petName
-        holder.petCategory.text = petsSelectList.petCategory
-        holder.petImage.setImageResource(petsSelectList.petImage)
+        val pet = petsSelectList[position]
+        holder.petName.text = pet.petName
+        holder.petCategory.text = pet.petCategory
+        Picasso.get().load(pet.petImage).resize(50, 50).centerCrop().into(holder.petImage)
     }
 }

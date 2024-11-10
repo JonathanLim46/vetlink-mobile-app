@@ -13,7 +13,7 @@ import java.util.Locale
 
 class ClinicListAdapter(
     private val clinicList : List<ClinicList>,
-    private val isClinicPage: Boolean
+    private val isClinicPage: Boolean,
 ) : RecyclerView.Adapter<ClinicListAdapter.ClinicViewHolder>() {
 
     private lateinit var listener: RecyclerViewClickListener<ClinicList>
@@ -45,7 +45,6 @@ class ClinicListAdapter(
 
     override fun onBindViewHolder(holder: ClinicViewHolder, position: Int) {
         val clinicList = clinicList[position]
-//        holder.clinicImageView.setImageResource(R.drawable.img_rspets)
         holder.clinicNameTv.text = clinicList.clinicName
         holder.clinicLocationTv.text = clinicList.clinicLocation
         holder.clinicTimeOpenTv.text = clinicList.clinicTimeOpen

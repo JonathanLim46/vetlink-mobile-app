@@ -12,9 +12,11 @@ import com.example.vetlink.data.model.pets.PetDetails
 import com.example.vetlink.data.model.pets.PetType
 import com.example.vetlink.data.model.queue.Queue
 import com.example.vetlink.data.model.user.User
+import com.example.vetlink.data.model.veteriner.Veteriner
 import com.example.vetlink.repository.AuthRepository
 import com.example.vetlink.repository.PetRepository
 import com.example.vetlink.repository.QueueRepository
+import com.example.vetlink.repository.VeterinerRepository
 import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -23,7 +25,8 @@ import java.net.ConnectException
 class MenuActivityViewModel(
     private val authRepository: AuthRepository,
     private val petRepository: PetRepository?,
-    private val queueRepository: QueueRepository?
+    private val queueRepository: QueueRepository?,
+    private val veterinerRepository: VeterinerRepository?
 ): ViewModel() {
 
     private val _user = MutableLiveData<User>()
@@ -69,6 +72,14 @@ class MenuActivityViewModel(
     val deletePetMessage: LiveData<String> get() = _deletePetMessage
     val _errorMessageDeletePet = MutableLiveData<String>()
 
+    private val _veterinerDetail = MutableLiveData<Veteriner>()
+    val veterinerDetail: LiveData<Veteriner> get() = _veterinerDetail
+
+    private val _errorMessageVeterinerDetail = MutableLiveData<String>()
+    val errorMessageVeterinerDetail: LiveData<String> get() = _errorMessageVeterinerDetail
+
+    val addQueueResponse = MutableLiveData<Int>()
+
     fun addPet(
         name: String,
         type: String,
@@ -98,8 +109,6 @@ class MenuActivityViewModel(
             }
         }
     }
-
-
 
     fun getPets(){
         viewModelScope.launch {
@@ -227,6 +236,48 @@ class MenuActivityViewModel(
                 Log.e("API_ERROR", "Queue Error: ${e.message}", e)
             }
         }
+    }
+
+    fun getDetailClinic(id: Int){
+        viewModelScope.launch {
+            try {
+                val response = veterinerRepository?.getVeteriner(id)
+                if (response!!.isSuccess){
+                    _veterinerDetail.postValue(response.getOrNull()?.data)
+                    Log.d("API_RESPONSE", "Veteriner detail fetched successfully: ${response.getOrNull()?.data}")
+                }
+            }catch (e: ConnectException) {
+                _errorMessageVeterinerDetail.postValue("Unable to connect to the server. Please check your internet connection.")
+                Log.e("API_ERROR", "Network error: ${e.message}")
+            }catch (e: Exception){
+                _errorMessageVeterinerDetail.postValue("An error occurred. Please try again.")
+                Log.d("exception vet detail", e.message.toString())
+            }
+        }
+    }
+
+    fun addQueue(petId: Int, veterinerId: Int, date: String){
+        viewModelScope.launch {
+            try {
+                val response = queueRepository?.addQueue(petId, veterinerId, date)
+                if (response!!.isSuccess && response.getOrNull()?.status == 201){
+                    addQueueResponse.postValue(response.getOrNull()?.status)
+                    Log.d("API_RESPONSE", "Queue added successfully: ${response.getOrNull()?.data}")
+                }
+                else{
+                    addQueueResponse.postValue(response.getOrNull()?.status)
+                    Log.e("API_ERROR", "Add Queue failed: ${response?.exceptionOrNull()}")
+                }
+            }catch (e: ConnectException){
+                _errorMessageQueues.postValue("Unable to connect to the server. Please check your internet connection.")
+                Log.e("API_ERROR", "Network error: ${e.message}")
+            }
+            catch (e: Exception){
+                _errorMessageQueues.postValue("An error occurred. Please try again.")
+                Log.e("API_ERROR", "Queue Error: ${e.message}", e)
+            }
+        }
+
     }
 
 }

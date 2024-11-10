@@ -98,15 +98,10 @@ class ClinicFragment : Fragment(), RecyclerViewClickListener<ClinicList>{
 
             rvClinicPage.layoutManager = LinearLayoutManager(requireContext())
 
-
-
-//            searchbar dan searchview
-
+//          searchbar dan searchview
             searchBarClinic.setOnClickListener{
                 searchView.show()
             }
-
-
 
             searchView.editText.setOnEditorActionListener(object: TextView.OnEditorActionListener{
                 override fun onEditorAction(p0: TextView?, p1: Int, p2: KeyEvent?): Boolean {
@@ -150,7 +145,7 @@ class ClinicFragment : Fragment(), RecyclerViewClickListener<ClinicList>{
             veteriners?.forEach{ veteriner ->
                 val openTimeFormatted = outputFormat.format(inputFormat.parse(veteriner.open_time)!!)
                 val closeTimeFormatted = outputFormat.format(inputFormat.parse(veteriner.close_time)!!)
-                allClinicList.add(ClinicList(veteriner.clinic_image, veteriner.clinic_name, veteriner.city, "Buka | $openTimeFormatted - $closeTimeFormatted"))
+                allClinicList.add(ClinicList(veteriner.id,veteriner.clinic_image, veteriner.clinic_name, veteriner.city, "Buka | $openTimeFormatted - $closeTimeFormatted"))
             }
 
             clinicList.addAll(allClinicList)
@@ -201,6 +196,7 @@ class ClinicFragment : Fragment(), RecyclerViewClickListener<ClinicList>{
     override fun onItemClicke(view: View, item: ClinicList) {
         val intent = Intent(activity, MenuActivity::class.java)
         intent.putExtra("MENU_TITLE", "Clinic")
+        intent.putExtra("CLINIC_ID", item.clinicId)
         startActivity(intent)
     }
 
