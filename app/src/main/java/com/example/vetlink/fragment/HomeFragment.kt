@@ -125,7 +125,7 @@ class HomeFragment : Fragment(), RecyclerViewClickListener<ClinicList> {
 
                 val openTimeFormatted = outputFormat.format(inputFormat.parse(veteriner.open_time)!!)
                 val closeTimeFormatted = outputFormat.format(inputFormat.parse(veteriner.close_time)!!)
-                allClinicList.add(ClinicList(veteriner.clinic_image, veteriner.clinic_name, veteriner.city, "Buka | $openTimeFormatted - $closeTimeFormatted"))
+                allClinicList.add(ClinicList(veteriner.id, veteriner.clinic_image, veteriner.clinic_name, veteriner.city, "Buka | $openTimeFormatted - $closeTimeFormatted"))
             }
             clinicList.clear()
             clinicList.addAll(allClinicList)

@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.vetlink.R
@@ -35,6 +36,7 @@ class ForumFormFragment : Fragment() {
     private lateinit var binding : FragmentForumFormBinding
     private lateinit var petsSelectList: ArrayList<PetsSelectList>
     private lateinit var petsSelectListAdapter: PetsSelectListAdapter
+    private var petId: Int? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -109,7 +111,11 @@ class ForumFormFragment : Fragment() {
         petsSelectList = ArrayList()
         addDataToPetList()
 
-        petsSelectListAdapter = PetsSelectListAdapter(petsSelectList)
+        petsSelectListAdapter = PetsSelectListAdapter(petsSelectList){ selectedPetName, selectedPetId ->
+            petId = selectedPetId
+//            binding.tvPetUserSelect.text = selectedPetName
+            Toast.makeText(requireContext(), "Selected et ID: $petId", Toast.LENGTH_SHORT).show()
+        }
         recyclerView.adapter = petsSelectListAdapter
 
         dialog?.apply {
@@ -123,10 +129,10 @@ class ForumFormFragment : Fragment() {
     }
 
     private fun addDataToPetList(){
-        petsSelectList.add(PetsSelectList("Mball", "Cat", R.drawable.img_cats))
-        petsSelectList.add(PetsSelectList("Mball", "Cat", R.drawable.img_cats))
-        petsSelectList.add(PetsSelectList("Mball", "Cat", R.drawable.img_cats))
-        petsSelectList.add(PetsSelectList("Mball", "Cat", R.drawable.img_cats))
+//        petsSelectList.add(PetsSelectList("Mball", "Cat", R.drawable.img_cats))
+//        petsSelectList.add(PetsSelectList("Mball", "Cat", R.drawable.img_cats))
+//        petsSelectList.add(PetsSelectList("Mball", "Cat", R.drawable.img_cats))
+//        petsSelectList.add(PetsSelectList("Mball", "Cat", R.drawable.img_cats))
     }
 
 

@@ -60,7 +60,7 @@ class MainActivityViewModel(
     fun getVeteriners() {
         viewModelScope.launch {
             try {
-                val responseVeteriners = veterinerRepository?.getVeterinars()
+                val responseVeteriners = veterinerRepository?.getVeteriners()
                 if (responseVeteriners?.isSuccess == true) {
                     val veterinerList = responseVeteriners.getOrNull()?.data ?: emptyList()
                     _veteriners.postValue(veterinerList)
@@ -78,6 +78,8 @@ class MainActivityViewModel(
             }
         }
     }
+
+
 
 //    fun getPets(){
 //        viewModelScope.launch {

@@ -12,7 +12,7 @@ class ViewModelFactory(
     private val authRepository: AuthRepository,
     private val petRepository: PetRepository? = null,
     private val queueRepository: QueueRepository? = null,
-    private val veterinerRepository: VeterinerRepository? = null,
+    private val veterinerRepository: VeterinerRepository? = null
 ) : ViewModelProvider.Factory {
 
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -30,7 +30,7 @@ class ViewModelFactory(
                 ProfileFragmentViewModel(authRepository) as T
             }
             modelClass.isAssignableFrom(MenuActivityViewModel::class.java) -> {
-                MenuActivityViewModel(authRepository, petRepository, queueRepository) as T
+                MenuActivityViewModel(authRepository, petRepository, queueRepository, veterinerRepository) as T
             }
             else -> throw IllegalArgumentException("Unknown ViewModel class")
         }

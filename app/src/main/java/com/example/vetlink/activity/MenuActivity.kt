@@ -27,6 +27,7 @@ import com.example.vetlink.helper.SessionManager
 import com.example.vetlink.repository.AuthRepository
 import com.example.vetlink.repository.PetRepository
 import com.example.vetlink.repository.QueueRepository
+import com.example.vetlink.repository.VeterinerRepository
 import com.example.vetlink.util.toast
 import com.example.vetlink.viewModel.MenuActivityViewModel
 import com.example.vetlink.viewModel.ViewModelFactory
@@ -38,7 +39,7 @@ class MenuActivity : AppCompatActivity() {
     private lateinit var session: SessionManager
 
     private val menuActivityViewModel: MenuActivityViewModel by viewModels{
-        ViewModelFactory(AuthRepository(session), PetRepository(session), QueueRepository(session))
+        ViewModelFactory(AuthRepository(session), PetRepository(session), QueueRepository(session), VeterinerRepository(session))
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -105,6 +106,9 @@ class MenuActivity : AppCompatActivity() {
         } else if(menuTitle == "FAQ VetLink"){
             replaceFragmentWithOutIntance(FaqFragment())
         } else if(menuTitle == "Clinic"){
+            val clinicId = intent.getIntExtra("CLINIC_ID", 0)
+            menuActivityViewModel.getDetailClinic(clinicId)
+            menuActivityViewModel.getPets()
             replaceFragmentWithOutIntance(ClinicPageFragment())
         } else if(menuTitle == "Postingan Baru"){
             replaceFragmentWithOutIntance(ForumFormFragment())

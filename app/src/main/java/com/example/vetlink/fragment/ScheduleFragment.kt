@@ -117,16 +117,6 @@ class ScheduleFragment : Fragment() {
             rvHistory.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
             rvCancel.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
 
-            scheduleList = ArrayList()
-            addDataToUpComing()
-
-            scheduleListAdapter = ScheduleListAdapter(scheduleList)
-            scheduleListAdapter.notifyDataSetChanged()
-
-            rvUpComing.adapter = scheduleListAdapter
-            rvHistory.adapter = scheduleListAdapter
-            rvCancel.adapter = scheduleListAdapter
-
             srlSchedule.setOnRefreshListener {
                 srlSchedule.isRefreshing = false
                 scheduleListAdapter.notifyDataSetChanged()
