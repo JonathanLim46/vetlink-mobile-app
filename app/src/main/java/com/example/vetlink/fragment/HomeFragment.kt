@@ -132,7 +132,7 @@ class HomeFragment : Fragment(), RecyclerViewClickListener<ClinicList> {
             var history = queues.filter { it.status == "finished" }
 
             val firstDataUpComing = upComing?.firstOrNull()
-            val firstDataHistory = upComing?.firstOrNull()
+            val firstDataHistory = history.firstOrNull()
 
             with(binding){
                 if(firstDataUpComing != null){
