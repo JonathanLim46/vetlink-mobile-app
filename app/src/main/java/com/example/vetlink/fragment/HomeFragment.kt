@@ -21,6 +21,8 @@ import com.example.vetlink.R
 import com.example.vetlink.activity.MainActivity
 import com.example.vetlink.activity.MenuActivity
 import com.example.vetlink.adapter.RecyclerViewClickListener
+import com.example.vetlink.adapter.ScheduleList
+import com.example.vetlink.adapter.ScheduleListAdapter
 import com.example.vetlink.databinding.FragmentHomeBinding
 import com.example.vetlink.viewModel.MainActivityViewModel
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -47,6 +49,10 @@ class HomeFragment : Fragment(), RecyclerViewClickListener<ClinicList> {
     private lateinit var clinicList: ArrayList<ClinicList>
     private lateinit var allClinicList: ArrayList<ClinicList>
     private lateinit var clinicListAdapter: ClinicListAdapter
+
+    // Schedule
+    val dateFormat = SimpleDateFormat("dd", Locale.getDefault())
+    val monthFormat = SimpleDateFormat("MM", Locale.getDefault())
 
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
 
@@ -119,20 +125,61 @@ class HomeFragment : Fragment(), RecyclerViewClickListener<ClinicList> {
             }
         }
 
+        // Queue
+        sharedMainActivityViewModel.queues.observe(viewLifecycleOwner){ queues ->
+            Log.d("QueueObserver", "Null")
+            var upComing = queues?.filter { it.status == "ongoing" }
+            var history = queues.filter { it.status == "finished" }
+
+            val firstDataUpComing = upComing?.firstOrNull()
+            val firstDataHistory = upComing?.firstOrNull()
+
+            with(binding){
+                if(firstDataUpComing != null){
+                    Log.d("QueueObserver", "Upcoming queue found: $firstDataUpComing")
+                    includeHome.tvVisit.text = "There is " + upComing?.size.toString() + " visit(s) for your pets."
+                    includeHome.tvTanggal.text = dateFormat.format(firstDataUpComing.appointment_time)
+                    includeHome.tvBulan.text = monthFormat.format(firstDataUpComing.appointment_time)
+                    includeHome.tvPetName.text = firstDataUpComing.pet.name
+                    includeHome.tvClinicName.text = firstDataUpComing.veteriner.clinic_name
+                } else {
+                    Log.d("QueueObserver", "No upcoming visits, showing empty view")
+                    includeHome.LayerVisit.visibility = View.GONE
+                    includeHome.layoutHomeNull.visibility = View.VISIBLE
+                }
+
+                if(firstDataHistory != null){
+                    tvClinicNameHistory.text = firstDataHistory.veteriner.clinic_name
+                    tvClinicLocationHistory.text = firstDataHistory.veteriner.city
+
+                    // IMAGE BELOM YA BANG
+                } else {
+                    layoutVisitHistory.visibility = View.GONE
+                    layoutVisitHistoryNull.visibility = View.VISIBLE
+                }
+
+            }
+        }
+
         // veteriner
         sharedMainActivityViewModel.veteriners.observe(viewLifecycleOwner) { veteriners ->
-            veteriners?.take(2)?.forEach{ veteriner ->
 
-                val openTimeFormatted = outputFormat.format(inputFormat.parse(veteriner.open_time)!!)
-                val closeTimeFormatted = outputFormat.format(inputFormat.parse(veteriner.close_time)!!)
-                allClinicList.add(ClinicList(veteriner.id, veteriner.clinic_image, veteriner.clinic_name, veteriner.city, "Buka | $openTimeFormatted - $closeTimeFormatted"))
+            if(veteriners != null){
+                veteriners?.take(5)?.forEach{ veteriner ->
+
+                    val openTimeFormatted = outputFormat.format(inputFormat.parse(veteriner.open_time)!!)
+                    val closeTimeFormatted = outputFormat.format(inputFormat.parse(veteriner.close_time)!!)
+                    allClinicList.add(ClinicList(veteriner.id, veteriner.clinic_image, veteriner.clinic_name, veteriner.city, "Buka | $openTimeFormatted - $closeTimeFormatted"))
+                }
+                clinicList.clear()
+                clinicList.addAll(allClinicList)
+                clinicListAdapter.notifyDataSetChanged()
+
+                getLastLocation()
             }
-            clinicList.clear()
-            clinicList.addAll(allClinicList)
-            clinicListAdapter.notifyDataSetChanged()
-
-            getLastLocation()
         }
+
+
     }
 
     private fun initView() {
@@ -150,9 +197,9 @@ class HomeFragment : Fragment(), RecyclerViewClickListener<ClinicList> {
             clinicListAdapter.clickListener(this@HomeFragment)
 
             srlList.setOnRefreshListener {
-
-                srlList.isRefreshing = false
+                getLastLocation()
                 clinicListAdapter.notifyDataSetChanged()
+                srlList.isRefreshing = false
             }
 
             tvNameHome.text = "Loading.."

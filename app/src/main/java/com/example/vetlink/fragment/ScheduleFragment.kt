@@ -118,8 +118,8 @@ class ScheduleFragment : Fragment() {
             rvCancel.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
 
             srlSchedule.setOnRefreshListener {
-                srlSchedule.isRefreshing = false
                 scheduleListAdapter.notifyDataSetChanged()
+                srlSchedule.isRefreshing = false
             }
 
         }
