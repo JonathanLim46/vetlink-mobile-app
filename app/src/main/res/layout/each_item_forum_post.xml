@@ -57,42 +57,16 @@
         app:layout_constraintTop_toTopOf="@id/tvPostUsername"
         app:layout_constraintBottom_toBottomOf="@+id/tvPostUsername"
         />
-
-    <TextView
-        android:id="@+id/tvPostLocation"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Depok"
-        android:textSize="11sp"
-        android:fontFamily="sans-serif-light"
-        app:layout_constraintTop_toBottomOf="@id/tvPostUsername"
-        app:layout_constraintStart_toStartOf="@+id/tvPostUsername"
-        />
-
-    <View
-        android:id="@+id/dotProfile2"
-        android:layout_width="4dp"
-        android:layout_height="4dp"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="2dp"
-        android:background="@drawable/layout_border_oval_purple"
-        android:backgroundTint="@color/defaultIcon"
-        app:layout_constraintStart_toEndOf="@+id/tvPostLocation"
-        app:layout_constraintTop_toTopOf="@+id/tvPostLocation"
-        app:layout_constraintBottom_toBottomOf="@+id/tvPostLocation"
-        />
     
     <TextView
         android:id="@+id/tvPostTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="5dp"
         android:text="1 mins ago"
         android:textSize="11sp"
         android:fontFamily="sans-serif-light"
-        app:layout_constraintStart_toEndOf="@id/dotProfile2"
-        app:layout_constraintTop_toTopOf="@+id/tvPostLocation"
-        app:layout_constraintBottom_toBottomOf="@id/tvPostLocation"
+        app:layout_constraintStart_toStartOf="@id/tvPostUsername"
+        app:layout_constraintTop_toBottomOf="@+id/tvPostUsername"
         />
 
     <ImageView
