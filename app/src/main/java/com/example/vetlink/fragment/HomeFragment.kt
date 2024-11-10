@@ -52,7 +52,7 @@ class HomeFragment : Fragment(), RecyclerViewClickListener<ClinicList> {
 
     // Schedule
     val dateFormat = SimpleDateFormat("dd", Locale.getDefault())
-    val monthFormat = SimpleDateFormat("MM", Locale.getDefault())
+    val monthFormat = SimpleDateFormat("MMM", Locale.getDefault())
 
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
 

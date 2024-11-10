@@ -15,7 +15,7 @@
             android:id="@+id/scrollViewSchedule"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="visible"
+            android:visibility="gone"
             android:scrollbars="none"
             >
 
@@ -157,7 +157,7 @@
         android:id="@+id/layoutScheduleNull"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone"
+        android:visibility="visible"
         >
         
         <ImageView

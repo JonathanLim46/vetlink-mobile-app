@@ -106,6 +106,17 @@ class ScheduleFragment : Fragment() {
 
             binding.rvCancel.adapter = ScheduleListAdapter(cancelList)
             binding.rvCancel.adapter?.notifyDataSetChanged()
+
+
+
+            if (upComingList.isEmpty() && historyList.isEmpty() && cancelList.isEmpty()){
+                binding.scrollViewSchedule.visibility = View.GONE
+                binding.layoutScheduleNull.visibility = View.VISIBLE
+            } else {
+                binding.layoutScheduleNull.visibility = View.GONE
+                binding.scrollViewSchedule.visibility = View.VISIBLE
+            }
+
         }
     }
 
@@ -118,7 +129,6 @@ class ScheduleFragment : Fragment() {
             rvCancel.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
 
             srlSchedule.setOnRefreshListener {
-                scheduleListAdapter.notifyDataSetChanged()
                 srlSchedule.isRefreshing = false
             }
 
