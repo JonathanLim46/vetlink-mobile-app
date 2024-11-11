@@ -13,10 +13,10 @@
         android:background="@drawable/layout_border_card_main"
         app:layout_constraintTop_toTopOf="parent">
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/layoutHome"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="100dp"
             android:layout_marginStart="25dp"
             android:layout_marginTop="100dp"
             android:layout_marginEnd="25dp"
@@ -29,84 +29,98 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <LinearLayout
-                android:id="@+id/boxDate"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginStart="30dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="20dp"
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/layoutDate"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="30dp"
                 android:background="@drawable/outline_active"
-                android:orientation="vertical">
+                app:layout_constraintHorizontal_bias="0"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                >
 
                 <TextView
                     android:id="@+id/tvTanggal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="25dp"
-                    android:layout_marginTop="15dp"
-                    android:layout_marginEnd="25dp"
-                    android:layout_weight="0.5"
-                    android:gravity="center"
                     android:text="03"
                     android:textSize="15sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:textAlignment="center"
+                    app:layout_constraintVertical_bias="0.3"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    />
 
                 <TextView
                     android:id="@+id/tvBulan"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="15dp"
-                    android:layout_weight="0.2"
-                    android:gravity="center"
                     android:text="March"
-                    android:textSize="12sp"
-                    android:textStyle="bold" />
-            </LinearLayout>
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    android:textAlignment="center"
+                    app:layout_constraintVertical_bias="0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvTanggal"
+                    />
 
-            <LinearLayout
-                android:id="@+id/LayerVisit"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
-                android:layout_marginTop="25dp"
-                android:layout_marginEnd="15dp"
-                android:layout_marginBottom="25dp"
-                android:orientation="vertical">
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="wrap_content"
+                android:layout_height="60dp"
+                android:layout_marginStart="10dp"
+                app:layout_constraintBottom_toBottomOf="@+id/layoutDate"
+                app:layout_constraintStart_toEndOf="@+id/layoutDate"
+                app:layout_constraintTop_toTopOf="@+id/layoutDate">
 
                 <TextView
                     android:id="@+id/tvVisit"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="2sp"
                     android:text="There is 1 visit for your pets."
-                    android:textSize="14sp" />
+                    android:textSize="14sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/tvPetName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="2sp"
+                    android:layout_marginTop="5dp"
                     android:drawablePadding="5dp"
                     android:fontFamily="sans-serif-light"
                     android:text="Mbal"
                     android:textSize="11sp"
-                    app:drawableLeftCompat="@drawable/icon_pets" />
+                    app:drawableLeftCompat="@drawable/icon_pets"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvVisit" />
 
                 <TextView
                     android:id="@+id/tvClinicName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="2sp"
+                    android:layout_marginTop="5dp"
                     android:drawablePadding="5dp"
                     android:fontFamily="sans-serif-light"
                     android:text="Klinik Hewan IPB"
                     android:textSize="11sp"
-                    app:drawableLeftCompat="@drawable/icon_location" />
+                    app:drawableLeftCompat="@drawable/icon_location"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvPetName" />
 
-            </LinearLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-        </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <!--    Layout if null    -->
         <LinearLayout
