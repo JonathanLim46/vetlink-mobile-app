@@ -19,7 +19,7 @@
             app:contentScrim="?attr/colorPrimary"
             app:layout_scrollFlags="scroll|snap|exitUntilCollapsed">
 
-            <include android:id="@+id/includeHome" layout="@layout/layout_home_header" />
+            <include android:id="@+id/includeHome" layout="@layout/layout_home_test" />
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
