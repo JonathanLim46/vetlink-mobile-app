@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.vetlink.activity.MenuActivity
 import com.example.vetlink.repository.AuthRepository
+import com.example.vetlink.repository.ForumRepository
 import com.example.vetlink.repository.PetRepository
 import com.example.vetlink.repository.QueueRepository
 import com.example.vetlink.repository.VeterinerRepository
@@ -12,7 +13,8 @@ class ViewModelFactory(
     private val authRepository: AuthRepository,
     private val petRepository: PetRepository? = null,
     private val queueRepository: QueueRepository? = null,
-    private val veterinerRepository: VeterinerRepository? = null
+    private val veterinerRepository: VeterinerRepository? = null,
+    private val forumRepository: ForumRepository? = null
 ) : ViewModelProvider.Factory {
 
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -24,7 +26,7 @@ class ViewModelFactory(
                 RegisterActivityViewModel(authRepository) as T
             }
             modelClass.isAssignableFrom(MainActivityViewModel::class.java) -> {
-                MainActivityViewModel(authRepository, veterinerRepository, queueRepository) as T
+                MainActivityViewModel(authRepository, veterinerRepository, queueRepository, forumRepository) as T
             }
             modelClass.isAssignableFrom(ProfileFragmentViewModel::class.java) -> {
                 ProfileFragmentViewModel(authRepository) as T

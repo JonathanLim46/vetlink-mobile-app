@@ -336,33 +336,87 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="10dp"
                             android:text="@string/user_name"
-                            android:textSize="12sp"
+                            android:textSize="16sp"
                             android:textStyle="bold"
                             app:layout_constraintStart_toEndOf="@+id/ivUserPhotoPostMissingSpotlight"
-                            app:layout_constraintTop_toTopOf="@+id/ivUserPhotoPostMissingSpotlight"/>
+                            app:layout_constraintTop_toTopOf="@+id/ivUserPhotoPostMissingSpotlight"
+                            app:layout_constraintBottom_toBottomOf="@+id/ivUserPhotoPostMissingSpotlight"
+                            />
 
                         <TextView
-                            android:id="@+id/tvDatePostMissingSpotlight"
+                            android:id="@+id/tvTitleSeenPostSpotlight"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="7 Ags"
-                            android:textSize="11sp"
+                            android:layout_marginTop="11dp"
+                            android:text="Lorem ipsum dolor sit amet, consectetur."
+                            android:textSize="16sp"
+                            android:textStyle="bold"
                             android:fontFamily="sans-serif-light"
-                            app:layout_constraintTop_toBottomOf="@+id/tvUserNamePostMissingSpotlight"
-                            app:layout_constraintStart_toStartOf="@+id/tvUserNamePostMissingSpotlight"/>
+                            app:layout_constraintTop_toBottomOf="@+id/ivUserPhotoPostMissingSpotlight"
+                            app:layout_constraintStart_toStartOf="@+id/ivUserPhotoPostMissingSpotlight"/>
+
+                        <TextView
+                            android:id="@+id/tvLastSeenPostSpotlightLabel"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:text="Last Seen:"
+                            android:textSize="12sp"
+                            android:textStyle="bold"
+                            android:fontFamily="sans-serif-light"
+                            app:layout_constraintTop_toBottomOf="@+id/tvTitleSeenPostSpotlight"
+                            app:layout_constraintStart_toStartOf="@+id/tvTitleSeenPostSpotlight"/>
+
+                        <TextView
+                            android:id="@+id/tvLastSeenPostSpotlight"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="5dp"
+                            android:text="Depan gerbang utama UI"
+                            android:textSize="12sp"
+                            android:fontFamily="sans-serif-light"
+                            app:layout_constraintTop_toTopOf="@+id/tvLastSeenPostSpotlightLabel"
+                            app:layout_constraintStart_toEndOf="@+id/tvLastSeenPostSpotlightLabel"/>
+
+                        <TextView
+                            android:id="@+id/tvCharacteristicsPostSpotlightLabel"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="11dp"
+                            android:text="Characteristics:"
+                            android:textSize="12sp"
+                            android:textStyle="bold"
+                            android:fontFamily="sans-serif-light"
+                            app:layout_constraintTop_toBottomOf="@+id/tvLastSeenPostSpotlightLabel"
+                            app:layout_constraintStart_toStartOf="@+id/tvLastSeenPostSpotlightLabel"/>
+
+                        <TextView
+                            android:id="@+id/tvCharacteristicsPostSpotlight"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="5dp"
+                            android:text="Orange putih, mata hitam kuning, pecicilan"
+                            android:textSize="12sp"
+                            android:fontFamily="sans-serif-light"
+                            app:layout_constraintTop_toTopOf="@+id/tvCharacteristicsPostSpotlightLabel"
+                            app:layout_constraintStart_toEndOf="@+id/tvCharacteristicsPostSpotlightLabel"/>
 
                         <TextView
                             android:id="@+id/tvDescriptionPostSpotlight"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="11dp"
+                            android:layout_marginTop="8dp"
                             android:layout_marginStart="10dp"
+                            android:layout_marginEnd="10dp"
                             android:text="@string/long_text"
                             android:textSize="12sp"
-                            app:layout_constraintTop_toBottomOf="@+id/ivUserPhotoPostMissingSpotlight"
-                            app:layout_constraintStart_toStartOf="@+id/ivUserPhotoPostMissingSpotlight"/>
+                            app:layout_constraintTop_toBottomOf="@+id/tvCharacteristicsPostSpotlightLabel"
+                            app:layout_constraintStart_toStartOf="@+id/tvCharacteristicsPostSpotlightLabel"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            />
 
                         <com.google.android.material.imageview.ShapeableImageView
+                            android:id="@+id/ivPetMissing"
                             android:layout_width="match_parent"
                             android:layout_height="168dp"
                             android:layout_marginTop="10dp"

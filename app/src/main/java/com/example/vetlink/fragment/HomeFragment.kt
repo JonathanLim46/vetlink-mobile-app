@@ -179,6 +179,32 @@ class HomeFragment : Fragment(), RecyclerViewClickListener<ClinicList> {
             }
         }
 
+        sharedMainActivityViewModel.forums.observe(viewLifecycleOwner) { forums ->
+            val firstData = forums.firstOrNull()
+
+            with(binding){
+                if (firstData != null) {
+                    Log.d("Response Data: ", "${firstData.title}")
+
+                    // GK BISA GET NAMA USER --> ERROR
+                    tvUserNamePostMissingSpotlight.text = firstData.user.username
+                    tvTitleSeenPostSpotlight.text = firstData.title
+                    tvLastSeenPostSpotlight.text = firstData.last_seen
+                    tvCharacteristicsPostSpotlight.text = if (firstData.characteristics != null) {
+                        firstData.characteristics
+                    } else {
+                        "-"
+                    }
+                    tvDescriptionPostSpotlight.text = firstData.description
+                    if (firstData.pet_image != null){
+                        Picasso.get().load(firstData.pet_image).resize(50, 50).centerCrop().into(binding.ivPetMissing)
+                    }else{
+                        binding.ivPetMissing.setImageResource(R.drawable.img_cats)
+                    }
+                }
+            }
+        }
+
 
     }
 

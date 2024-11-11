@@ -22,6 +22,7 @@ import com.example.vetlink.fragment.HomeFragment
 import com.example.vetlink.fragment.ProfileFragment
 import com.example.vetlink.helper.SessionManager
 import com.example.vetlink.repository.AuthRepository
+import com.example.vetlink.repository.ForumRepository
 import com.example.vetlink.repository.PetRepository
 import com.example.vetlink.repository.QueueRepository
 import com.example.vetlink.repository.VeterinerRepository
@@ -34,7 +35,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var session: SessionManager
 
     private val mainActivityViewModel: MainActivityViewModel by viewModels {
-        ViewModelFactory(AuthRepository(session), veterinerRepository = VeterinerRepository(session), queueRepository = QueueRepository(session))
+        ViewModelFactory(AuthRepository(session), veterinerRepository = VeterinerRepository(session), queueRepository = QueueRepository(session), forumRepository = ForumRepository(session))
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,6 +50,7 @@ class MainActivity : AppCompatActivity() {
         mainActivityViewModel.fetchUser() // Fetch user data when activity is created
         mainActivityViewModel.getVeteriners()
         mainActivityViewModel.getQueues()
+        mainActivityViewModel.getForums()
     }
 
     private fun setupUI() {
