@@ -144,7 +144,7 @@ class HomeFragment : Fragment(), RecyclerViewClickListener<ClinicList> {
                     includeHome.tvClinicName.text = firstDataUpComing.veteriner.clinic_name
                 } else {
                     Log.d("QueueObserver", "No upcoming visits, showing empty view")
-                    includeHome.LayerVisit.visibility = View.GONE
+                    includeHome.layoutHome.visibility = View.GONE
                     includeHome.layoutHomeNull.visibility = View.VISIBLE
                 }
 
