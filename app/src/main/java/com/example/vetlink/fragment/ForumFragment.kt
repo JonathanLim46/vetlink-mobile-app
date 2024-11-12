@@ -4,15 +4,19 @@ import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
 import androidx.viewpager.widget.ViewPager
 import com.example.vetlink.activity.MainActivity
 import com.example.vetlink.activity.MenuActivity
 import com.example.vetlink.adapter.ForumPageAdapter
+import com.example.vetlink.data.model.forums.Forum
 import com.example.vetlink.databinding.FragmentForumBinding
+import com.example.vetlink.viewModel.MainActivityViewModel
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.Tab
 import com.google.android.material.tabs.TabLayoutMediator
@@ -32,7 +36,14 @@ class ForumFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
 
+    var userForum: List<Forum>? = null
+    var userForumLost: List<Forum>? = null
+    var userForumFound: List<Forum>? = null
+    var otherForum: List<Forum>? = null
+
     private lateinit var binding: FragmentForumBinding
+
+    private val sharedMainActivityViewModel: MainActivityViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,9 +59,34 @@ class ForumFragment : Fragment() {
     ): View? {
         binding = FragmentForumBinding.inflate(inflater, container, false)
 
+        setupObserver()
         initView()
 
         return binding.root
+    }
+
+    private fun setupObserver() {
+        sharedMainActivityViewModel.user.observe(viewLifecycleOwner){ user ->
+            binding.apply {
+                tvMessageHeader.text = "Hello, ${user.name}"
+            }
+        }
+
+        sharedMainActivityViewModel.forums.observe(viewLifecycleOwner){ forums ->
+            if (forums.isNotEmpty()){
+                Log.d("forums", "$forums")
+                userForum = forums.filter { it.user.id == sharedMainActivityViewModel.user.value?.id }
+                userForumLost = userForum!!.filter { it.status == "lost" }
+                userForumFound = userForum!!.filter { it.status == "found" }
+                binding.apply {
+                    tvCountPost.text = userForum!!.size.toString()
+                    tvCountPostInProgress.text = userForumLost!!.size.toString()
+                    tvCountPostFinished.text = userForumFound!!.size.toString()
+                }
+            }else{
+                binding.tvDataNull.visibility = View.VISIBLE
+            }
+        }
     }
 
     private fun initView() {
