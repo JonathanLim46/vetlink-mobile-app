@@ -10,7 +10,7 @@ class ForumRepository(val session: SessionManager) {
 
     suspend fun getForums(): Result<ForumsResponse> {
         return try {
-            val response = forumApi.getCustomerForums()
+            val response = forumApi.getForums()
             Result.success(response)
         } catch (e: Exception){
             Result.failure(e)

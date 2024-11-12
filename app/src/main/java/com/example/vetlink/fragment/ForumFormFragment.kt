@@ -10,12 +10,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.vetlink.R
 import com.example.vetlink.adapter.PetsSelectList
 import com.example.vetlink.adapter.PetsSelectListAdapter
 import com.example.vetlink.databinding.FragmentForumFormBinding
+import com.example.vetlink.viewModel.MainActivityViewModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 
@@ -53,9 +55,14 @@ class ForumFormFragment : Fragment() {
         // Inflate the layout for this fragment
         binding = FragmentForumFormBinding.inflate(inflater, container, false)
 
+        setupObservers()
         initView()
 
         return binding.root
+    }
+
+    private fun setupObservers() {
+
     }
 
     private fun initView(){

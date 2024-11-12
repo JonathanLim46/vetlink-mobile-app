@@ -153,7 +153,16 @@ class ClinicFragment : Fragment(), RecyclerViewClickListener<ClinicList>{
     }
 
     private fun filterList(query: String){
+
         with(binding){
+
+            if(!::clinicListAdapter.isInitialized){
+                clinicListAdapter = ClinicListAdapter(clinicList, true)
+                rvClinicPage.adapter = clinicListAdapter
+            } else {
+                clinicListAdapter.notifyDataSetChanged()
+            }
+
             clinicList.clear()
             if(query.isEmpty()){
                 dataClinic()
@@ -167,6 +176,7 @@ class ClinicFragment : Fragment(), RecyclerViewClickListener<ClinicList>{
                 }
             }
             clinicListAdapter.notifyDataSetChanged()
+            clinicListAdapter.clickListener(this@ClinicFragment)
         }
     }
 
