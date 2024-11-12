@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -11,24 +12,31 @@ import android.view.ViewGroup
 import android.widget.Button
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toDrawable
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.vetlink.R
+import com.example.vetlink.adapter.ForumPostList
+import com.example.vetlink.adapter.ForumPostListAdapter
+import com.example.vetlink.adapter.RecyclerViewClickListener
+import com.example.vetlink.data.model.forums.Forum
 import com.example.vetlink.databinding.FragmentForumPrivateBinding
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+private const val ARG_FORUMS = "userForums"
 
 /**
  * A simple [Fragment] subclass.
  * Use the [ForumPrivateFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class ForumPrivateFragment : Fragment() {
+class ForumPrivateFragment() : Fragment(), RecyclerViewClickListener<ForumPostList> {
     // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
     private lateinit var binding: FragmentForumPrivateBinding
+
+    private var userForums: ArrayList<Forum>? = null
+
+    private lateinit var forumPostList: ArrayList<ForumPostList>
+    private lateinit var forumPostListAdapter: ForumPostListAdapter
 
     val mainButtonBackground = R.drawable.layout_button_main
     val mainTextColor = Color.parseColor("#FFFFFF")
@@ -38,8 +46,7 @@ class ForumPrivateFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+            userForums = it.getParcelableArrayList<Forum>(ARG_FORUMS)
         }
     }
 
@@ -60,25 +67,81 @@ class ForumPrivateFragment : Fragment() {
 
         with(binding){
 
-
-
             btnAll.setBackgroundResource(mainButtonBackground)
             btnAll.setTextColor(mainTextColor)
 
+            forumPostList = ArrayList()
+
+            forumPostListAdapter = ForumPostListAdapter(requireContext(), forumPostList)
+            forumPostListAdapter.setClickListener(this@ForumPrivateFragment)
+
+            rvPostForumPrivate.layoutManager = LinearLayoutManager(requireContext()) // Add this line
+            rvPostForumPrivate.adapter = forumPostListAdapter
+
+            if (userForums?.isNotEmpty() == true){
+                for (forum in userForums!!) {
+                    forumPostList.add(
+                        ForumPostList(
+                            forum.user.photo,
+                            forum.pet_image,
+                            forum.user.username,
+                            forum.status,
+                            forum.title,
+                            forum.description,
+                            forum.last_seen,
+                            forum.characteristics
+                        )
+                    )
+                }
+                Log.d("forumPostListPrivate", forumPostList.toString())
+            }
+            forumPostListAdapter.notifyDataSetChanged()
+
             btnAll.setOnClickListener{
                 buttonState(btnAll, listOf(btnFound, btnLost))
+                filterList("all")
             }
 
             btnFound.setOnClickListener{
                 buttonState(btnFound, listOf(btnAll, btnLost))
+                filterList("found")
             }
 
             btnLost.setOnClickListener{
                 buttonState(btnLost, listOf(btnAll, btnFound))
+                filterList("lost")
             }
 
         }
+    }
 
+    private fun filterList(status: String) {
+        val filteredList = when (status.lowercase()) {
+            "all" -> userForums // No filter, show all
+            "found" -> userForums?.filter { it.status.lowercase() == "found" }
+            "lost" -> userForums?.filter { it.status.lowercase() == "lost" }
+            else -> userForums // Default to showing all
+        }
+
+        forumPostList.clear()
+        if (filteredList != null) {
+            for (forum in filteredList) {
+                forumPostList.add(
+                    ForumPostList(
+                        forum.user.photo,
+                        forum.pet_image,
+                        forum.user.username,
+                        forum.status,
+                        forum.title,
+                        forum.description,
+                        forum.last_seen,
+                        forum.characteristics
+                    )
+                )
+            }
+        }
+
+        forumPostListAdapter.notifyDataSetChanged()
     }
 
     private fun buttonState(selectedButton: Button, otherButton: List<Button>){
@@ -102,12 +165,15 @@ class ForumPrivateFragment : Fragment() {
          */
         // TODO: Rename and change types and number of parameters
         @JvmStatic
-        fun newInstance(param1: String, param2: String) =
+        fun newInstance(userForum: List<Forum>) =
             ForumPrivateFragment().apply {
                 arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+                    putParcelableArrayList(ARG_FORUMS, ArrayList(userForum))
                 }
             }
+    }
+
+    override fun onItemClicke(view: View, item: ForumPostList) {
+
     }
 }

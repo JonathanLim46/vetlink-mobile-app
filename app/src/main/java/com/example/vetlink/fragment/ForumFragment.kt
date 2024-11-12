@@ -37,8 +37,6 @@ class ForumFragment : Fragment() {
     private var param2: String? = null
 
     var userForum: List<Forum>? = null
-    var userForumLost: List<Forum>? = null
-    var userForumFound: List<Forum>? = null
     var otherForum: List<Forum>? = null
 
     private lateinit var binding: FragmentForumBinding
@@ -73,17 +71,22 @@ class ForumFragment : Fragment() {
         }
 
         sharedMainActivityViewModel.forums.observe(viewLifecycleOwner){ forums ->
-            if (forums.isNotEmpty()){
+            if (forums.isNotEmpty()) {
                 Log.d("forums", "$forums")
                 userForum = forums.filter { it.user.id == sharedMainActivityViewModel.user.value?.id }
-                userForumLost = userForum!!.filter { it.status == "lost" }
-                userForumFound = userForum!!.filter { it.status == "found" }
+                var userForumLost = userForum!!.filter { it.status == "lost" }
+                var userForumFound = userForum!!.filter { it.status == "found" }
+                otherForum = forums.filter { it.user.id != sharedMainActivityViewModel.user.value?.id }
+
                 binding.apply {
                     tvCountPost.text = userForum!!.size.toString()
                     tvCountPostInProgress.text = userForumLost!!.size.toString()
                     tvCountPostFinished.text = userForumFound!!.size.toString()
                 }
-            }else{
+
+                // Call setAdapter after data is initialized
+                setAdapter()
+            } else {
                 binding.tvDataNull.visibility = View.VISIBLE
             }
         }
@@ -91,9 +94,6 @@ class ForumFragment : Fragment() {
 
     private fun initView() {
         with(binding){
-
-            setAdapter()
-
             ivAddPostForum.setOnClickListener{
                 val intent = Intent(activity, MenuActivity::class.java)
                 intent.putExtra("MENU_TITLE", "Postingan Baru")
@@ -103,17 +103,21 @@ class ForumFragment : Fragment() {
     }
 
     private fun setAdapter(){
-        val tabArrayList = arrayOf("All Board", "My Board")
-        val adapter = ForumPageAdapter(requireActivity(), tabArrayList.size)
-        binding.apply {
-            viewPagerForum.adapter = adapter
-            TabLayoutMediator(tabLayoutForum, viewPagerForum) {tab, position ->
-                tab.text = tabArrayList[position]
-            }.attach()
+        if (otherForum != null && userForum != null){
+            val tabArrayList = arrayOf("All Board", "My Board")
+            val adapter = ForumPageAdapter(requireActivity(), tabArrayList.size, otherForum!!, userForum!!)
+            binding.apply {
+                viewPagerForum.adapter = adapter
+                TabLayoutMediator(tabLayoutForum, viewPagerForum) {tab, position ->
+                    tab.text = tabArrayList[position]
+                }.attach()
 
-            tabLayoutForum.setSelectedTabIndicatorColor(Color.GRAY)
-            tabLayoutForum.setBackgroundColor(Color.TRANSPARENT)
-            tabLayoutForum.elevation = 0f
+                tabLayoutForum.setSelectedTabIndicatorColor(Color.GRAY)
+                tabLayoutForum.setBackgroundColor(Color.TRANSPARENT)
+                tabLayoutForum.elevation = 0f
+            }
+        }else {
+            Log.e("setAdapter", "Data is not ready to set the adapter")
         }
     }
 

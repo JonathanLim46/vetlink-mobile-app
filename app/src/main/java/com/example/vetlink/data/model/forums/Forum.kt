@@ -1,8 +1,11 @@
 package com.example.vetlink.data.model.forums
 
+import android.os.Parcelable
 import com.example.vetlink.data.model.comment.Comment
 import com.example.vetlink.data.model.user.UserBasic
+import kotlinx.parcelize.Parcelize
 
+@Parcelize
 data class Forum(
     val id: Int,
     val title: String,
@@ -13,4 +16,4 @@ data class Forum(
     val pet_image: String,
     val user: UserBasic,
     val comment: List<Comment>
-)
+) : Parcelable

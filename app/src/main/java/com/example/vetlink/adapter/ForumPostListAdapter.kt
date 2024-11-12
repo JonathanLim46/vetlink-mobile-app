@@ -1,15 +1,18 @@
 package com.example.vetlink.adapter
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.vetlink.R
-import org.w3c.dom.Text
+import com.squareup.picasso.Picasso
 
-class ForumPostListAdapter(private val forumPostList: List<ForumPostList>): RecyclerView.Adapter<ForumPostListAdapter.ForumPostViewHolder>(){
+class ForumPostListAdapter(private val context: Context,private val forumPostList: List<ForumPostList>): RecyclerView.Adapter<ForumPostListAdapter.ForumPostViewHolder>(){
 
     private lateinit var listener: RecyclerViewClickListener<ForumPostList>
 
@@ -46,10 +49,24 @@ class ForumPostListAdapter(private val forumPostList: List<ForumPostList>): Recy
 
     override fun onBindViewHolder(holder: ForumPostViewHolder, position: Int) {
         val forumPostList = forumPostList[position]
-        holder.postImageProfile.setImageResource(forumPostList.postImageProfile)
-        holder.postImagePets.setImageResource(forumPostList.postImagePets)
+        if (forumPostList.postImageProfile != null){
+            Picasso.get().load(forumPostList.postImageProfile).into(holder.postImageProfile)
+        }
+        else{
+            holder.postImageProfile.setImageResource(R.drawable.img_default_profile)
+        }
+        if (forumPostList.postImagePets != null){
+            Picasso.get().load(forumPostList.postImagePets).into(holder.postImagePets)
+        }
+        else{
+            holder.postImagePets.setImageResource(R.drawable.icon_pets)
+        }
         holder.postUsername.text = forumPostList.postUsername
-        holder.postStatus.text = forumPostList.postStatus
+        holder.postStatus.text = forumPostList.postStatus.replaceFirstChar { it.uppercaseChar() }
+        when (forumPostList.postStatus.lowercase()) {
+            "lost" -> holder.postStatus.setTextColor(ContextCompat.getColor(context, R.color.red))
+            "found" -> holder.postStatus.setTextColor(ContextCompat.getColor(context, R.color.green))
+        }
         holder.postHeader.text = forumPostList.postHeader
         holder.postDescription.text = forumPostList.postDescription
         holder.postLastSeen.text = forumPostList.postLastSeen

@@ -4,6 +4,7 @@ import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -16,6 +17,7 @@ import com.example.vetlink.R
 import com.example.vetlink.adapter.ForumPostList
 import com.example.vetlink.adapter.ForumPostListAdapter
 import com.example.vetlink.adapter.RecyclerViewClickListener
+import com.example.vetlink.data.model.forums.Forum
 import com.example.vetlink.databinding.FragmentForumPublicBinding
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -23,18 +25,16 @@ import org.w3c.dom.Text
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+private const val ARG_FORUMS = "otherForums"
 
 /**
  * A simple [Fragment] subclass.
  * Use the [ForumPublicFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class ForumPublicFragment : Fragment(), RecyclerViewClickListener<ForumPostList> {
+class ForumPublicFragment: Fragment(), RecyclerViewClickListener<ForumPostList> {
     // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    private var otherForums: ArrayList<Forum>? = null
     private lateinit var binding: FragmentForumPublicBinding
     private lateinit var forumPostList: ArrayList<ForumPostList>
     private lateinit var forumPostListAdapter: ForumPostListAdapter
@@ -42,8 +42,7 @@ class ForumPublicFragment : Fragment(), RecyclerViewClickListener<ForumPostList>
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+            otherForums = it.getParcelableArrayList(ARG_FORUMS)
         }
     }
 
@@ -64,26 +63,35 @@ class ForumPublicFragment : Fragment(), RecyclerViewClickListener<ForumPostList>
             rvPostForumPublic.layoutManager = LinearLayoutManager(requireContext())
 
             forumPostList = ArrayList()
-            addDataToPost()
 
-            forumPostListAdapter = ForumPostListAdapter(forumPostList)
+            forumPostListAdapter = ForumPostListAdapter(requireContext(), forumPostList)
             forumPostListAdapter.notifyDataSetChanged()
 
             forumPostListAdapter.setClickListener(this@ForumPublicFragment)
 
             rvPostForumPublic.adapter = forumPostListAdapter
 
+            if (otherForums?.isNotEmpty() == true){
+                val lostForums = otherForums!!.filter { it.status.lowercase() == "lost" }
+                for (forum in lostForums) {
+                    forumPostList.add(
+                        ForumPostList(
+                            forum.user.photo,
+                            forum.pet_image,
+                            forum.user.username,
+                            forum.status,
+                            forum.title,
+                            forum.description,
+                            forum.last_seen,
+                            forum.characteristics
+                        )
+                    )
+                }
+            }
+
         }
     }
 
-    private fun addDataToPost(){
-        forumPostList.add(ForumPostList(R.drawable.img_tontawan, R.drawable.img_cats, "mawarptr",
-            "Lost", "Mball Hilang", "Lorem ipsum dolor sit amet, consectetur adipiscing elite.",
-            "Depan Gerbang Utama UI", "Orange putih, mata hitam kuning, pecicilan"))
-        forumPostList.add(ForumPostList(R.drawable.img_tontawan, R.drawable.img_cats, "mawarptr",
-            "Lost", "Mball Hilang", "Lorem ipsum dolor sit amet, consectetur adipiscing elite.",
-            "Depan Gerbang Utama UI", "Orange putih, mata hitam kuning, pecicilan"))
-    }
     override fun onItemClicke(view: View, item: ForumPostList) {
         val dialog = activity?.let { BottomSheetDialog(it) }
 
@@ -165,11 +173,10 @@ class ForumPublicFragment : Fragment(), RecyclerViewClickListener<ForumPostList>
          */
         // TODO: Rename and change types and number of parameters
         @JvmStatic
-        fun newInstance(param1: String, param2: String) =
+        fun newInstance(otherForums: List<Forum>) =
             ForumPublicFragment().apply {
                 arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+                    putParcelableArrayList(ARG_FORUMS, ArrayList(otherForums))
                 }
             }
     }

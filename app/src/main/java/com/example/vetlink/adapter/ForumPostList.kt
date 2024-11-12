@@ -1,8 +1,8 @@
 package com.example.vetlink.adapter
 
 data class ForumPostList(
-    val postImageProfile: Int,
-    val postImagePets: Int,
+    val postImageProfile: String?,
+    val postImagePets: String,
     val postUsername: String,
     val postStatus: String,
     val postHeader: String,
