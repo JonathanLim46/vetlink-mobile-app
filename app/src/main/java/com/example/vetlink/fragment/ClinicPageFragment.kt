@@ -1,7 +1,11 @@
 package com.example.vetlink.fragment
 
 import android.app.DatePickerDialog
+import android.app.Dialog
+import android.content.DialogInterface
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -61,6 +65,7 @@ class ClinicPageFragment : Fragment() {
                 clinicId = veterinerDetail.id
                 latitude = veterinerDetail.latitude
                 longitude = veterinerDetail.longitude
+                Log.d("Location", "$latitude, $longitude")
             }
         }
 
@@ -107,15 +112,20 @@ class ClinicPageFragment : Fragment() {
                 selectPetsDialog()
             }
             ivLocationButton.setOnClickListener {
-                val gmmIntentUri = Uri.parse("google.streetview:cbll=$latitude, $longitude") //latitude | longitude
+                val mapUri = Uri.parse("https://maps.google.com/maps?daddr=$latitude,$longitude")
+                val intent = Intent(Intent.ACTION_VIEW, mapUri)
 
-                // Create an Intent from gmmIntentUri. Set the action to ACTION_VIEW
-                val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
-                // Make the Intent explicit by setting the Google Maps package
-                mapIntent.setPackage("com.google.android.apps.maps")
+                startActivity(intent)
 
-                // Attempt to start an activity that can handle the Intent
-                startActivity(mapIntent)
+//                val gmmIntentUri = Uri.parse("google.streetview:cbll=$latitude, $longitude") //latitude | longitude
+//
+//                // Create an Intent from gmmIntentUri. Set the action to ACTION_VIEW
+//                val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
+//                // Make the Intent explicit by setting the Google Maps package
+//                mapIntent.setPackage("com.google.android.apps.maps")
+//
+//                // Attempt to start an activity that can handle the Intent
+//                startActivity(mapIntent)
 
             }
         }
@@ -141,6 +151,13 @@ class ClinicPageFragment : Fragment() {
             calendar.get(Calendar.MONTH),
             calendar.get(Calendar.DAY_OF_MONTH)
         )
+
+        datePickerDialog.datePicker.minDate = System.currentTimeMillis() - 1000
+        datePickerDialog.setOnShowListener{
+            datePickerDialog.getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(Color.BLUE)
+            datePickerDialog.getButton(DialogInterface.BUTTON_NEGATIVE).setTextColor(Color.GRAY)
+
+        }
         datePickerDialog.show()
     }
 

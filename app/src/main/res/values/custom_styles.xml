@@ -75,5 +75,4 @@
         <item name="android:textColor">@color/colorTabs</item>
         <item name="textAllCaps">true</item>
     </style>
-
 </resources>
