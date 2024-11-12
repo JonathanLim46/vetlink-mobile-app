@@ -182,6 +182,7 @@
                                 app:layout_constraintStart_toStartOf="@id/tvClinicNameHistory"/>
 
                             <Button
+                                android:id="@+id/btnReturnVisit"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Return Visit"
@@ -335,12 +336,25 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="10dp"
+                            android:layout_marginBottom="15dp"
                             android:text="@string/user_name"
-                            android:textSize="16sp"
+                            android:textSize="14sp"
                             android:textStyle="bold"
                             app:layout_constraintStart_toEndOf="@+id/ivUserPhotoPostMissingSpotlight"
                             app:layout_constraintTop_toTopOf="@+id/ivUserPhotoPostMissingSpotlight"
                             app:layout_constraintBottom_toBottomOf="@+id/ivUserPhotoPostMissingSpotlight"
+                            />
+
+                        <TextView
+                            android:id="@+id/tvStatusPostMissingSpotlight"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Lost"
+                            android:textSize="12sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/red"
+                            app:layout_constraintStart_toStartOf="@+id/tvUserNamePostMissingSpotlight"
+                            app:layout_constraintTop_toBottomOf="@+id/tvUserNamePostMissingSpotlight"
                             />
 
                         <TextView

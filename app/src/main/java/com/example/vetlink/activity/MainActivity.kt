@@ -51,6 +51,7 @@ class MainActivity : AppCompatActivity() {
         mainActivityViewModel.getVeteriners()
         mainActivityViewModel.getQueues()
         mainActivityViewModel.getForums()
+        mainActivityViewModel.getLatestQueue()
     }
 
     private fun setupUI() {

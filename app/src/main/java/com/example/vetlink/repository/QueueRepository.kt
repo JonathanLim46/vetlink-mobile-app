@@ -1,6 +1,8 @@
 package com.example.vetlink.repository
 
 import com.example.vetlink.data.model.queue.AddQueueResponse
+import com.example.vetlink.data.model.queue.LatestQueue
+import com.example.vetlink.data.model.queue.LatestQueueResponse
 import com.example.vetlink.data.model.queue.QueuesResponse
 import com.example.vetlink.data.network.QueueApi
 import com.example.vetlink.data.network.RetrofitInstance
@@ -12,6 +14,15 @@ class QueueRepository(val session: SessionManager) {
     suspend fun getQueues(): Result<QueuesResponse> {
         return try {
             val response = queueApi.getCustomerQueue()
+            Result.success(response)
+        } catch (e: Exception){
+            Result.failure(e)
+        }
+    }
+
+    suspend fun getLatestQueue(): Result<LatestQueueResponse> {
+        return try{
+            val response = queueApi.getLatestQueue()
             Result.success(response)
         } catch (e: Exception){
             Result.failure(e)

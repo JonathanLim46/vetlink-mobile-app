@@ -1,6 +1,8 @@
 package com.example.vetlink.data.network
 
 import com.example.vetlink.data.model.queue.AddQueueResponse
+import com.example.vetlink.data.model.queue.LatestQueue
+import com.example.vetlink.data.model.queue.LatestQueueResponse
 import com.example.vetlink.data.model.queue.QueuesResponse
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
@@ -10,6 +12,9 @@ import retrofit2.http.POST
 interface QueueApi {
     @GET("customer/queues")
     suspend fun getCustomerQueue(): QueuesResponse
+
+    @GET("customer/queue/latest")
+    suspend fun getLatestQueue(): LatestQueueResponse
 
     @FormUrlEncoded
     @POST("customer/queue")

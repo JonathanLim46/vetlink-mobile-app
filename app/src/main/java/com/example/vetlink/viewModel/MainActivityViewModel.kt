@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.vetlink.data.model.forums.Forum
 import com.example.vetlink.data.model.pets.Pet
+import com.example.vetlink.data.model.queue.LatestQueue
 import com.example.vetlink.data.model.queue.Queue
 import com.example.vetlink.data.model.user.User
 import com.example.vetlink.data.model.veteriner.Veteriner
@@ -50,6 +51,12 @@ class MainActivityViewModel(
 
     private val _errorMessageQueues = MutableLiveData<String>()
     val errorMessageQueues: LiveData<String> get() = _errorMessageQueues
+
+    private val _latestQueue = MutableLiveData<LatestQueue>()
+    val latestQueue: LiveData<LatestQueue> get() = _latestQueue
+
+    private val _errorMessageLatestQueue = MutableLiveData<String>()
+    val errorMessageLatestQueue: LiveData<String> get() = _errorMessageLatestQueue
 
     private val _forums = MutableLiveData<List<Forum>>()
     val forums: LiveData<List<Forum>> get() = _forums
@@ -119,6 +126,33 @@ class MainActivityViewModel(
                 Log.e("API_ERROR", "Network error: ${e.message}")
             } catch (e: Exception) {
                 _errorMessageQueues.postValue("An error occurred while fetching queues. Please try again.")
+                Log.e("API_ERROR", "Queue Error: ${e.message}", e)
+            }
+        }
+    }
+
+    fun getLatestQueue(){
+        if (queueRepository == null) {
+            Log.e("API_ERROR", "QueueRepository is null")
+            _errorMessageLatestQueue.postValue("QueueRepository is not initialized.")
+            return
+        }
+
+        viewModelScope.launch {
+            try {
+                val responseQueues = queueRepository.getLatestQueue()
+                if (responseQueues.isSuccess){
+                    _latestQueue.postValue(responseQueues.getOrNull()?.data)
+                    Log.d("API_RESPONSE", "Queues fetched successfully: ${responseQueues.getOrNull()?.data}")
+                } else {
+                    _errorMessageLatestQueue.postValue("An error occurred while fetching queues. Please try again.")
+                    Log.e("API_ERROR", "Queue fetch failed: ${responseQueues.exceptionOrNull()}")
+                }
+            } catch (e: ConnectException) {
+                _errorMessageLatestQueue.postValue("Unable to connect to the server. Please check your internet connection.")
+                Log.e("API_ERROR", "Network error: ${e.message}")
+            } catch (e: Exception){
+                _errorMessageLatestQueue.postValue("An error occurred while fetching queues. Please try again.")
                 Log.e("API_ERROR", "Queue Error: ${e.message}", e)
             }
         }

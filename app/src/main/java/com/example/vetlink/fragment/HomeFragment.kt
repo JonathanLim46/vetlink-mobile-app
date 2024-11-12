@@ -125,14 +125,33 @@ class HomeFragment : Fragment(), RecyclerViewClickListener<ClinicList> {
             }
         }
 
+        sharedMainActivityViewModel.latestQueue.observe(viewLifecycleOwner){ latestQueue ->
+            with(binding){
+                Log.d("Queue Lates : ", "${latestQueue.clinic_name}")
+                tvClinicNameHistory.text = latestQueue.clinic_name
+                if (latestQueue.clinic_image != null){
+                    Picasso.get().load(latestQueue.clinic_image).resize(150, 150).centerCrop().into(binding.ivClinicHistory)
+                }else{
+                    binding.ivClinicHistory.setImageResource(R.drawable.img_rspets)
+                }
+                tvClinicLocationHistory.text = latestQueue.city
+
+
+                // button return visit
+
+//                btnReturnVisit.setOnClickListener{
+//
+//                }
+
+            }
+        }
+
         // Queue
         sharedMainActivityViewModel.queues.observe(viewLifecycleOwner){ queues ->
             Log.d("QueueObserver", "Null")
             var upComing = queues?.filter { it.status == "ongoing" }
-            var history = queues.filter { it.status == "finished" }
 
             val firstDataUpComing = upComing?.firstOrNull()
-            val firstDataHistory = history.firstOrNull()
 
             with(binding){
                 if(firstDataUpComing != null){
@@ -147,17 +166,6 @@ class HomeFragment : Fragment(), RecyclerViewClickListener<ClinicList> {
                     includeHome.layoutHome.visibility = View.GONE
                     includeHome.layoutHomeNull.visibility = View.VISIBLE
                 }
-
-                if(firstDataHistory != null){
-                    tvClinicNameHistory.text = firstDataHistory.veteriner.clinic_name
-                    tvClinicLocationHistory.text = firstDataHistory.veteriner.city
-
-                    // IMAGE BELOM YA BANG
-                } else {
-                    layoutVisitHistory.visibility = View.GONE
-                    layoutVisitHistoryNull.visibility = View.VISIBLE
-                }
-
             }
         }
 
@@ -180,7 +188,8 @@ class HomeFragment : Fragment(), RecyclerViewClickListener<ClinicList> {
         }
 
         sharedMainActivityViewModel.forums.observe(viewLifecycleOwner) { forums ->
-            val firstData = forums.firstOrNull()
+            var firstData = forums?.filter { it.status == "lost" }?.sortedByDescending { it.id }
+                ?.firstOrNull()
 
             with(binding){
                 if (firstData != null) {
@@ -188,6 +197,7 @@ class HomeFragment : Fragment(), RecyclerViewClickListener<ClinicList> {
 
                     // GK BISA GET NAMA USER --> ERROR
                     tvUserNamePostMissingSpotlight.text = firstData.user.username
+                    tvStatusPostMissingSpotlight.text = firstData.status.capitalize()
                     tvTitleSeenPostSpotlight.text = firstData.title
                     tvLastSeenPostSpotlight.text = firstData.last_seen
                     tvCharacteristicsPostSpotlight.text = if (firstData.characteristics != null) {
@@ -197,7 +207,7 @@ class HomeFragment : Fragment(), RecyclerViewClickListener<ClinicList> {
                     }
                     tvDescriptionPostSpotlight.text = firstData.description
                     if (firstData.pet_image != null){
-                        Picasso.get().load(firstData.pet_image).resize(50, 50).centerCrop().into(binding.ivPetMissing)
+                        Picasso.get().load(firstData.pet_image).resize(250, 250).centerCrop().into(binding.ivPetMissing)
                     }else{
                         binding.ivPetMissing.setImageResource(R.drawable.img_cats)
                     }
