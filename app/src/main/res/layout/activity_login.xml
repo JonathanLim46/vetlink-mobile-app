@@ -72,19 +72,18 @@
                 android:layout_width="match_parent"
                 android:layout_height="52dp"
                 android:layout_marginTop="18dp"
-                android:inputType="textPassword"
                 android:background="@drawable/layout_border_edit_text"
-                android:paddingStart="20dp"
-                android:paddingEnd="20dp"
                 android:drawableStart="@drawable/icon_lock_login"
                 android:drawablePadding="20dp"
                 android:hint="Password"
-                android:textColorHint="#98FFFFFF"
+                android:inputType="textPassword"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
                 android:textColor="@color/white"
+                android:textColorHint="#98FFFFFF"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/et_username"
-                />
+                app:layout_constraintTop_toBottomOf="@+id/et_username" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
