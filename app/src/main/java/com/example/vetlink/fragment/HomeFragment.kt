@@ -128,16 +128,19 @@ class HomeFragment : Fragment(), RecyclerViewClickListener<ClinicList> {
 
         sharedMainActivityViewModel.latestQueue.observe(viewLifecycleOwner){ latestQueue ->
             with(binding){
-                Log.d("Queue Lates : ", "${latestQueue.clinic_name}")
-                tvClinicNameHistory.text = latestQueue.clinic_name
-                if (latestQueue.clinic_image != null){
-                    Picasso.get().load(latestQueue.clinic_image).resize(150, 150).centerCrop().into(binding.ivClinicHistory)
-                }else{
-                    binding.ivClinicHistory.setImageResource(R.drawable.img_rspets)
+                if (latestQueue != null){
+                    tvClinicNameHistory.text = latestQueue.clinic_name
+                    if (latestQueue.clinic_image != null){
+                        Picasso.get().load(latestQueue.clinic_image).resize(150, 150).centerCrop().into(binding.ivClinicHistory)
+                    }else{
+                        binding.ivClinicHistory.setImageResource(R.drawable.img_rspets)
+                    }
+                    tvClinicLocationHistory.text = latestQueue.city
+                } else {
+                    Log.d("Queue Latest : ", "Queue is null")
+                    layoutVisitHistory.visibility = View.GONE
+                    layoutVisitHistoryNull.visibility = View.VISIBLE
                 }
-                tvClinicLocationHistory.text = latestQueue.city
-
-
                 // button return visit
 
 //                btnReturnVisit.setOnClickListener{
