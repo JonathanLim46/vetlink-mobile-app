@@ -61,6 +61,8 @@ class MenuActivity : AppCompatActivity() {
 
         initView()
 
+        menuActivityViewModel.fetchProfile()
+
     }
 
     @SuppressLint("MissingInflatedId")
