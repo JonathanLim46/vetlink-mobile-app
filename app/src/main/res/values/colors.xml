@@ -25,4 +25,6 @@
     <color name="green">#5AAF51</color>
     <color name="red">#EA3C3D</color>
 
+    <color name="shimmerColor">#C2C2C2</color>
+
 </resources>

@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.vetlink.LocationPermissionHelper
 import com.example.vetlink.R
+import com.example.vetlink.Resource
 import com.example.vetlink.activity.MainActivity
 import com.example.vetlink.activity.MenuActivity
 import com.example.vetlink.adapter.RecyclerViewClickListener
@@ -147,26 +148,45 @@ class HomeFragment : Fragment(), RecyclerViewClickListener<ClinicList> {
         }
 
         // Queue
-        sharedMainActivityViewModel.queues.observe(viewLifecycleOwner){ queues ->
-            Log.d("QueueObserver", "Null")
-            var upComing = queues?.filter { it.status == "ongoing" }
+        sharedMainActivityViewModel.queues.observe(viewLifecycleOwner){ resource ->
+            when(resource) {
+                is Resource.Loading -> {
+                    binding.shimmerLayout.startShimmer()
+                }
+                is Resource.Success -> {
+                    showHomeHeader()
 
-            val firstDataUpComing = upComing?.firstOrNull()
+                    val upComing = resource.data?.filter { it.status == "ongoing" }
+                    val firstDataUpComing = upComing?.firstOrNull()
 
-            with(binding){
-                if(firstDataUpComing != null){
-                    Log.d("QueueObserver", "Upcoming queue found: $firstDataUpComing")
-                    includeHome.tvVisit.text = "There is " + upComing?.size.toString() + " visit(s) for your pets."
-                    includeHome.tvTanggal.text = dateFormat.format(firstDataUpComing.appointment_time)
-                    includeHome.tvBulan.text = monthFormat.format(firstDataUpComing.appointment_time)
-                    includeHome.tvPetName.text = firstDataUpComing.pet.name
-                    includeHome.tvClinicName.text = firstDataUpComing.veteriner.clinic_name
-                } else {
-                    Log.d("QueueObserver", "No upcoming visits, showing empty view")
-                    includeHome.layoutHome.visibility = View.GONE
-                    includeHome.layoutHomeNull.visibility = View.VISIBLE
+                    with(binding){
+                        if(firstDataUpComing != null){
+                            Log.d("QueueObserver", "Upcoming queue found: $firstDataUpComing")
+                            includeHome.tvVisit.text = "There is " + upComing?.size.toString() + " visit(s) for your pets."
+                            includeHome.tvTanggal.text = dateFormat.format(firstDataUpComing.appointment_time)
+                            includeHome.tvBulan.text = monthFormat.format(firstDataUpComing.appointment_time)
+                            includeHome.tvPetName.text = firstDataUpComing.pet.name
+                            includeHome.tvClinicName.text = firstDataUpComing.veteriner.clinic_name
+                        } else {
+                            Log.d("QueueObserver", "No upcoming visits, showing empty view")
+                            includeHome.layoutHome.visibility = View.GONE
+                            includeHome.layoutHomeNull.visibility = View.VISIBLE
+                        }
+                    }
+                }
+                is Resource.Error -> {
+                    Log.d("QueueObserver", "Error loading data: ${resource.message}")
+                    binding.shimmerLayout.hideShimmer()
+                    Toast.makeText(context, "Error: ${resource.message}", Toast.LENGTH_SHORT).show()
+
+                    with(binding) {
+                        includeHome.layoutHome.visibility = View.GONE
+                        includeHome.layoutHomeNull.visibility = View.VISIBLE
+                    }
                 }
             }
+
+
         }
 
         // veteriner
@@ -321,6 +341,14 @@ class HomeFragment : Fragment(), RecyclerViewClickListener<ClinicList> {
         if (isAdded) {
             Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
         }
+    }
+
+    private fun showHomeHeader(){
+        binding.shimmerLayout.apply {
+            stopShimmer()
+            visibility = View.GONE
+        }
+        binding.includeHome.root.visibility = View.VISIBLE
     }
 
     override fun onItemClicke(view: View, item: ClinicList) {
