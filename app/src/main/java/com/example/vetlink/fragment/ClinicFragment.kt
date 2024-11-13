@@ -79,9 +79,9 @@ class ClinicFragment : Fragment(), RecyclerViewClickListener<ClinicList>{
     ): View? {
 
         binding = FragmentClinicBinding.inflate(inflater, container, false)
-
-        initView()
         setupObservers()
+        initView()
+
 
         // Inflate the layout for this fragment
         return binding.root
