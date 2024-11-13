@@ -15,5 +15,5 @@ data class Forum(
     val description: String,
     val pet_image: String,
     val user: UserBasic,
-    val comment: List<Comment>
+    val comments: List<Comment>
 ) : Parcelable

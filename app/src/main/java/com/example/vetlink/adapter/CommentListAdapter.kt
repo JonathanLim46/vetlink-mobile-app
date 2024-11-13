@@ -7,8 +7,9 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.vetlink.R
+import com.example.vetlink.data.model.comment.Comment
 
-class CommentListAdapter(private val commentList: List<CommentList>): RecyclerView.Adapter<CommentListAdapter.CommentViewHolder>(){
+class CommentListAdapter(private val commentList: List<Comment>): RecyclerView.Adapter<CommentListAdapter.CommentViewHolder>(){
 
     class CommentViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
         val commentPhotoProfile: ImageView = itemView.findViewById(R.id.ivPhotoComment)
@@ -27,8 +28,8 @@ class CommentListAdapter(private val commentList: List<CommentList>): RecyclerVi
 
     override fun onBindViewHolder(holder: CommentViewHolder, position: Int) {
         val commentList = commentList[position]
-        holder.commentPhotoProfile.setImageResource(commentList.commentPhotoProfile)
-        holder.commentUsername.text = commentList.commentUsername
-        holder.commentBody.text = commentList.commentBody
+        holder.commentPhotoProfile.setImageResource(R.drawable.img_default_profile)
+        holder.commentUsername.text = commentList.user.username
+        holder.commentBody.text = commentList.content
     }
 }

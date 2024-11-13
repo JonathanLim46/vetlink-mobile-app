@@ -1,24 +1,33 @@
 package com.example.vetlink.fragment
 
 import android.annotation.SuppressLint
+import android.app.Dialog
 import android.content.res.ColorStateList
 import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
 import android.widget.Button
+import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toDrawable
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.vetlink.R
+import com.example.vetlink.adapter.CommentListAdapter
 import com.example.vetlink.adapter.ForumPostList
 import com.example.vetlink.adapter.ForumPostListAdapter
 import com.example.vetlink.adapter.RecyclerViewClickListener
+import com.example.vetlink.data.model.comment.Comment
 import com.example.vetlink.data.model.forums.Forum
 import com.example.vetlink.databinding.FragmentForumPrivateBinding
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -72,7 +81,7 @@ class ForumPrivateFragment() : Fragment(), RecyclerViewClickListener<ForumPostLi
 
             forumPostList = ArrayList()
 
-            forumPostListAdapter = ForumPostListAdapter(requireContext(), forumPostList)
+            forumPostListAdapter = ForumPostListAdapter(requireContext(), forumPostList, false)
             forumPostListAdapter.setClickListener(this@ForumPrivateFragment)
 
             rvPostForumPrivate.layoutManager = LinearLayoutManager(requireContext()) // Add this line
@@ -89,11 +98,11 @@ class ForumPrivateFragment() : Fragment(), RecyclerViewClickListener<ForumPostLi
                             forum.title,
                             forum.description,
                             forum.last_seen,
-                            forum.characteristics
+                            forum.characteristics,
+                            forum.comments
                         )
                     )
                 }
-                Log.d("forumPostListPrivate", forumPostList.toString())
             }
             forumPostListAdapter.notifyDataSetChanged()
 
@@ -135,7 +144,8 @@ class ForumPrivateFragment() : Fragment(), RecyclerViewClickListener<ForumPostLi
                         forum.title,
                         forum.description,
                         forum.last_seen,
-                        forum.characteristics
+                        forum.characteristics,
+                        forum.comments
                     )
                 )
             }
@@ -174,6 +184,85 @@ class ForumPrivateFragment() : Fragment(), RecyclerViewClickListener<ForumPostLi
     }
 
     override fun onItemClicke(view: View, item: ForumPostList) {
+        val dialog = activity?.let { BottomSheetDialog(it) }
 
+        val layoutId = when(view.tag){
+            "postMenu" -> {
+                R.layout.layout_bottom_sheet_post_dialog
+            }
+            "postComment" -> {
+                R.layout.layout_bottom_sheet_comment_dialog
+            }
+
+            else -> {R.layout.layout_bottom_sheet_post_dialog}
+        }
+
+        val viewLayout = layoutInflater.inflate(layoutId, null, false)
+
+        dialog?.apply {
+            setCancelable(true)
+            setContentView(viewLayout)
+
+            val bottomSheet = viewLayout.parent as View
+
+            if (view.tag == "postComment") {
+                bottomSheet.layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT
+
+                // Here is where we display the comments
+                val rvComments = viewLayout.findViewById<RecyclerView>(R.id.rvCommentForum)
+                rvComments.layoutManager = LinearLayoutManager(context)
+
+                // Assuming you can get the list of comments for the post
+                val commentsList = getCommentsForPost(item) // A function that retrieves comments
+                val commentAdapter = CommentListAdapter(commentsList)
+                rvComments.adapter = commentAdapter
+            } else if (view.tag == "postMenu"){
+                val deletePost = viewLayout.findViewById<TextView>(R.id.tvThirdLineDialog)
+                deletePost.setOnClickListener{
+                    dialog.dismiss()
+                    deletePostDialog()
+                }
+            }
+
+            show()
+
+
+            val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
+            bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+            bottomSheetBehavior.isHideable = true
+        }
+    }
+
+    private fun deletePostDialog(){
+        val dialog = Dialog(requireContext())
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setCancelable(false)
+        dialog.setContentView(R.layout.layout_center_logout_dialog)
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+        val tvDialogTitle: TextView = dialog.findViewById(R.id.tvDialogHeader)
+        val tvDialogDescription: TextView = dialog.findViewById(R.id.tvDialogDescription)
+        val btnYes: Button = dialog.findViewById(R.id.btnDialogLogout)
+        val btnNo: Button = dialog.findViewById(R.id.btnDialogCancel)
+
+        tvDialogTitle.text = "Delete this post ?"
+        tvDialogDescription.text = "Are you sure you want to permanently delete this post."
+        btnYes.text = "Delete"
+        btnNo.text = "Cancel"
+
+        btnYes.setOnClickListener {
+
+        }
+        btnNo.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        dialog.show()
+    }
+
+    // Example function to get comments for a post
+    private fun getCommentsForPost(post: ForumPostList): List<Comment> {
+        // In practice, you may retrieve this data from a server or database
+        return post.postComments
     }
 }

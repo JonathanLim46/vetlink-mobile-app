@@ -13,11 +13,17 @@ import android.view.Window
 import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.vetlink.R
+import com.example.vetlink.adapter.CommentList
+import com.example.vetlink.adapter.CommentListAdapter
 import com.example.vetlink.adapter.ForumPostList
 import com.example.vetlink.adapter.ForumPostListAdapter
 import com.example.vetlink.adapter.RecyclerViewClickListener
+import com.example.vetlink.data.model.comment.Comment
 import com.example.vetlink.data.model.forums.Forum
+import com.example.vetlink.data.model.user.User
+import com.example.vetlink.data.model.user.UserBasic
 import com.example.vetlink.databinding.FragmentForumPublicBinding
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -64,7 +70,7 @@ class ForumPublicFragment: Fragment(), RecyclerViewClickListener<ForumPostList> 
 
             forumPostList = ArrayList()
 
-            forumPostListAdapter = ForumPostListAdapter(requireContext(), forumPostList)
+            forumPostListAdapter = ForumPostListAdapter(requireContext(), forumPostList, true)
             forumPostListAdapter.notifyDataSetChanged()
 
             forumPostListAdapter.setClickListener(this@ForumPublicFragment)
@@ -83,7 +89,8 @@ class ForumPublicFragment: Fragment(), RecyclerViewClickListener<ForumPostList> 
                             forum.title,
                             forum.description,
                             forum.last_seen,
-                            forum.characteristics
+                            forum.characteristics,
+                            forum.comments
                         )
                     )
                 }
@@ -112,12 +119,19 @@ class ForumPublicFragment: Fragment(), RecyclerViewClickListener<ForumPostList> 
             setCancelable(true)
             setContentView(viewLayout)
 
-
             val bottomSheet = viewLayout.parent as View
-
 
             if (view.tag == "postComment") {
                 bottomSheet.layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT
+
+                // Here is where we display the comments
+                val rvComments = viewLayout.findViewById<RecyclerView>(R.id.rvCommentForum)
+                rvComments.layoutManager = LinearLayoutManager(context)
+
+                // Assuming you can get the list of comments for the post
+                val commentsList = getCommentsForPost(item) // A function that retrieves comments
+                val commentAdapter = CommentListAdapter(commentsList)
+                rvComments.adapter = commentAdapter
             } else if (view.tag == "postMenu"){
                 val deletePost = viewLayout.findViewById<TextView>(R.id.tvThirdLineDialog)
                 deletePost.setOnClickListener{
@@ -133,6 +147,12 @@ class ForumPublicFragment: Fragment(), RecyclerViewClickListener<ForumPostList> 
             bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
             bottomSheetBehavior.isHideable = true
         }
+    }
+
+    // Example function to get comments for a post
+    private fun getCommentsForPost(post: ForumPostList): List<Comment> {
+        // In practice, you may retrieve this data from a server or database
+        return post.postComments
     }
 
     private fun deletePostDialog(){
