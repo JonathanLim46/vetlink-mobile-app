@@ -9,9 +9,14 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
 import com.example.vetlink.R
 import com.example.vetlink.activity.MenuActivity
 import com.example.vetlink.databinding.FragmentAccountBinding
+import com.example.vetlink.helper.Session
+import com.example.vetlink.helper.SessionManager
+import com.example.vetlink.viewModel.MenuActivityViewModel
+import com.squareup.picasso.Picasso
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -29,6 +34,7 @@ class AccountFragment : Fragment() {
     private var param2: String? = null
 
     private lateinit var binding: FragmentAccountBinding
+    private val sharedMenuActivityViewModel: MenuActivityViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,8 +53,26 @@ class AccountFragment : Fragment() {
         binding = FragmentAccountBinding.inflate(inflater, container, false)
 
         initView()
+        setupObservers()
 
         return binding.root
+    }
+
+    private fun setupObservers(){
+        sharedMenuActivityViewModel.user.observe(viewLifecycleOwner) { user ->
+            if (user != null){
+                with(binding){
+                    if (user.photo != null){
+                        Picasso.get().load(user.photo).resize(50,50).centerCrop().into(ivAddImage)
+                    } else {
+                        ivAddImage.setImageResource(R.drawable.img_default_profile)
+                    }
+                    etNameAcc.setText(user.name)
+                    etPhoneAcc.setText(user.phone)
+                    etEmailAcc.setText(user.email)
+                }
+            }
+        }
     }
 
     private fun initView(){

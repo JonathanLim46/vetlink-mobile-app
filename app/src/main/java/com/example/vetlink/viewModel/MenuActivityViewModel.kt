@@ -80,6 +80,21 @@ class MenuActivityViewModel(
 
     val addQueueResponse = MutableLiveData<Int>()
 
+    fun fetchProfile() {
+        viewModelScope.launch {
+            try {
+                val responseUser = authRepository.getProfile()
+                _user.postValue(responseUser.data)
+            } catch (e: ConnectException) {
+                _errorMessageUser.postValue("Unable to connect to the server. Please check your internet connection.")
+                Log.e("API_ERROR", "Network Error: ${e.message}")
+            } catch (e: Exception){
+                _errorMessageUser.postValue("An error occurred. Please try again.")
+                Log.e("API_ERROR", "Fetch user error: ${e.message}")
+            }
+        }
+    }
+
     fun addPet(
         name: String,
         type: String,
