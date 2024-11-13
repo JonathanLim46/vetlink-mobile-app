@@ -19,7 +19,137 @@
             app:contentScrim="?attr/colorPrimary"
             app:layout_scrollFlags="scroll|snap|exitUntilCollapsed">
 
-            <include android:id="@+id/includeHome" layout="@layout/layout_home_header" />
+            <!--  Shimmer Layout -->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/layoutDateShimmer"
+                android:layout_width="match_parent"
+                android:layout_height="250dp"
+                android:background="@drawable/layout_border_card_main"
+                >
+                
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:background="@drawable/layout_border_card_second"
+                    android:visibility="visible"
+                    android:layout_marginStart="25dp"
+                    android:layout_marginTop="100dp"
+                    android:layout_marginEnd="25dp"
+                    android:layout_marginBottom="40dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    >
+
+                    <com.facebook.shimmer.ShimmerFrameLayout
+                        android:id="@+id/shimmerLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:visibility="visible"
+                        >
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <!--  BOX DATE SHIMMER -->
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:id="@+id/layoutDate"
+                                android:layout_width="70dp"
+                                android:layout_height="70dp"
+                                android:layout_marginStart="20dp"
+                                android:layout_marginEnd="30dp"
+                                android:background="@drawable/outline_active_shimmer"
+                                app:layout_constraintHorizontal_bias="0"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                >
+
+                                <TextView
+                                    android:id="@+id/tvTanggal"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:textSize="15sp"
+                                    android:textStyle="bold"
+                                    android:textAlignment="center"
+                                    app:layout_constraintVertical_bias="0.3"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    />
+
+                                <TextView
+                                    android:id="@+id/tvBulan"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:textSize="15sp"
+                                    android:textStyle="bold"
+                                    android:textAlignment="center"
+                                    app:layout_constraintVertical_bias="0"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintTop_toBottomOf="@+id/tvTanggal"
+                                    />
+
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+
+                            <!--  Description Visit Shimmer -->
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="60dp"
+                                android:layout_marginStart="15dp"
+                                android:background="@color/shimmerColor"
+                                app:layout_constraintBottom_toBottomOf="@+id/layoutDate"
+                                app:layout_constraintStart_toEndOf="@+id/layoutDate"
+                                app:layout_constraintTop_toTopOf="@+id/layoutDate">
+
+                                <TextView
+                                    android:id="@+id/tvVisit"
+                                    android:layout_width="180dp"
+                                    android:layout_height="wrap_content"
+                                    android:textSize="14sp"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                                <TextView
+                                    android:id="@+id/tvPetName"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="5dp"
+                                    android:drawablePadding="5dp"
+                                    android:fontFamily="sans-serif-light"
+                                    android:textSize="11sp"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toBottomOf="@+id/tvVisit" />
+
+                                <TextView
+                                    android:id="@+id/tvClinicName"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="5dp"
+                                    android:drawablePadding="5dp"
+                                    android:fontFamily="sans-serif-light"
+                                    android:textSize="11sp"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toBottomOf="@id/tvPetName" />
+
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    </com.facebook.shimmer.ShimmerFrameLayout>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <include android:id="@+id/includeHome" layout="@layout/layout_home_header" android:visibility="gone"/>
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
