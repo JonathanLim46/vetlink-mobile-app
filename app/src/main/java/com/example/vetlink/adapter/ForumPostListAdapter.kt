@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.vetlink.R
 import com.squareup.picasso.Picasso
 
-class ForumPostListAdapter(private val context: Context,private val forumPostList: List<ForumPostList>): RecyclerView.Adapter<ForumPostListAdapter.ForumPostViewHolder>(){
+class ForumPostListAdapter(private val context: Context, private val forumPostList: List<ForumPostList>, private val isPublic: Boolean): RecyclerView.Adapter<ForumPostListAdapter.ForumPostViewHolder>(){
 
     private lateinit var listener: RecyclerViewClickListener<ForumPostList>
 
@@ -37,8 +37,13 @@ class ForumPostListAdapter(private val context: Context,private val forumPostLis
         val view = LayoutInflater.from(parent.context).inflate(R.layout.each_item_forum_post, parent, false)
 
         // HIDE, JIKA BUKAN PUNYA USER....
-//        val Image = view.findViewById<ImageView>(R.id.menuOptionalPost)
-//        Image.visibility = View.GONE
+        if (isPublic == true){
+            val Image = view.findViewById<ImageView>(R.id.menuOptionalPost)
+            Image.visibility = View.GONE
+        }else{
+            val Image = view.findViewById<ImageView>(R.id.menuOptionalPost)
+            Image.visibility = View.VISIBLE
+        }
 
         return ForumPostViewHolder(view)
     }
