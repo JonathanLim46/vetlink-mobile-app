@@ -241,16 +241,18 @@ class HomeFragment : Fragment(), RecyclerViewClickListener<ClinicList> {
             tvNameHome.text = "Loading.."
 
 //            View More
-            tvViewMoreClinic.setOnClickListener{
-                val intent = Intent(activity, MainActivity::class.java)
-                intent.putExtra("fragment", "clinicFragment")
-                startActivity(intent)
+//            tvViewMoreClinic.setOnClickListener{
+//                val intent = Intent(activity, MainActivity::class.java)
+//                intent.putExtra("fragment", "clinicFragment")
+//                startActivity(intent)
+//            }
+
+            tvViewMoreClinic.setOnClickListener {
+                (activity as? MainActivity)?.navigateToTab(R.id.clinicPage)
             }
 
-            tvViewMoreForum.setOnClickListener{
-                val intent = Intent(activity, MainActivity::class.java)
-                intent.putExtra("fragment", "forumFragment")
-                startActivity(intent)
+            tvViewMoreForum.setOnClickListener {
+                (activity as? MainActivity)?.navigateToTab(R.id.forumPage)
             }
 
         }
