@@ -12,11 +12,15 @@ import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import com.example.vetlink.R
 import com.example.vetlink.activity.MenuActivity
+import com.example.vetlink.data.model.user.User
 import com.example.vetlink.databinding.FragmentAccountBinding
 import com.example.vetlink.helper.Session
 import com.example.vetlink.helper.SessionManager
 import com.example.vetlink.viewModel.MenuActivityViewModel
 import com.squareup.picasso.Picasso
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -35,6 +39,7 @@ class AccountFragment : Fragment() {
 
     private lateinit var binding: FragmentAccountBinding
     private val sharedMenuActivityViewModel: MenuActivityViewModel by activityViewModels()
+    private var currentUser: User? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,6 +75,8 @@ class AccountFragment : Fragment() {
                     etNameAcc.setText(user.name)
                     etPhoneAcc.setText(user.phone)
                     etEmailAcc.setText(user.email)
+
+                    currentUser = user
                 }
             }
         }
@@ -77,66 +84,73 @@ class AccountFragment : Fragment() {
 
     private fun initView(){
         with(binding){
-            val colorError = ColorStateList.valueOf(Color.RED)
-
             btnChangePassword.setOnClickListener{
                 val intent = Intent(activity, MenuActivity::class.java)
                 intent.putExtra("MENU_TITLE", "Change Password")
                 startActivity(intent)
             }
 
+
             btnSubmitAccount.setOnClickListener{
-                val nameAcc = etNameAcc.text.toString()
-                val emailAcc = etEmailAcc.text.toString()
-                val phoneAcc = etPhoneAcc.text.toString()
-
-                if(nameAcc.isEmpty()){
-                    textInputLayoutNameAcc.error = "Name is required"
-                    textInputLayoutNameAcc.setErrorTextColor(colorError)
-                    textInputLayoutNameAcc.setErrorIconTintList(colorError)
-                    etNameAcc.requestFocus()
-                } else if (nameAcc.length <= 3){
-                    textInputLayoutNameAcc.error = "Name must be more than 3 characters"
-                    textInputLayoutNameAcc.setErrorTextColor(colorError)
-                    textInputLayoutNameAcc.setErrorIconTintList(colorError)
-                    etNameAcc.requestFocus()
-                } else {
-                    textInputLayoutNameAcc.error = null
-                    textInputLayoutNameAcc.isErrorEnabled = false
-                }
-
-                if(emailAcc.isEmpty()){
-                    textInputLayoutEmailAcc.error = "Email is required"
-                    textInputLayoutEmailAcc.setErrorTextColor(colorError)
-                    textInputLayoutEmailAcc.setErrorIconTintList(colorError)
-                    etEmailAcc.requestFocus()
-                } else if (!Patterns.EMAIL_ADDRESS.matcher(emailAcc).matches()){
-                    textInputLayoutEmailAcc.error = "Email is invalid"
-                    textInputLayoutEmailAcc.setErrorTextColor(colorError)
-                    textInputLayoutEmailAcc.setErrorIconTintList(colorError)
-                    etEmailAcc.requestFocus()
-                } else {
-                    textInputLayoutEmailAcc.error = null
-                    textInputLayoutEmailAcc.isErrorEnabled = false
-                }
-
-                if(phoneAcc.isEmpty()){
-                    textInputLayoutPhoneAcc.error = "Phone is required"
-                    textInputLayoutPhoneAcc.setErrorTextColor(colorError)
-                    textInputLayoutPhoneAcc.setErrorIconTintList(colorError)
-                    etPhoneAcc.requestFocus()
-//                } else if (!Patterns.EMAIL_ADDRESS.matcher(emailAcc).matches()){
-//                    textInputLayoutPhoneAcc.error = "Email is invalid"
-//                    textInputLayoutPhoneAcc.setErrorTextColor(colorError)
-//                    textInputLayoutPhoneAcc.setErrorIconTintList(colorError)
-//                    etPhoneAcc.requestFocus()
-                } else {
-                    textInputLayoutPhoneAcc.error = null
-                    textInputLayoutPhoneAcc.isErrorEnabled = false
-                }
-
+                validateEdit()
             }
         }
+    }
+
+    private fun validateEdit(){
+
+        with(binding) {
+            val colorError = ColorStateList.valueOf(Color.RED)
+            val user = currentUser ?: return
+            val updates = mutableMapOf<String, Any>()
+
+            if (etNameAcc.length() > 32) {
+                textInputLayoutNameAcc.error = "Name cannot be longer than 32 characters"
+                textInputLayoutNameAcc.setErrorTextColor(colorError)
+                etNameAcc.requestFocus()
+            } else if (etNameAcc.text.toString().isEmpty()) {
+                textInputLayoutNameAcc.error = "Name is required"
+                textInputLayoutNameAcc.setErrorTextColor(colorError)
+                etNameAcc.requestFocus()
+            } else if (etNameAcc.text.toString() != user.name) {
+                updates["name"] = etNameAcc.text.toString()
+                textInputLayoutNameAcc.error = null
+                textInputLayoutNameAcc.isErrorEnabled = false
+            } else {
+                textInputLayoutNameAcc.error = null
+                textInputLayoutNameAcc.isErrorEnabled = false
+            }
+
+            if (etPhoneAcc.text.toString().isEmpty()){
+                textInputLayoutPhoneAcc.error = "Phone is required"
+                textInputLayoutPhoneAcc.setErrorTextColor(colorError)
+                etPhoneAcc.requestFocus()
+            } else if (!Patterns.PHONE.matcher(etPhoneAcc.toString()).matches()){
+                textInputLayoutPhoneAcc.error = "Phone is invalid"
+                textInputLayoutPhoneAcc.setErrorTextColor(colorError)
+                etPhoneAcc.requestFocus()
+            } else if (etPhoneAcc.text.toString() != user.name) {
+                updates["phone"] = etPhoneAcc.text.toString()
+                textInputLayoutPhoneAcc.error = null
+                textInputLayoutPhoneAcc.isErrorEnabled = false
+            } else {
+                textInputLayoutPhoneAcc.error = null
+                textInputLayoutPhoneAcc.isErrorEnabled = false
+            }
+
+            if (updates.isNotEmpty()) {
+                val params = mutableMapOf<String, RequestBody>()
+
+                updates.forEach { (key, value) ->
+                    val requestBody = value.toString().toRequestBody("text/plain".toMediaTypeOrNull())
+                    params[key] = requestBody
+                }
+
+                // view model
+            }
+
+        }
+
     }
 
 
