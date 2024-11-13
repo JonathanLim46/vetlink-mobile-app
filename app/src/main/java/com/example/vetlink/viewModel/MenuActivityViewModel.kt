@@ -35,6 +35,12 @@ class MenuActivityViewModel(
     private val _errorMessageUser = MutableLiveData<String>()
     val errorMessageUser: LiveData<String> get() = _errorMessageUser
 
+    private val _updateMessageUserUpdate = MutableLiveData<String>()
+    val updateMessageUserUpdate: LiveData<String> get() = _updateMessageUserUpdate
+
+    private val _errorMessageUserUpdate = MutableLiveData<String>()
+    val errorMessageUserUpdate: LiveData<String> get() = _errorMessageUserUpdate
+
     val addPetResponse = MutableLiveData<PetAddResponse?>()
     val errorMessageAddPet = MutableLiveData<String>()
 
@@ -202,6 +208,25 @@ class MenuActivityViewModel(
                 _errorMessagePetUpdate.postValue("Unable to connect to the server. Please check your internet connection.")
                 Log.e("API_ERROR", "Network error: ${e.message}")
             }catch (e: Exception){
+
+            }
+        }
+    }
+
+    fun updateProfile(
+        params: MutableMap<String, RequestBody>,
+        photo: MultipartBody.Part?
+    ) {
+        viewModelScope.launch {
+            try {
+                val response = authRepository.editProfile(params, photo)
+                if (response.isSuccess){
+                    _updateMessageUserUpdate.postValue("Update success!")
+                }
+            } catch (e: ConnectException){
+                _errorMessageUserUpdate.postValue("Unable to connect to the server. Please check your internet connection.")
+                Log.e("API_ERROR", "Network error: ${e.message}")
+            } catch (e: Exception){
 
             }
         }

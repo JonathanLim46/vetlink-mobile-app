@@ -3,13 +3,20 @@ package com.example.vetlink.fragment
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
 import com.example.vetlink.R
 import com.example.vetlink.databinding.ActivityMenuBinding
 import com.example.vetlink.databinding.FragmentChangePasswordBinding
+import com.example.vetlink.viewModel.MenuActivityViewModel
+import com.squareup.picasso.Picasso
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -27,6 +34,8 @@ class ChangePasswordFragment : Fragment() {
     private var param2: String? = null
 
     private lateinit var binding: FragmentChangePasswordBinding
+    private val sharedMenuActivityViewModel: MenuActivityViewModel by activityViewModels()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,24 +61,48 @@ class ChangePasswordFragment : Fragment() {
     private fun initView(){
 
         with(binding){
-            val colorError = ColorStateList.valueOf(Color.RED)
+
 
             btnSaveNewPassword.setOnClickListener{
-
-                val newPWD = etChangePassword.text.toString()
-
-                if (newPWD.isEmpty()){
-                    textInputLayoutNewPassword.error = "New Password is required"
-                    textInputLayoutNewPassword.setErrorTextColor(colorError)
-                    textInputLayoutNewPassword.setErrorIconTintList(colorError)
-                    etChangePassword.requestFocus()
-                } else{
-                    textInputLayoutNewPassword.error = null
-                    textInputLayoutNewPassword.isErrorEnabled = false
-                }
+                validateNewPassword()
             }
         }
 
+    }
+
+    private fun validateNewPassword(){
+        with(binding){
+            val colorError = ColorStateList.valueOf(Color.RED)
+            val newPWD = etChangePassword.text.toString()
+            val updates = mutableMapOf<String, Any>()
+
+            if (newPWD.isEmpty()){
+                textInputLayoutNewPassword.error = "New Password is required"
+                textInputLayoutNewPassword.setErrorTextColor(colorError)
+                textInputLayoutNewPassword.setErrorIconTintList(colorError)
+                etChangePassword.requestFocus()
+            } else if (newPWD.length < 8){
+                textInputLayoutNewPassword.error = "Password must be greater than or equal to 8 characters"
+                textInputLayoutNewPassword.setErrorTextColor(colorError)
+                textInputLayoutNewPassword.setErrorIconTintList(colorError)
+                etChangePassword.requestFocus()
+            } else{
+                updates["password"] = etChangePassword.text.toString()
+                textInputLayoutNewPassword.error = null
+                textInputLayoutNewPassword.isErrorEnabled = false
+            }
+
+            if (updates.isNotEmpty()) {
+                val params = mutableMapOf<String, RequestBody>()
+
+                updates.forEach { (key, value) ->
+                    val requestBody = value.toString().toRequestBody("text/plain".toMediaTypeOrNull())
+                    params[key] = requestBody
+                }
+
+                sharedMenuActivityViewModel.updateProfile(params, photo = null)
+            }
+        }
     }
 
     companion object {

@@ -44,6 +44,18 @@ class AuthRepository(val session: SessionManager) {
         return authApi.getProfile()
     }
 
+    suspend fun editProfile(
+        params: MutableMap<String, RequestBody>,
+        photo: MultipartBody.Part?
+    ): Result<ProfileResponse>{
+        return try {
+            val response = authApi.updateProfile(params, photo)
+            Result.success(response)
+        } catch (e: Exception){
+            Result.failure(e)
+        }
+    }
+
     suspend fun logout(): Boolean {
         return withContext(Dispatchers.IO){
             try{
