@@ -3,6 +3,7 @@ package com.example.vetlink.data.network
 import com.example.vetlink.data.model.auth.LoginResponse
 import com.example.vetlink.data.model.auth.LogoutResponse
 import com.example.vetlink.data.model.auth.RegisterResponse
+import com.example.vetlink.data.model.pets.PetDetailsResponse
 import com.example.vetlink.data.model.user.ProfileResponse
 import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -45,7 +46,7 @@ interface AuthApi {
 
     @Multipart
     @POST("profile/update")
-    suspend fun updateProfile(
+    suspend fun editProfile(
         @PartMap params: Map<String, @JvmSuppressWildcards RequestBody>,
         @Part photo: MultipartBody.Part? = null,
     ): ProfileResponse

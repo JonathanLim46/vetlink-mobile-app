@@ -105,7 +105,7 @@ class ChangePasswordFragment : Fragment() {
                     params[key] = requestBody
                 }
 
-                sharedMenuActivityViewModel.updateProfile(params, photo = null)
+                sharedMenuActivityViewModel.updateUser(params, photo = null)
             }
         }
     }
