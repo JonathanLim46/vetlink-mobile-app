@@ -9,8 +9,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.viewpager.widget.ViewPager
+import com.example.vetlink.Resource
 import com.example.vetlink.activity.MainActivity
 import com.example.vetlink.activity.MenuActivity
 import com.example.vetlink.adapter.ForumPageAdapter
@@ -64,10 +66,25 @@ class ForumFragment : Fragment() {
     }
 
     private fun setupObserver() {
-        sharedMainActivityViewModel.user.observe(viewLifecycleOwner){ user ->
-            binding.apply {
-                tvMessageHeader.text = "Hello, ${user.name}"
+        sharedMainActivityViewModel.getUserHome.observe(viewLifecycleOwner){ resource ->
+
+            when(resource) {
+                is Resource.Loading -> {
+
+                }
+                is Resource.Success -> {
+                    binding.apply {
+                        if (resource.data != null){
+                            tvMessageHeader.text = "Hello, ${resource.data.name}"
+                        }
+                    }
+                }
+                is Resource.Error -> {
+                    Log.d("QueueObserver", "Error loading data: ${resource.message}")
+                    Toast.makeText(requireContext(), "Failed to load name, please try again.", Toast.LENGTH_SHORT).show()
+                }
             }
+
         }
 
         sharedMainActivityViewModel.forums.observe(viewLifecycleOwner){ forums ->
