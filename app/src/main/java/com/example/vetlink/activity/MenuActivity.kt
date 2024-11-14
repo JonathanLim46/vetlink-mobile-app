@@ -29,6 +29,7 @@ import com.example.vetlink.repository.PetRepository
 import com.example.vetlink.repository.QueueRepository
 import com.example.vetlink.repository.VeterinerRepository
 import com.example.vetlink.util.toast
+import com.example.vetlink.viewModel.MenuActivityViewModel
 import com.example.vetlink.viewModel.ViewModelFactory
 
 class MenuActivity : AppCompatActivity() {

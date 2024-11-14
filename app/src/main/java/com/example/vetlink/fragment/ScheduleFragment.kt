@@ -15,6 +15,7 @@ import com.example.vetlink.adapter.ScheduleList
 import com.example.vetlink.adapter.ScheduleListAdapter
 import com.example.vetlink.data.model.queue.Queue
 import com.example.vetlink.databinding.FragmentScheduleBinding
+import com.example.vetlink.viewModel.MenuActivityViewModel
 import java.text.SimpleDateFormat
 import java.util.Locale
 

@@ -17,6 +17,7 @@ import androidx.fragment.app.activityViewModels
 import com.example.vetlink.R
 import com.example.vetlink.databinding.ActivityMenuBinding
 import com.example.vetlink.databinding.FragmentChangePasswordBinding
+import com.example.vetlink.viewModel.MenuActivityViewModel
 import com.squareup.picasso.Picasso
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody

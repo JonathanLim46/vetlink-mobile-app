@@ -27,6 +27,7 @@ import com.example.vetlink.adapter.PetsListAdapter
 import com.example.vetlink.adapter.RecyclerViewClickListener
 import com.example.vetlink.data.model.pets.Pet
 import com.example.vetlink.databinding.FragmentMyPetsBinding
+import com.example.vetlink.viewModel.MenuActivityViewModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import org.w3c.dom.Text
