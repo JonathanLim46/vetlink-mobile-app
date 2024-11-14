@@ -115,15 +115,32 @@ class HomeFragment : Fragment(), RecyclerViewClickListener<ClinicList> {
 
     private fun setupObservers() {
         // Observe user data from shared ViewModel
-        sharedMainActivityViewModel.user.observe(viewLifecycleOwner) { user ->
-            if (user != null){
-                binding.tvNameHome.text = user.name
-                if (user.photo != null){
-                    Picasso.get().load(user.photo).resize(50, 50).centerCrop().into(binding.ivPhotoHome)
-                }else{
-                    binding.ivPhotoHome.setImageResource(R.drawable.img_default_profile)
+        sharedMainActivityViewModel.getUserHome.observe(viewLifecycleOwner) { resource ->
+
+            when(resource){
+                is Resource.Loading -> {
+                    binding.shimmerToolBar.startShimmer()
+                }
+                is Resource.Success -> {
+                    showToolBar()
+
+                    if (resource.data != null){
+                        binding.layoutHomeToolbar.tvNameHome.text = resource.data.name
+                        if (resource.data.photo != null){
+                            Picasso.get().load(resource.data.photo).resize(50, 50).centerCrop().into(binding.layoutHomeToolbar.ivPhotoHome)
+                        }else{
+                            binding.layoutHomeToolbar.ivPhotoHome.setImageResource(R.drawable.img_default_profile)
+                        }
+                    }
+                }
+                is Resource.Error -> {
+                    Log.d("QueueObserver", "Error loading data: ${resource.message}")
+                    Toast.makeText(requireContext(), "Failed connect to server", Toast.LENGTH_SHORT).show()
+                    binding.shimmerLayout.hideShimmer()
+                    binding.layoutHomeToolbar.ivPhotoHome.setImageResource(R.drawable.img_default_profile)
                 }
             }
+
         }
 
         sharedMainActivityViewModel.latestQueue.observe(viewLifecycleOwner){ latestQueue ->
@@ -261,7 +278,7 @@ class HomeFragment : Fragment(), RecyclerViewClickListener<ClinicList> {
                 srlList.isRefreshing = false
             }
 
-            tvNameHome.text = "Loading.."
+            layoutHomeToolbar.tvNameHome.text = "Loading.."
 
 //            View More
 //            tvViewMoreClinic.setOnClickListener{
@@ -352,6 +369,14 @@ class HomeFragment : Fragment(), RecyclerViewClickListener<ClinicList> {
             visibility = View.GONE
         }
         binding.includeHome.root.visibility = View.VISIBLE
+    }
+
+    private fun showToolBar(){
+        binding.shimmerToolBar.apply {
+            stopShimmer()
+            visibility = View.GONE
+        }
+        binding.layoutHomeToolbar.root.visibility = View.VISIBLE
     }
 
     override fun onItemClicke(view: View, item: ClinicList) {
