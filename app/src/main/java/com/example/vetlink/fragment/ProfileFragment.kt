@@ -7,6 +7,7 @@ import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.text.SpannableString
 import android.text.style.UnderlineSpan
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,6 +18,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.example.vetlink.R
+import com.example.vetlink.Resource
 import com.example.vetlink.activity.LoginActivity
 import com.example.vetlink.activity.MenuActivity
 import com.example.vetlink.databinding.FragmentProfileBinding
@@ -45,25 +47,40 @@ class ProfileFragment : Fragment() {
 
     private fun setupObservers() {
         // Observe user data from shared ViewModel
-        sharedMainActivityViewModel.user.observe(viewLifecycleOwner) { user ->
-            if (user != null) {
-                binding.tvUsernameProfile.text = user.name
-                val email = user.email ?: "Email not available"
+        sharedMainActivityViewModel.getUserHome.observe(viewLifecycleOwner) { resource ->
 
-                val spannableEmail = SpannableString(email).apply {
-                    setSpan(UnderlineSpan(), 0, length, 0)
-                }
-                binding.tvEmailProfile.text = spannableEmail
-                if (user.photo != null) {
-                    Picasso.get().load(user.photo).resize(50, 50).centerCrop().into(binding.ivPhotoProfile)
-                }else{
-                    binding.ivPhotoProfile.setImageResource(R.drawable.img_default_profile)
-                }
+            when(resource) {
+                is Resource.Loading -> {
 
-            } else {
-                binding.tvUsernameProfile.text = "User"
-                binding.tvEmailProfile.text = "No email available"
+                }
+                is Resource.Success -> {
+                    if (resource.data != null) {
+                        binding.tvUsernameProfile.text = resource.data.name
+                        val email = resource.data.email ?: "Email not available"
+
+                        val spannableEmail = SpannableString(email).apply {
+                            setSpan(UnderlineSpan(), 0, length, 0)
+                        }
+                        binding.tvEmailProfile.text = spannableEmail
+                        if (resource.data.photo != null) {
+                            Picasso.get().load(resource.data.photo).resize(50, 50).centerCrop().into(binding.ivPhotoProfile)
+                        }else{
+                            binding.ivPhotoProfile.setImageResource(R.drawable.img_default_profile)
+                        }
+
+                    } else {
+                        binding.tvUsernameProfile.text = "User"
+                        binding.tvEmailProfile.text = "No email available"
+                    }
+                }
+                is Resource.Error -> {
+                    Log.d("QueueObserver", "Error loading data: ${resource.message}")
+                    Toast.makeText(requireContext(), "Failed to load profile, please try again.", Toast.LENGTH_SHORT).show()
+                    binding.tvUsernameProfile.text = "User"
+                    binding.tvEmailProfile.text = "No email available"
+                }
             }
+
         }
 
 

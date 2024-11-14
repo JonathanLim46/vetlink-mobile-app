@@ -49,8 +49,8 @@ class MainActivityViewModel(
 //    private val _errorMessagePet = MutableLiveData<String>()
 //    val errorMessagePet: LiveData<String> get() = _errorMessagePet
 
-    private val _veteriners = MutableLiveData<List<Veteriner>>()
-    val veteriners: LiveData<List<Veteriner>> get() = _veteriners
+    private val _veteriners = MutableLiveData<Resource<List<Veteriner>>>()
+    val veteriners: LiveData<Resource<List<Veteriner>>> get() = _veteriners
 
     private val _errorMessageVeteriner = MutableLiveData<String>()
     val errorMessageVeteriner: LiveData<String> get() = _errorMessageVeteriner
@@ -61,8 +61,8 @@ class MainActivityViewModel(
     private val _errorMessageQueues = MutableLiveData<String>()
     val errorMessageQueues: LiveData<String> get() = _errorMessageQueues
 
-    private val _latestQueue = MutableLiveData<LatestQueue>()
-    val latestQueue: LiveData<LatestQueue> get() = _latestQueue
+    private val _latestQueue = MutableLiveData<Resource<LatestQueue>>()
+    val latestQueue: LiveData<Resource<LatestQueue>> get() = _latestQueue
 
     private val _errorMessageLatestQueue = MutableLiveData<String>()
     val errorMessageLatestQueue: LiveData<String> get() = _errorMessageLatestQueue
@@ -97,23 +97,29 @@ class MainActivityViewModel(
     }
 
     fun getVeteriners() {
+
+        _veteriners.postValue(Resource.Loading())
+
         viewModelScope.launch {
             try {
                 val responseVeteriners = veterinerRepository?.getVeteriners()
                 if (responseVeteriners?.isSuccess == true) {
                     val veterinerList = responseVeteriners.getOrNull()?.data ?: emptyList()
-                    _veteriners.postValue(veterinerList)
+                    _veteriners.postValue(Resource.Success(veterinerList))
                     Log.d("API_RESPONSE", "Veteriners fetched successfully: ${veterinerList.size}")
                 } else {
                     _errorMessageVeteriner.postValue("Failed to fetch veteriners.")
                     Log.e("API_ERROR", "Veteriners fetch error: ${responseVeteriners?.exceptionOrNull()?.message}")
+                    _veteriners.postValue(Resource.Error("Failed to fetch veteriners.", null))
                 }
             }catch (e: ConnectException) {
                 _errorMessageUser.postValue("Unable to connect to the server. Please check your internet connection.")
                 Log.e("API_ERROR", "Network error: ${e.message}")
+                _veteriners.postValue(Resource.Error("Unable to connect to the server. Please check your internet connection.", null))
             } catch (e: Exception) {
                 _errorMessageUser.postValue("An error occurred. Please try again.")
                 Log.e("API_ERROR", "Fetch user error: ${e.message}")
+                _veteriners.postValue(Resource.Error("An error occurred. Please try again", null))
             }
         }
     }
@@ -157,22 +163,28 @@ class MainActivityViewModel(
             return
         }
 
+        _latestQueue.postValue(Resource.Loading())
+
         viewModelScope.launch {
             try {
                 val responseQueues = queueRepository.getLatestQueue()
                 if (responseQueues.isSuccess){
-                    _latestQueue.postValue(responseQueues.getOrNull()?.data)
+                    _latestQueue.postValue(responseQueues.getOrNull()
+                        ?.let { Resource.Success(it.data) })
                     Log.d("API_RESPONSE", "Queues fetched successfully: ${responseQueues.getOrNull()?.data}")
                 } else {
                     _errorMessageLatestQueue.postValue("An error occurred while fetching queues. Please try again.")
                     Log.e("API_ERROR", "Queue fetch failed: ${responseQueues.exceptionOrNull()}")
+                    _latestQueue.postValue(Resource.Error("An error occurred while fetching queues. Please try again.", null))
                 }
             } catch (e: ConnectException) {
                 _errorMessageLatestQueue.postValue("Unable to connect to the server. Please check your internet connection.")
                 Log.e("API_ERROR", "Network error: ${e.message}")
+                _latestQueue.postValue(Resource.Error("Unable to connect to the server. Please check your internet connection.", null))
             } catch (e: Exception){
                 _errorMessageLatestQueue.postValue("An error occurred while fetching queues. Please try again.")
                 Log.e("API_ERROR", "Queue Error: ${e.message}", e)
+                _latestQueue.postValue(Resource.Error("\"An error occurred while fetching queues. Please try again. ", null))
             }
         }
     }
