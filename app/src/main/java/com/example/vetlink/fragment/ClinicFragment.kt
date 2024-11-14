@@ -27,6 +27,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView.LayoutManager
 import com.example.vetlink.LocationPermissionHelper
 import com.example.vetlink.R
+import com.example.vetlink.Resource
 import com.example.vetlink.activity.MenuActivity
 import com.example.vetlink.adapter.ClinicList
 import com.example.vetlink.adapter.ClinicListAdapter
@@ -139,16 +140,29 @@ class ClinicFragment : Fragment(), RecyclerViewClickListener<ClinicList>{
     }
 
     private fun setupObservers(){
-        sharedMainActivityViewModel.veteriners.observe(viewLifecycleOwner) { veteriners ->
+        sharedMainActivityViewModel.veteriners.observe(viewLifecycleOwner) { resource ->
 
-            allClinicList.clear()
-            veteriners?.forEach{ veteriner ->
-                val openTimeFormatted = outputFormat.format(inputFormat.parse(veteriner.open_time)!!)
-                val closeTimeFormatted = outputFormat.format(inputFormat.parse(veteriner.close_time)!!)
-                allClinicList.add(ClinicList(veteriner.id,veteriner.clinic_image, veteriner.clinic_name, veteriner.city, "Buka | $openTimeFormatted - $closeTimeFormatted"))
+            when(resource){
+                is Resource.Loading -> {
+
+                }
+                is Resource.Success -> {
+                    if (resource.data != null){
+                        allClinicList.clear()
+                        resource.data?.forEach{ veteriner ->
+                            val openTimeFormatted = outputFormat.format(inputFormat.parse(veteriner.open_time)!!)
+                            val closeTimeFormatted = outputFormat.format(inputFormat.parse(veteriner.close_time)!!)
+                            allClinicList.add(ClinicList(veteriner.id,veteriner.clinic_image, veteriner.clinic_name, veteriner.city, "Buka | $openTimeFormatted - $closeTimeFormatted"))
+                        }
+
+                        clinicList.addAll(allClinicList)
+                    }
+                }
+                is Resource.Error -> {
+
+                }
             }
 
-            clinicList.addAll(allClinicList)
         }
     }
 

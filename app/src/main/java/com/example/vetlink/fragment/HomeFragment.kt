@@ -143,26 +143,43 @@ class HomeFragment : Fragment(), RecyclerViewClickListener<ClinicList> {
 
         }
 
-        sharedMainActivityViewModel.latestQueue.observe(viewLifecycleOwner){ latestQueue ->
+        sharedMainActivityViewModel.latestQueue.observe(viewLifecycleOwner){ resource ->
             with(binding){
-                if (latestQueue != null){
-                    tvClinicNameHistory.text = latestQueue.clinic_name
-                    if (latestQueue.clinic_image != null){
-                        Picasso.get().load(latestQueue.clinic_image).resize(150, 150).centerCrop().into(binding.ivClinicHistory)
-                    }else{
-                        binding.ivClinicHistory.setImageResource(R.drawable.img_rspets)
-                    }
-                    tvClinicLocationHistory.text = latestQueue.city
-                } else {
-                    Log.d("Queue Latest : ", "Queue is null")
-                    layoutVisitHistory.visibility = View.GONE
-                    layoutVisitHistoryNull.visibility = View.VISIBLE
-                }
-                // button return visit
 
-//                btnReturnVisit.setOnClickListener{
-//
-//                }
+                when(resource) {
+                    is Resource.Loading -> {
+                        binding.shimmerVisitHistory.startShimmer()
+                    }
+                    is Resource.Success -> {
+                        showVisitHistory()
+                        if (resource.data != null){
+                            layoutHomeVisitHistory.tvClinicNameHistory.text = resource.data.clinic_name
+                            if (resource.data.clinic_image != null){
+                                Picasso.get().load(resource.data.clinic_image).resize(150, 150).centerCrop().into(binding.layoutHomeVisitHistory.ivClinicHistory)
+                            }else{
+                                binding.layoutHomeVisitHistory.ivClinicHistory.setImageResource(R.drawable.img_rspets)
+                            }
+                            layoutHomeVisitHistory.tvClinicLocationHistory.text = resource.data.city
+                        } else {
+                            Log.d("Queue Latest : ", "Queue is null")
+                            layoutVisitHistory.visibility = View.GONE
+                            layoutVisitHistoryNull.visibility = View.VISIBLE
+                        }
+                        // button return visit
+
+                        // btnReturnVisit.setOnClickListener{
+                        //
+                        // }
+                    }
+                    is Resource.Error -> {
+                        Log.d("QueueObserver", "Error loading data: ${resource.message}")
+                        Toast.makeText(requireContext(), "Failed to load visit history", Toast.LENGTH_SHORT).show()
+                        binding.shimmerLayout.hideShimmer()
+                        layoutVisitHistory.visibility = View.GONE
+                        layoutVisitHistoryNull.visibility = View.VISIBLE
+                    }
+                }
+
 
             }
         }
@@ -210,21 +227,36 @@ class HomeFragment : Fragment(), RecyclerViewClickListener<ClinicList> {
         }
 
         // veteriner
-        sharedMainActivityViewModel.veteriners.observe(viewLifecycleOwner) { veteriners ->
+        sharedMainActivityViewModel.veteriners.observe(viewLifecycleOwner) { resource ->
 
-            if(veteriners != null){
-                veteriners?.take(5)?.forEach{ veteriner ->
-
-                    val openTimeFormatted = outputFormat.format(inputFormat.parse(veteriner.open_time)!!)
-                    val closeTimeFormatted = outputFormat.format(inputFormat.parse(veteriner.close_time)!!)
-                    allClinicList.add(ClinicList(veteriner.id, veteriner.clinic_image, veteriner.clinic_name, veteriner.city, "Buka | $openTimeFormatted - $closeTimeFormatted"))
+            when (resource){
+                is Resource.Loading -> {
+                    binding.shimmerClinic.startShimmer()
                 }
-                clinicList.clear()
-                clinicList.addAll(allClinicList)
-                clinicListAdapter.notifyDataSetChanged()
+                is Resource.Success -> {
+                    showClinic()
+                    if(resource.data != null){
+                        resource.data?.take(5)?.forEach{ veteriner ->
 
-                getLastLocation()
+                            val openTimeFormatted = outputFormat.format(inputFormat.parse(veteriner.open_time)!!)
+                            val closeTimeFormatted = outputFormat.format(inputFormat.parse(veteriner.close_time)!!)
+                            allClinicList.add(ClinicList(veteriner.id, veteriner.clinic_image, veteriner.clinic_name, veteriner.city, "Buka | $openTimeFormatted - $closeTimeFormatted"))
+                        }
+                        clinicList.clear()
+                        clinicList.addAll(allClinicList)
+                        clinicListAdapter.notifyDataSetChanged()
+
+                        getLastLocation()
+                    }
+                }
+                is Resource.Error -> {
+                    Log.d("QueueObserver", "Error loading data: ${resource.message}")
+                    Toast.makeText(requireContext(), "Failed to load clinic", Toast.LENGTH_SHORT).show()
+                    binding.shimmerLayout.hideShimmer()
+                }
             }
+
+
         }
 
         sharedMainActivityViewModel.forums.observe(viewLifecycleOwner) { forums ->
@@ -377,6 +409,22 @@ class HomeFragment : Fragment(), RecyclerViewClickListener<ClinicList> {
             visibility = View.GONE
         }
         binding.layoutHomeToolbar.root.visibility = View.VISIBLE
+    }
+
+    private fun showVisitHistory(){
+        binding.shimmerVisitHistory.apply {
+            stopShimmer()
+            visibility = View.GONE
+        }
+        binding.layoutHomeVisitHistory.root.visibility = View.VISIBLE
+    }
+
+    private fun showClinic(){
+        binding.shimmerClinic.apply {
+            stopShimmer()
+            visibility = View.GONE
+        }
+        binding.rvClinicList.visibility = View.VISIBLE
     }
 
     override fun onItemClicke(view: View, item: ClinicList) {
