@@ -4,7 +4,6 @@ import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -15,19 +14,15 @@ import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.vetlink.R
-import com.example.vetlink.adapter.CommentList
 import com.example.vetlink.adapter.CommentListAdapter
 import com.example.vetlink.adapter.ForumPostList
 import com.example.vetlink.adapter.ForumPostListAdapter
 import com.example.vetlink.adapter.RecyclerViewClickListener
 import com.example.vetlink.data.model.comment.Comment
 import com.example.vetlink.data.model.forums.Forum
-import com.example.vetlink.data.model.user.User
-import com.example.vetlink.data.model.user.UserBasic
 import com.example.vetlink.databinding.FragmentForumPublicBinding
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import org.w3c.dom.Text
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -104,13 +99,13 @@ class ForumPublicFragment: Fragment(), RecyclerViewClickListener<ForumPostList> 
 
         val layoutId = when(view.tag){
             "postMenu" -> {
-                R.layout.layout_bottom_sheet_post_dialog
+                R.layout.dialog_bottom_sheet_post
             }
             "postComment" -> {
-                R.layout.layout_bottom_sheet_comment_dialog
+                R.layout.dialog_bottom_sheet_comment
             }
 
-            else -> {R.layout.layout_bottom_sheet_post_dialog}
+            else -> {R.layout.dialog_bottom_sheet_post}
         }
 
         val viewLayout = layoutInflater.inflate(layoutId, null, false)
@@ -159,7 +154,7 @@ class ForumPublicFragment: Fragment(), RecyclerViewClickListener<ForumPostList> 
         val dialog = Dialog(requireContext())
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setCancelable(false)
-        dialog.setContentView(R.layout.layout_center_logout_dialog)
+        dialog.setContentView(R.layout.dialog_center_logout)
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
         val tvDialogTitle: TextView = dialog.findViewById(R.id.tvDialogHeader)

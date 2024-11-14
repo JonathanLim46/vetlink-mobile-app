@@ -1,12 +1,9 @@
 package com.example.vetlink.fragment
 
-import android.annotation.SuppressLint
 import android.app.Dialog
-import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -14,8 +11,6 @@ import android.view.ViewGroup
 import android.view.Window
 import android.widget.Button
 import android.widget.TextView
-import androidx.core.content.ContextCompat
-import androidx.core.graphics.drawable.toDrawable
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.vetlink.R
@@ -188,13 +183,13 @@ class ForumPrivateFragment() : Fragment(), RecyclerViewClickListener<ForumPostLi
 
         val layoutId = when(view.tag){
             "postMenu" -> {
-                R.layout.layout_bottom_sheet_post_dialog
+                R.layout.dialog_bottom_sheet_post
             }
             "postComment" -> {
-                R.layout.layout_bottom_sheet_comment_dialog
+                R.layout.dialog_bottom_sheet_comment
             }
 
-            else -> {R.layout.layout_bottom_sheet_post_dialog}
+            else -> {R.layout.dialog_bottom_sheet_post}
         }
 
         val viewLayout = layoutInflater.inflate(layoutId, null, false)
@@ -237,7 +232,7 @@ class ForumPrivateFragment() : Fragment(), RecyclerViewClickListener<ForumPostLi
         val dialog = Dialog(requireContext())
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setCancelable(false)
-        dialog.setContentView(R.layout.layout_center_logout_dialog)
+        dialog.setContentView(R.layout.dialog_center_logout)
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
         val tvDialogTitle: TextView = dialog.findViewById(R.id.tvDialogHeader)
