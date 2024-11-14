@@ -6,7 +6,6 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -30,7 +29,6 @@ import com.example.vetlink.databinding.FragmentMyPetsBinding
 import com.example.vetlink.viewModel.MenuActivityViewModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import org.w3c.dom.Text
 
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
@@ -73,7 +71,7 @@ class MyPetsFragment : Fragment(),
     @SuppressLint("MissingInflatedId", "UseCompatLoadingForDrawables")
     override fun onItemClicke(view: View, item: PetsList) {
         val dialog = activity?.let { BottomSheetDialog(it) }
-        val viewLayout = layoutInflater.inflate(R.layout.layout_bottom_sheet_post_dialog, null, false)
+        val viewLayout = layoutInflater.inflate(R.layout.dialog_bottom_sheet_post, null, false)
 
         val firstLine = viewLayout.findViewById<TextView>(R.id.tvFirstLineDialog)
         val lineDone = viewLayout.findViewById<View>(R.id.lineDone)
@@ -148,7 +146,7 @@ class MyPetsFragment : Fragment(),
 
     private fun showBottomSheetFilter() {
         val dialog = activity?.let { BottomSheetDialog(it) }
-        val viewFilter = layoutInflater.inflate(R.layout.layout_bottom_sheet_filter_dialog, null, false)
+        val viewFilter = layoutInflater.inflate(R.layout.dialog_bottom_sheet_filter, null, false)
 
         val recyclerView = viewFilter.findViewById<RecyclerView>(R.id.rvFilterList)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
@@ -253,7 +251,7 @@ class MyPetsFragment : Fragment(),
         val dialog = Dialog(requireContext())
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setCancelable(false)
-        dialog.setContentView(R.layout.layout_center_logout_dialog)
+        dialog.setContentView(R.layout.dialog_center_logout)
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
         val tvDialogTitle: TextView = dialog.findViewById(R.id.tvDialogHeader)

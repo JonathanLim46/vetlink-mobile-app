@@ -345,7 +345,7 @@ class PetDetailsFragment : Fragment() {
         onSelect: (Any) -> Unit
     ) {
         val dialog = activity?.let { BottomSheetDialog(it) }
-        val view = layoutInflater.inflate(R.layout.layout_bottom_sheet_pet_dialog, null, false)
+        val view = layoutInflater.inflate(R.layout.dialog_bottom_sheet_pet, null, false)
         val headerDialog = view.findViewById<TextView>(R.id.tvDialog)
         val recyclerView = view.findViewById<RecyclerView>(R.id.rvPetCategoryList)
         headerDialog.text = title

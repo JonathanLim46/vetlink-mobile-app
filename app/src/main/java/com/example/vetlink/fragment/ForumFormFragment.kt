@@ -1,6 +1,5 @@
 package com.example.vetlink.fragment
 
-import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -15,13 +14,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.vetlink.R
 import com.example.vetlink.activity.SignupActivity
-import com.example.vetlink.activity.SignupActivity.Companion.REQUEST_CODE_IMAGE_PICKER
 import com.example.vetlink.adapter.PetForumSelectAdapter
 import com.example.vetlink.adapter.RecyclerViewClickListener
 import com.example.vetlink.data.model.pets.Pet
@@ -206,7 +203,7 @@ class ForumFormFragment : Fragment(), RecyclerViewClickListener<Pet> {
     private fun selectPetsDialog() {
         val activityContext = activity ?: return
         dialog = BottomSheetDialog(activityContext)
-        val view = layoutInflater.inflate(R.layout.layout_bottom_sheet_select_pet_dialog, null, false)
+        val view = layoutInflater.inflate(R.layout.dialog_bottom_sheet_select_pet, null, false)
 
         val recyclerView = view.findViewById<RecyclerView>(R.id.rvSelectPetForum)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())

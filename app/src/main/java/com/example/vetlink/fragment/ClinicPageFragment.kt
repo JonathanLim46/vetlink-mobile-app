@@ -1,17 +1,14 @@
 package com.example.vetlink.fragment
 
 import android.app.DatePickerDialog
-import android.app.Dialog
 import android.content.DialogInterface
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
@@ -29,7 +26,6 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.squareup.picasso.Picasso
 import java.text.SimpleDateFormat
 import java.util.Calendar
-import java.util.Date
 import java.util.Locale
 
 class ClinicPageFragment : Fragment() {
@@ -80,7 +76,7 @@ class ClinicPageFragment : Fragment() {
         sharedMenuActivityViewModel.addQueueResponse.observe(viewLifecycleOwner){ response ->
             if(response == 201){
                 val dialog = BottomSheetDialog(requireContext())
-                val viewLayout = layoutInflater.inflate(R.layout.layout_bottom_sheet_success_dialog, null, false)
+                val viewLayout = layoutInflater.inflate(R.layout.dialog_bottom_sheet_success, null, false)
                 dialog.setContentView(viewLayout)
                 dialog.setCancelable(true)
 
@@ -180,7 +176,7 @@ class ClinicPageFragment : Fragment() {
     private fun selectPetsDialog() {
         // Initialize dialog
         val dialog = BottomSheetDialog(requireContext())
-        val view = layoutInflater.inflate(R.layout.layout_bottom_sheet_select_pet_dialog, null, false)
+        val view = layoutInflater.inflate(R.layout.dialog_bottom_sheet_select_pet, null, false)
 
         val rvSelectPet = view.findViewById<RecyclerView>(R.id.rvSelectPetForum)
         rvSelectPet.layoutManager = LinearLayoutManager(requireContext())

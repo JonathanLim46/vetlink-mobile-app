@@ -51,33 +51,34 @@ class ProfileFragment : Fragment() {
 
             when(resource) {
                 is Resource.Loading -> {
-
+                    binding.shimmerProfile.startShimmer()
                 }
                 is Resource.Success -> {
                     if (resource.data != null) {
-                        binding.tvUsernameProfile.text = resource.data.name
+                        showProfile()
+                        binding.layoutProfile.tvUsernameProfile.text = resource.data.name
                         val email = resource.data.email ?: "Email not available"
 
                         val spannableEmail = SpannableString(email).apply {
                             setSpan(UnderlineSpan(), 0, length, 0)
                         }
-                        binding.tvEmailProfile.text = spannableEmail
+                        binding.layoutProfile.tvEmailProfile.text = spannableEmail
                         if (resource.data.photo != null) {
-                            Picasso.get().load(resource.data.photo).resize(50, 50).centerCrop().into(binding.ivPhotoProfile)
+                            Picasso.get().load(resource.data.photo).resize(50, 50).centerCrop().into(binding.layoutProfile.ivPhotoProfile)
                         }else{
-                            binding.ivPhotoProfile.setImageResource(R.drawable.img_default_profile)
+                            binding.layoutProfile.ivPhotoProfile.setImageResource(R.drawable.img_default_profile)
                         }
 
                     } else {
-                        binding.tvUsernameProfile.text = "User"
-                        binding.tvEmailProfile.text = "No email available"
+                        binding.layoutProfile.tvUsernameProfile.text = "User"
+                        binding.layoutProfile.tvEmailProfile.text = "No email available"
                     }
                 }
                 is Resource.Error -> {
                     Log.d("QueueObserver", "Error loading data: ${resource.message}")
                     Toast.makeText(requireContext(), "Failed to load profile, please try again.", Toast.LENGTH_SHORT).show()
-                    binding.tvUsernameProfile.text = "User"
-                    binding.tvEmailProfile.text = "No email available"
+                    binding.layoutProfile.tvUsernameProfile.text = "User"
+                    binding.layoutProfile.tvEmailProfile.text = "No email available"
                 }
             }
 
@@ -137,7 +138,7 @@ class ProfileFragment : Fragment() {
         val dialog = Dialog(requireContext())
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setCancelable(false)
-        dialog.setContentView(R.layout.layout_center_logout_dialog)
+        dialog.setContentView(R.layout.dialog_center_logout)
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
         val tvDialogDescription: TextView = dialog.findViewById(R.id.tvDialogDescription)
@@ -155,5 +156,13 @@ class ProfileFragment : Fragment() {
         }
 
         dialog.show()
+    }
+
+    private fun showProfile(){
+        binding.shimmerProfile.apply {
+            stopShimmer()
+            visibility = View.GONE
+        }
+        binding.layoutProfile.root.visibility = View.VISIBLE
     }
 }

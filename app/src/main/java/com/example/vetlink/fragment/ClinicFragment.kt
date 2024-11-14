@@ -144,9 +144,10 @@ class ClinicFragment : Fragment(), RecyclerViewClickListener<ClinicList>{
 
             when(resource){
                 is Resource.Loading -> {
-
+                    binding.shimmerClinicMain.startShimmer()
                 }
                 is Resource.Success -> {
+                    showClinic()
                     if (resource.data != null){
                         allClinicList.clear()
                         resource.data?.forEach{ veteriner ->
@@ -159,7 +160,8 @@ class ClinicFragment : Fragment(), RecyclerViewClickListener<ClinicList>{
                     }
                 }
                 is Resource.Error -> {
-
+                    Log.d("QueueObserver", "Error loading data: ${resource.message}")
+                    Toast.makeText(requireContext(), "Failed to load profile, please try again.", Toast.LENGTH_SHORT).show()
                 }
             }
 
@@ -274,6 +276,14 @@ class ClinicFragment : Fragment(), RecyclerViewClickListener<ClinicList>{
                 Toast.makeText(requireContext(), "Location not available", Toast.LENGTH_SHORT).show()
             }
         }
+    }
+
+    private fun showClinic(){
+        binding.shimmerClinicMain.apply {
+            stopShimmer()
+            visibility = View.GONE
+        }
+        binding.rvClinicPage.visibility = View.VISIBLE
     }
 
     companion object {
