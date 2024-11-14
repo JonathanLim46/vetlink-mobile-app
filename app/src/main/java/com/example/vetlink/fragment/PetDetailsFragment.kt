@@ -26,7 +26,6 @@ import com.example.vetlink.adapter.PetTypeListAdapter
 import com.example.vetlink.data.model.pets.PetBreed
 import com.example.vetlink.data.model.pets.PetType
 import com.example.vetlink.databinding.FragmentPetDetailsBinding
-import com.example.vetlink.viewModel.MenuActivityViewModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import okhttp3.MultipartBody

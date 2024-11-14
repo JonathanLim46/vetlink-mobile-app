@@ -24,7 +24,6 @@ import com.example.vetlink.activity.MenuActivity
 import com.example.vetlink.adapter.PetsSelectList
 import com.example.vetlink.adapter.PetsSelectListAdapter
 import com.example.vetlink.databinding.FragmentClinicPageBinding
-import com.example.vetlink.viewModel.MenuActivityViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.squareup.picasso.Picasso
 import java.text.SimpleDateFormat

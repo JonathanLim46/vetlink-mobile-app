@@ -16,7 +16,6 @@ import com.example.vetlink.data.model.user.User
 import com.example.vetlink.databinding.FragmentAccountBinding
 import com.example.vetlink.helper.Session
 import com.example.vetlink.helper.SessionManager
-import com.example.vetlink.viewModel.MenuActivityViewModel
 import com.squareup.picasso.Picasso
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody

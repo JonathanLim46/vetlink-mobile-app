@@ -1,18 +1,22 @@
 package com.example.vetlink.fragment
 
+import android.app.Dialog
 import android.content.res.ColorStateList
 import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
+import android.widget.Button
+import android.widget.TextView
 import androidx.fragment.app.activityViewModels
 import com.example.vetlink.R
 import com.example.vetlink.databinding.ActivityMenuBinding
 import com.example.vetlink.databinding.FragmentChangePasswordBinding
-import com.example.vetlink.viewModel.MenuActivityViewModel
 import com.squareup.picasso.Picasso
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody
@@ -102,6 +106,26 @@ class ChangePasswordFragment : Fragment() {
 
                 sharedMenuActivityViewModel.updateProfile(params, photo = null)
             }
+        }
+    }
+
+    private fun alertDialog(){
+        val dialog = Dialog(requireContext())
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setCancelable(false)
+        dialog.setContentView(R.layout.layout_center_logout_dialog)
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+        val tvDialogDescription: TextView = dialog.findViewById(R.id.tvDialogDescription)
+        val btnYes: Button = dialog.findViewById(R.id.btnDialogLogout)
+        val btnNo: Button = dialog.findViewById(R.id.btnDialogCancel)
+
+        tvDialogDescription.text = "Are you sure you want to change your password? Your account will be automatically logged out and the application will ask you to log in again."
+        btnYes.text = "Yes"
+        btnNo.text = "No"
+
+        btnYes.setOnClickListener{
+
         }
     }
 
