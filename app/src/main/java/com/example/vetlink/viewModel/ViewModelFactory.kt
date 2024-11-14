@@ -32,7 +32,7 @@ class ViewModelFactory(
                 ProfileFragmentViewModel(authRepository) as T
             }
             modelClass.isAssignableFrom(MenuActivityViewModel::class.java) -> {
-                MenuActivityViewModel(authRepository, petRepository, queueRepository, veterinerRepository) as T
+                MenuActivityViewModel(authRepository, petRepository, queueRepository, veterinerRepository, forumRepository) as T
             }
             else -> throw IllegalArgumentException("Unknown ViewModel class")
         }

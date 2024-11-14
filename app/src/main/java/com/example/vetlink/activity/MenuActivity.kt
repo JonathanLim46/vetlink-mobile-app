@@ -25,6 +25,7 @@ import com.example.vetlink.fragment.PetDetailsFragment
 import com.example.vetlink.fragment.ScheduleFragment
 import com.example.vetlink.helper.SessionManager
 import com.example.vetlink.repository.AuthRepository
+import com.example.vetlink.repository.ForumRepository
 import com.example.vetlink.repository.PetRepository
 import com.example.vetlink.repository.QueueRepository
 import com.example.vetlink.repository.VeterinerRepository
@@ -39,7 +40,7 @@ class MenuActivity : AppCompatActivity() {
     private lateinit var session: SessionManager
 
     private val menuActivityViewModel: MenuActivityViewModel by viewModels{
-        ViewModelFactory(AuthRepository(session), PetRepository(session), QueueRepository(session), VeterinerRepository(session))
+        ViewModelFactory(AuthRepository(session), PetRepository(session), QueueRepository(session), VeterinerRepository(session), ForumRepository(session))
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -113,6 +114,7 @@ class MenuActivity : AppCompatActivity() {
             menuActivityViewModel.getPets()
             replaceFragmentWithOutIntance(ClinicPageFragment())
         } else if(menuTitle == "Postingan Baru"){
+            menuActivityViewModel.getPets()
             replaceFragmentWithOutIntance(ForumFormFragment())
         } else if(menuTitle == "Guide App"){
             val panduanFragment = FaqCategoryFragment.newInstance("Guide App")
