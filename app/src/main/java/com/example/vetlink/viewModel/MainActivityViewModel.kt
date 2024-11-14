@@ -37,6 +37,12 @@ class MainActivityViewModel(
     private val _errorMessageUser = MutableLiveData<String>()
     val errorMessageUser: LiveData<String> get() = _errorMessageUser
 
+    private val _getUserHome = MutableLiveData<Resource<User>>()
+    val getUserHome: LiveData<Resource<User>> get() = _getUserHome
+
+    private val _errorMessageUserHome = MutableLiveData<String>()
+    val errorMessageUserHome: LiveData<String> get() = _errorMessageUserHome
+
 //    private val _pets = MutableLiveData<List<Pet>>()
 //    val pets: LiveData<List<Pet>> get() = _pets
 
@@ -72,15 +78,20 @@ class MainActivityViewModel(
 
     fun fetchUser() {
         viewModelScope.launch {
+
+            _getUserHome.postValue(Resource.Loading())
+
             try {
                 val responseUser = authRepository.getProfile()
-                _user.postValue(responseUser.data)
+                _getUserHome.postValue(Resource.Success(responseUser.data))
             } catch (e: ConnectException) {
-                _errorMessageUser.postValue("Unable to connect to the server. Please check your internet connection.")
+                _errorMessageUserHome.postValue("Unable to connect to the server. Please check your internet connection.")
                 Log.e("API_ERROR", "Network error: ${e.message}")
+                _getUserHome.postValue(Resource.Error("An error occurred while fetching queues.", null))
             } catch (e: Exception) {
-                _errorMessageUser.postValue("An error occurred. Please try again.")
+                _errorMessageUserHome.postValue("An error occurred. Please try again.")
                  Log.e("API_ERROR", "Fetch user error: ${e.message}")
+                _getUserHome.postValue(Resource.Error("Fetch user error: ${e.message}", null))
             }
         }
     }

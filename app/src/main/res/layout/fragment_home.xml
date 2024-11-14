@@ -6,6 +6,12 @@
     android:layout_height="match_parent"
     tools:context=".fragment.HomeFragment">
 
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="layout_home_toolbar.xml" />
+
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -64,36 +70,6 @@
                                 app:layout_constraintEnd_toEndOf="parent"
                                 >
 
-                                <TextView
-                                    android:id="@+id/tvVisit"
-                                    android:layout_width="180dp"
-                                    android:layout_height="wrap_content"
-                                    android:textSize="14sp"
-                                    app:layout_constraintStart_toStartOf="parent"
-                                    app:layout_constraintTop_toTopOf="parent" />
-
-                                <TextView
-                                    android:id="@+id/tvPetName"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="5dp"
-                                    android:drawablePadding="5dp"
-                                    android:fontFamily="sans-serif-light"
-                                    android:textSize="11sp"
-                                    app:layout_constraintStart_toStartOf="parent"
-                                    app:layout_constraintTop_toBottomOf="@+id/tvVisit" />
-
-                                <TextView
-                                    android:id="@+id/tvClinicName"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="5dp"
-                                    android:drawablePadding="5dp"
-                                    android:fontFamily="sans-serif-light"
-                                    android:textSize="11sp"
-                                    app:layout_constraintStart_toStartOf="parent"
-                                    app:layout_constraintTop_toBottomOf="@id/tvPetName" />
-
                             </androidx.constraintlayout.widget.ConstraintLayout>
 
                         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -115,53 +91,16 @@
                 android:background="@color/activeIcon"
                 app:layout_collapseMode="pin">
 
-                <androidx.constraintlayout.widget.ConstraintLayout
+                <com.facebook.shimmer.ShimmerFrameLayout
+                    android:id="@+id/shimmerToolBar"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="wrap_content">
 
-                    <de.hdodenhof.circleimageview.CircleImageView
-                        android:id="@+id/ivPhotoHome"
-                        android:layout_width="62dp"
-                        android:layout_height="62dp"
-                        android:layout_marginStart="15dp"
-                        android:layout_marginTop="20dp"
-                        android:src="@drawable/img_tontawan"
-                        app:civ_border_color="@color/white"
-                        app:civ_border_width="1dp"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                    <include layout="@layout/layout_home_toolbar_shimmer" />
 
-                    <TextView
-                        android:id="@+id/tvNameHome"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="15dp"
-                        android:text="@string/user_name"
-                        android:textColor="@color/white"
-                        android:textSize="18sp"
-                        app:layout_constraintStart_toEndOf="@+id/ivPhotoHome"
-                        app:layout_constraintTop_toTopOf="@+id/ivPhotoHome" />
+                </com.facebook.shimmer.ShimmerFrameLayout>
 
-                    <TextView
-                        android:id="@+id/tvStatus"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="sans-serif-light"
-                        android:text="Pet Enthusiast"
-                        android:textColor="@color/white"
-                        android:textSize="12sp"
-                        app:layout_constraintStart_toStartOf="@+id/tvNameHome"
-                        app:layout_constraintTop_toBottomOf="@+id/tvNameHome" />
-
-<!--                    <ImageView-->
-<!--                        android:layout_width="wrap_content"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:layout_marginEnd="25dp"-->
-<!--                        android:src="@drawable/icon_notif"-->
-<!--                        app:layout_constraintEnd_toEndOf="parent"-->
-<!--                        app:layout_constraintTop_toTopOf="@+id/tvNameHome" />-->
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                <include android:id="@+id/layoutHomeToolbar" layout="@layout/layout_home_toolbar" android:visibility="gone"/>
 
             </androidx.appcompat.widget.Toolbar>
 
