@@ -86,6 +86,9 @@ class MenuActivityViewModel(
 
     val addQueueResponse = MutableLiveData<Int>()
 
+    private val _logoutSuccess = MutableLiveData<Boolean>()
+    val logoutSuccess: LiveData<Boolean> = _logoutSuccess
+
     fun fetchProfile() {
         viewModelScope.launch {
             try {
@@ -318,6 +321,13 @@ class MenuActivityViewModel(
             }
         }
 
+    }
+
+    fun performLogout(){
+        viewModelScope.launch {
+            val responseLogout = authRepository.logout()
+            _logoutSuccess.postValue(responseLogout)
+        }
     }
 
 }

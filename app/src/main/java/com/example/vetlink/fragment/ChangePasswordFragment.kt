@@ -1,6 +1,7 @@
 package com.example.vetlink.fragment
 
 import android.app.Dialog
+import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -13,8 +14,10 @@ import android.view.ViewGroup
 import android.view.Window
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import com.example.vetlink.R
+import com.example.vetlink.activity.LoginActivity
 import com.example.vetlink.databinding.ActivityMenuBinding
 import com.example.vetlink.databinding.FragmentChangePasswordBinding
 import com.example.vetlink.viewModel.MenuActivityViewModel
@@ -41,6 +44,8 @@ class ChangePasswordFragment : Fragment() {
     private lateinit var binding: FragmentChangePasswordBinding
     private val sharedMenuActivityViewModel: MenuActivityViewModel by activityViewModels()
 
+    private val params = mutableMapOf<String, RequestBody>()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,8 +64,20 @@ class ChangePasswordFragment : Fragment() {
         binding = FragmentChangePasswordBinding.inflate(inflater, container, false)
 
         initView()
+        setupObservers()
 
         return binding.root
+    }
+
+    private fun setupObservers(){
+        sharedMenuActivityViewModel.logoutSuccess.observe(viewLifecycleOwner) { success ->
+            if (success){
+                startActivity(Intent(activity, LoginActivity::class.java))
+                activity?.finish()
+            }else{
+                Toast.makeText(requireContext(), "Logout failed. Try again later.", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
     private fun initView(){
@@ -72,7 +89,6 @@ class ChangePasswordFragment : Fragment() {
                 validateNewPassword()
             }
         }
-
     }
 
     private fun validateNewPassword(){
@@ -98,14 +114,11 @@ class ChangePasswordFragment : Fragment() {
             }
 
             if (updates.isNotEmpty()) {
-                val params = mutableMapOf<String, RequestBody>()
-
                 updates.forEach { (key, value) ->
                     val requestBody = value.toString().toRequestBody("text/plain".toMediaTypeOrNull())
                     params[key] = requestBody
                 }
-
-                sharedMenuActivityViewModel.updateUser(params, photo = null)
+                alertDialog()
             }
         }
     }
@@ -126,8 +139,16 @@ class ChangePasswordFragment : Fragment() {
         btnNo.text = "No"
 
         btnYes.setOnClickListener{
-
+            sharedMenuActivityViewModel.updateUser(params, photo = null)
+            sharedMenuActivityViewModel.performLogout()
+            dialog.dismiss()
         }
+
+        btnNo.setOnClickListener{
+            dialog.dismiss()
+        }
+
+        dialog.show()
     }
 
     companion object {
