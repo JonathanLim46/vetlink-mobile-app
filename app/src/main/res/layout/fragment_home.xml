@@ -53,59 +53,16 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent">
 
-                            <!--  BOX DATE SHIMMER -->
-                            <androidx.constraintlayout.widget.ConstraintLayout
-                                android:id="@+id/layoutDate"
-                                android:layout_width="70dp"
-                                android:layout_height="70dp"
-                                android:layout_marginStart="20dp"
-                                android:layout_marginEnd="30dp"
-                                android:background="@drawable/outline_active_shimmer"
-                                app:layout_constraintHorizontal_bias="0"
-                                app:layout_constraintTop_toTopOf="parent"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintBottom_toBottomOf="parent"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                >
-
-                                <TextView
-                                    android:id="@+id/tvTanggal"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:textSize="15sp"
-                                    android:textStyle="bold"
-                                    android:textAlignment="center"
-                                    app:layout_constraintVertical_bias="0.3"
-                                    app:layout_constraintStart_toStartOf="parent"
-                                    app:layout_constraintEnd_toEndOf="parent"
-                                    app:layout_constraintTop_toTopOf="parent"
-                                    app:layout_constraintBottom_toBottomOf="parent"
-                                    />
-
-                                <TextView
-                                    android:id="@+id/tvBulan"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:textSize="15sp"
-                                    android:textStyle="bold"
-                                    android:textAlignment="center"
-                                    app:layout_constraintVertical_bias="0"
-                                    app:layout_constraintStart_toStartOf="parent"
-                                    app:layout_constraintEnd_toEndOf="parent"
-                                    app:layout_constraintTop_toBottomOf="@+id/tvTanggal"
-                                    />
-
-                            </androidx.constraintlayout.widget.ConstraintLayout>
-
                             <!--  Description Visit Shimmer -->
                             <androidx.constraintlayout.widget.ConstraintLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="60dp"
-                                android:layout_marginStart="15dp"
-                                android:background="@color/shimmerColor"
-                                app:layout_constraintBottom_toBottomOf="@+id/layoutDate"
-                                app:layout_constraintStart_toEndOf="@+id/layoutDate"
-                                app:layout_constraintTop_toTopOf="@+id/layoutDate">
+                                android:layout_width="match_parent"
+                                android:layout_height="70dp"
+                                android:layout_margin="15dp"
+                                android:background="@drawable/layout_shimmer_background"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                >
 
                                 <TextView
                                     android:id="@+id/tvVisit"
