@@ -130,10 +130,12 @@ class ChangePasswordFragment : Fragment() {
         dialog.setContentView(R.layout.layout_center_logout_dialog)
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
+        val title: TextView = dialog.findViewById(R.id.tvDialogHeader)
         val tvDialogDescription: TextView = dialog.findViewById(R.id.tvDialogDescription)
         val btnYes: Button = dialog.findViewById(R.id.btnDialogLogout)
         val btnNo: Button = dialog.findViewById(R.id.btnDialogCancel)
 
+        title.text = "Change Your Password"
         tvDialogDescription.text = "Are you sure you want to change your password? Your account will be automatically logged out and the application will ask you to log in again."
         btnYes.text = "Yes"
         btnNo.text = "No"

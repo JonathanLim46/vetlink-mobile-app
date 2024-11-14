@@ -18,6 +18,8 @@ import com.example.vetlink.repository.PetRepository
 import com.example.vetlink.repository.QueueRepository
 import com.example.vetlink.repository.VeterinerRepository
 import kotlinx.coroutines.launch
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import okhttp3.Response
 import java.net.ConnectException
 import kotlin.math.log
