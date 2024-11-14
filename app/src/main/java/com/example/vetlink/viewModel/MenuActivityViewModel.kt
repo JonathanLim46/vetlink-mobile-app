@@ -35,6 +35,12 @@ class MenuActivityViewModel(
     private val _errorMessageUser = MutableLiveData<String>()
     val errorMessageUser: LiveData<String> get() = _errorMessageUser
 
+    private val _updateMessageUserUpdate = MutableLiveData<String>()
+    val updateMessageUserUpdate: LiveData<String> get() = _updateMessageUserUpdate
+
+    private val _errorMessageUserUpdate = MutableLiveData<String>()
+    val errorMessageUserUpdate: LiveData<String> get() = _errorMessageUserUpdate
+
     val addPetResponse = MutableLiveData<PetAddResponse?>()
     val errorMessageAddPet = MutableLiveData<String>()
 
@@ -80,6 +86,9 @@ class MenuActivityViewModel(
 
     val addQueueResponse = MutableLiveData<Int>()
 
+    private val _logoutSuccess = MutableLiveData<Boolean>()
+    val logoutSuccess: LiveData<Boolean> = _logoutSuccess
+
     fun fetchProfile() {
         viewModelScope.launch {
             try {
@@ -91,6 +100,25 @@ class MenuActivityViewModel(
             } catch (e: Exception){
                 _errorMessageUser.postValue("An error occurred. Please try again.")
                 Log.e("API_ERROR", "Fetch user error: ${e.message}")
+            }
+        }
+    }
+
+    fun updateUser(
+        params: MutableMap<String, RequestBody>,
+        photo: MultipartBody.Part?
+    ) {
+        viewModelScope.launch {
+            try {
+                val response = authRepository?.editProfile(params, photo)
+                if (response!!.isSuccess){
+                    _updateMessageUserUpdate.postValue("Update success!")
+                }
+            }catch (e: ConnectException){
+                _errorMessageUserUpdate.postValue("Unable to connect to the server. Please check your internet connection.")
+                Log.e("API_ERROR", "Network error: ${e.message}")
+            }catch (e: Exception){
+
             }
         }
     }
@@ -293,6 +321,13 @@ class MenuActivityViewModel(
             }
         }
 
+    }
+
+    fun performLogout(){
+        viewModelScope.launch {
+            val responseLogout = authRepository.logout()
+            _logoutSuccess.postValue(responseLogout)
+        }
     }
 
 }

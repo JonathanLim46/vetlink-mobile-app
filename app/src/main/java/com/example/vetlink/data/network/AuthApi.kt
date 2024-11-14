@@ -3,6 +3,7 @@ package com.example.vetlink.data.network
 import com.example.vetlink.data.model.auth.LoginResponse
 import com.example.vetlink.data.model.auth.LogoutResponse
 import com.example.vetlink.data.model.auth.RegisterResponse
+import com.example.vetlink.data.model.pets.PetDetailsResponse
 import com.example.vetlink.data.model.user.ProfileResponse
 import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -17,6 +18,8 @@ import retrofit2.http.GET
 import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.Part
+import retrofit2.http.PartMap
+import retrofit2.http.Path
 
 interface AuthApi {
     @Multipart
@@ -40,6 +43,13 @@ interface AuthApi {
 
     @GET("profile")
     suspend fun getProfile(): ProfileResponse
+
+    @Multipart
+    @POST("profile/update")
+    suspend fun editProfile(
+        @PartMap params: Map<String, @JvmSuppressWildcards RequestBody>,
+        @Part photo: MultipartBody.Part? = null,
+    ): ProfileResponse
 
     @POST("logout")
     suspend fun logout(): Response<LogoutResponse>

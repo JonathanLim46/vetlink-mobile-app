@@ -4,6 +4,7 @@ import android.se.omapi.Session
 import com.example.vetlink.data.model.auth.LoginResponse
 import com.example.vetlink.data.model.auth.LogoutResponse
 import com.example.vetlink.data.model.auth.RegisterResponse
+import com.example.vetlink.data.model.pets.PetDetailsResponse
 import com.example.vetlink.data.model.user.ProfileResponse
 import com.example.vetlink.data.network.AuthApi
 import com.example.vetlink.data.network.RetrofitInstance
@@ -42,6 +43,18 @@ class AuthRepository(val session: SessionManager) {
 
     suspend fun getProfile(): ProfileResponse {
         return authApi.getProfile()
+    }
+
+    suspend fun editProfile(
+        params: MutableMap<String, RequestBody>,
+        photo: MultipartBody.Part?
+    ): Result<ProfileResponse>{
+        return try {
+            val response = authApi.editProfile(params, photo)
+            Result.success(response)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
     }
 
     suspend fun logout(): Boolean {
