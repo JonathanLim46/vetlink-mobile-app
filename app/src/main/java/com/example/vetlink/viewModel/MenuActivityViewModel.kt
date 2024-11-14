@@ -14,6 +14,7 @@ import com.example.vetlink.data.model.queue.Queue
 import com.example.vetlink.data.model.user.User
 import com.example.vetlink.data.model.veteriner.Veteriner
 import com.example.vetlink.repository.AuthRepository
+import com.example.vetlink.repository.ForumRepository
 import com.example.vetlink.repository.PetRepository
 import com.example.vetlink.repository.QueueRepository
 import com.example.vetlink.repository.VeterinerRepository
@@ -26,7 +27,8 @@ class MenuActivityViewModel(
     private val authRepository: AuthRepository,
     private val petRepository: PetRepository?,
     private val queueRepository: QueueRepository?,
-    private val veterinerRepository: VeterinerRepository?
+    private val veterinerRepository: VeterinerRepository?,
+    private val forumRepository: ForumRepository?
 ): ViewModel() {
 
     private val _user = MutableLiveData<User>()
@@ -79,6 +81,11 @@ class MenuActivityViewModel(
     val errorMessageVeterinerDetail: LiveData<String> get() = _errorMessageVeterinerDetail
 
     val addQueueResponse = MutableLiveData<Int>()
+
+    val messageAddForum = MutableLiveData<Int>()
+    val errorMessageAddForum = MutableLiveData<String>()
+
+    private val _errorMessageAddQueue = MutableLiveData<String>()
 
     fun addPet(
         name: String,
@@ -278,6 +285,22 @@ class MenuActivityViewModel(
             }
         }
 
+    }
+
+    fun addForum(
+        params: MutableMap<String, RequestBody>,
+        photoPart: MultipartBody.Part?
+    ){
+        viewModelScope.launch {
+            val response = forumRepository?.addForum(params, photoPart)
+            if (response!!.isSuccess){
+                messageAddForum.postValue(response.getOrNull()?.status)
+                Log.d("API_RESPONSE", "Forum added successfully: ${response.getOrNull()?.data}")
+            } else {
+                errorMessageAddForum.postValue("Failed to add pet. Please try again.")
+                Log.e("API_ERROR", "Add Forum failed: ${response?.exceptionOrNull()}")
+            }
+        }
     }
 
 }

@@ -1,60 +1,64 @@
 package com.example.vetlink.fragment
 
+import android.Manifest
+import android.app.Activity
+import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Paint
+import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
-import android.text.SpannableString
 import android.text.TextWatcher
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.vetlink.R
-import com.example.vetlink.adapter.PetsSelectList
-import com.example.vetlink.adapter.PetsSelectListAdapter
+import com.example.vetlink.activity.SignupActivity
+import com.example.vetlink.activity.SignupActivity.Companion.REQUEST_CODE_IMAGE_PICKER
+import com.example.vetlink.adapter.PetForumSelectAdapter
+import com.example.vetlink.adapter.RecyclerViewClickListener
+import com.example.vetlink.data.model.pets.Pet
 import com.example.vetlink.databinding.FragmentForumFormBinding
-import com.example.vetlink.viewModel.MainActivityViewModel
+import com.example.vetlink.viewModel.MenuActivityViewModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.squareup.picasso.Picasso
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
+import java.io.File
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+class ForumFormFragment : Fragment(), RecyclerViewClickListener<Pet> {
+    private lateinit var binding: FragmentForumFormBinding
+    private val sharedmenuActivityViewModel: MenuActivityViewModel by activityViewModels()
+    private lateinit var petAdapter: PetForumSelectAdapter
 
-/**
- * A simple [Fragment] subclass.
- * Use the [ForumFormFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-class ForumFormFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-    private lateinit var binding : FragmentForumFormBinding
-    private lateinit var petsSelectList: ArrayList<PetsSelectList>
-    private lateinit var petsSelectListAdapter: PetsSelectListAdapter
-    private var petId: Int? = null
+    private var imageUri: Uri? = null
+    private var petImage: String? = null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+
         }
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
         binding = FragmentForumFormBinding.inflate(inflater, container, false)
-
         setupObservers()
         initView()
 
@@ -62,15 +66,16 @@ class ForumFormFragment : Fragment() {
     }
 
     private fun setupObservers() {
-
+        // If you need any ViewModel observables, define them here
     }
 
-    private fun initView(){
-        with(binding){
-            tvAddPostImagePets.paintFlags = Paint.UNDERLINE_TEXT_FLAG
-            tvSelectPhotoOwnPets.paintFlags = Paint.UNDERLINE_TEXT_FLAG
+    private fun initView() {
+        with(binding) {
+            // Underline the text for better UX
+            tvAddPostImagePets.paintFlags = tvAddPostImagePets.paintFlags or Paint.UNDERLINE_TEXT_FLAG
+            tvSelectPhotoOwnPets.paintFlags = tvSelectPhotoOwnPets.paintFlags or Paint.UNDERLINE_TEXT_FLAG
 
-            // Description Box
+            // Description Box with TextWatcher
             etPostDescription.addTextChangedListener(object : TextWatcher {
                 private var isLineBreakAllowed = false
 
@@ -79,17 +84,12 @@ class ForumFormFragment : Fragment() {
                 }
 
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                    // Check if the first line is complete
                     if (!isLineBreakAllowed && s?.contains("\n") == true) {
-                        // If a line break is detected before the first line is complete, remove it
                         val newText = s.toString().replace("\n", "")
                         etPostDescription.setText(newText)
-                        etPostDescription.setSelection(newText.length) // Move cursor to the end
+                        etPostDescription.setSelection(newText.length)
                     } else if (etPostDescription.layout != null) {
-                        // Check if the text exceeds the first line width
-                        if (etPostDescription.layout.lineCount > 1 || (etPostDescription.text?.length
-                                ?: 0) >= etPostDescription.width
-                        ){
+                        if (etPostDescription.layout.lineCount > 1 || (s?.length ?: 0) >= etPostDescription.width) {
                             isLineBreakAllowed = true
                         }
                     }
@@ -100,66 +100,159 @@ class ForumFormFragment : Fragment() {
                 }
             })
 
-            tvSelectPhotoOwnPets.setOnClickListener{
+            tvSelectPhotoOwnPets.setOnClickListener {
                 selectPetsDialog()
             }
 
+            tvAddPostImagePets.setOnClickListener {
+                // Permission granted, open image picker
+                openImageChooser()
+            }
 
+            btnSubmitPost.setOnClickListener {
+                val title = etPostTitle.text
+                val lastSeen = etPostLastSeen.text
+                val characteristics = etPostCharacteristics.text
+                val description = etPostDescription.text
+
+                if (title?.isNotEmpty() == true && lastSeen?.isNotEmpty() == true && characteristics?.isNotEmpty() == true && description?.isNotEmpty() == true) {
+                    val params: MutableMap<String, RequestBody> = mutableMapOf(
+                        "title" to title.toString().toRequestBody("text/plain".toMediaTypeOrNull()),
+                        "last_seen" to lastSeen.toString().toRequestBody("text/plain".toMediaTypeOrNull()),
+                        "characteristics" to characteristics.toString().toRequestBody("text/plain".toMediaTypeOrNull()),
+                        "description" to description.toString().toRequestBody("text/plain".toMediaTypeOrNull())
+                    )
+
+                    var photoPart: MultipartBody.Part? = null
+
+                    if (imageUri != null) {
+                        try {
+                            val inputStream = requireContext().contentResolver.openInputStream(imageUri!!)
+                            val file = File.createTempFile("upload", ".jpg", requireContext().cacheDir)
+                            file.outputStream().use { output ->
+                                inputStream?.copyTo(output)
+                            }
+
+                            val requestFile = file.asRequestBody("image/*".toMediaTypeOrNull())
+                            photoPart = MultipartBody.Part.createFormData("pet_image_file", file.name, requestFile)
+
+                        } catch (e: Exception) {
+                            e.printStackTrace()
+                            Toast.makeText(requireContext(), "Failed to prepare image for upload", Toast.LENGTH_SHORT).show()
+                            return@setOnClickListener
+                        }
+                    } else if (petImage != null) {
+                        // If user used an existing URL (string)
+                        val petImageUrl = petImage
+                        if (petImageUrl!!.isNotEmpty()) {
+                            params["pet_image"] = petImageUrl.toRequestBody("text/plain".toMediaTypeOrNull())
+                        }
+                    }
+
+                    Log.d("params", "$params")
+                    // Call the ViewModel function to add a forum post
+                    sharedmenuActivityViewModel.addForum(params, photoPart)
+                    sharedmenuActivityViewModel.messageAddForum.observe(viewLifecycleOwner) {
+                        if (it == 201) {
+                            activity?.finish()
+                            Toast.makeText(requireContext(), "Post added successfully", Toast.LENGTH_SHORT).show()
+                        }else{
+                            Toast.makeText(requireContext(), "Failed to add post", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                } else {
+                    Toast.makeText(requireContext(), "Please fill out all fields", Toast.LENGTH_SHORT).show()
+                }
+            }
         }
     }
 
-    private fun selectPetsDialog(){
-        val dialog = activity?.let { BottomSheetDialog(it) }
+    private fun openImageChooser() {
+        Intent(Intent.ACTION_PICK).also {
+            it.type = "image/*"
+            it.putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("image/jpeg", "image/jpg", "image/png"))
+            startActivityForResult(it, SignupActivity.REQUEST_CODE_IMAGE_PICKER)
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == Activity.RESULT_OK && requestCode == SignupActivity.REQUEST_CODE_IMAGE_PICKER) {
+            imageUri = data?.data
+            imageUri?.let { uri ->
+                // Set the selected image URI to the ImageView
+                petImage = null
+                binding.ivPostImagePets.setImageURI(uri)
+                binding.tvNullPostImagePets.visibility = View.GONE
+                Log.d("imageUri", "$imageUri")
+            }
+        }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == SignupActivity.REQUEST_CODE_IMAGE_PICKER) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permission granted, open the image chooser
+                openImageChooser()
+            } else {
+                Toast.makeText(requireContext(),"Permission denied to access images.", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private var dialog: BottomSheetDialog? = null
+
+    private fun selectPetsDialog() {
+        val activityContext = activity ?: return
+        dialog = BottomSheetDialog(activityContext)
         val view = layoutInflater.inflate(R.layout.layout_bottom_sheet_select_pet_dialog, null, false)
 
         val recyclerView = view.findViewById<RecyclerView>(R.id.rvSelectPetForum)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
-        petsSelectList = ArrayList()
-        addDataToPetList()
-
-        petsSelectListAdapter = PetsSelectListAdapter(petsSelectList){ selectedPetName, selectedPetId ->
-            petId = selectedPetId
-//            binding.tvPetUserSelect.text = selectedPetName
-            Toast.makeText(requireContext(), "Selected et ID: $petId", Toast.LENGTH_SHORT).show()
+        // Observe pets and set up the adapter
+        sharedmenuActivityViewModel.pets.observe(viewLifecycleOwner) { pets ->
+            petAdapter = PetForumSelectAdapter(pets)
+            recyclerView.adapter = petAdapter
+            petAdapter.setClickListener(this@ForumFormFragment)
         }
-        recyclerView.adapter = petsSelectListAdapter
 
         dialog?.apply {
             setCancelable(true)
             setContentView(view)
-            show()
             val bottomSheetBehavior = BottomSheetBehavior.from(view.parent as View)
             bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+            show()
         }
-
     }
-
-    private fun addDataToPetList(){
-//        petsSelectList.add(PetsSelectList("Mball", "Cat", R.drawable.img_cats))
-//        petsSelectList.add(PetsSelectList("Mball", "Cat", R.drawable.img_cats))
-//        petsSelectList.add(PetsSelectList("Mball", "Cat", R.drawable.img_cats))
-//        petsSelectList.add(PetsSelectList("Mball", "Cat", R.drawable.img_cats))
-    }
-
 
     companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment ForumFormFragment.
-         */
-        // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
             ForumFormFragment().apply {
                 arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+
                 }
             }
+        private const val REQUEST_CODE_READ_EXTERNAL_STORAGE = 101
+        private const val REQUEST_CODE_IMAGE_PICKER = 102
+    }
+
+    override fun onItemClicke(view: View, item: Pet) {
+        // Handle item click events here
+        with(binding) {
+            etPostTitle.setText("${item.pet_name} Hilang")
+            Log.d("pet-image", "${item.photo}")
+            petImage = item.photo
+            Picasso.get().load(item.photo).into(ivPostImagePets)
+            tvNullPostImagePets.visibility = View.GONE
+            etPostLastSeen.setText("Hilang pada tanggal (tanggal), disetikar (kota)")
+            etPostCharacteristics.setText("${item.type} dengan ras ${item.breed} dengan jenis kelamin ${item.gender}")
+            imageUri = null
+        }
+
+        // Dismiss the dialog when an item is clicked
+        dialog?.dismiss()
     }
 }

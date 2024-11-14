@@ -12,7 +12,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.vetlink.R
 import com.squareup.picasso.Picasso
 
-class ForumPostListAdapter(private val context: Context, private val forumPostList: List<ForumPostList>, private val isPublic: Boolean): RecyclerView.Adapter<ForumPostListAdapter.ForumPostViewHolder>(){
+class ForumPostListAdapter(
+    private val context: Context,
+    private val forumPostList: List<ForumPostList>,
+    private val isPublic: Boolean
+): RecyclerView.Adapter<ForumPostListAdapter.ForumPostViewHolder>(){
 
     private lateinit var listener: RecyclerViewClickListener<ForumPostList>
 
