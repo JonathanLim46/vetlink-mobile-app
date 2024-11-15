@@ -32,8 +32,8 @@ class MenuActivityViewModel(
     private val forumRepository: ForumRepository?
 ): ViewModel() {
 
-    private val _user = MutableLiveData<User>()
-    val user: LiveData<User> get() = _user
+    private val _user = MutableLiveData<Resource<User>>()
+    val user: LiveData<Resource<User>> get() = _user
 
     private val _errorMessageUser = MutableLiveData<String>()
     val errorMessageUser: LiveData<String> get() = _errorMessageUser
@@ -98,16 +98,21 @@ class MenuActivityViewModel(
     val logoutSuccess: LiveData<Boolean> = _logoutSuccess
 
     fun fetchProfile() {
+
+        _user.postValue(Resource.Loading())
+
         viewModelScope.launch {
             try {
                 val responseUser = authRepository.getProfile()
-                _user.postValue(responseUser.data)
+                _user.postValue(Resource.Success(responseUser.data))
             } catch (e: ConnectException) {
                 _errorMessageUser.postValue("Unable to connect to the server. Please check your internet connection.")
                 Log.e("API_ERROR", "Network Error: ${e.message}")
+                _user.postValue(Resource.Error("Unable to connect to the server. Please check your internet connection."))
             } catch (e: Exception){
                 _errorMessageUser.postValue("An error occurred. Please try again.")
                 Log.e("API_ERROR", "Fetch user error: ${e.message}")
+                _user.postValue(Resource.Error("An error occurred. Please try again."))
             }
         }
     }

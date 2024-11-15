@@ -7,6 +7,7 @@ import android.content.res.ColorStateList
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.util.Patterns
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -15,6 +16,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import com.example.vetlink.R
+import com.example.vetlink.Resource
 import com.example.vetlink.activity.MenuActivity
 import com.example.vetlink.activity.SignupActivity
 import com.example.vetlink.data.model.user.User
@@ -73,39 +75,56 @@ class AccountFragment : Fragment() {
     }
 
     private fun setupObservers(){
-        sharedMenuActivityViewModel.user.observe(viewLifecycleOwner) { user ->
-            if (user != null){
-                with(binding){
-                    if (user.photo != null){
-                        Picasso.get().load(user.photo).resize(50,50).centerCrop().into(ivAddImage)
-                    } else {
-                        ivAddImage.setImageResource(R.drawable.img_default_profile)
-                    }
-                    etNameAcc.setText(user.name)
-                    etPhoneAcc.setText(user.phone)
-                    etEmailAcc.setText(user.email)
+        sharedMenuActivityViewModel.user.observe(viewLifecycleOwner) { resource ->
 
-                    currentUser = user
+            when(resource){
+                is Resource.Loading ->{
+                    binding.shimmerAccount.startShimmer()
+                }
+                is Resource.Success ->{
+
+                    showAccount()
+                    if (resource.data != null){
+                        with(binding){
+                            if (resource.data.photo != null){
+                                Picasso.get().load(resource.data.photo).resize(50,50).centerCrop().into(layoutAccount.ivAddImage)
+                            } else {
+                                layoutAccount.ivAddImage.setImageResource(R.drawable.img_default_profile)
+                            }
+                            layoutAccount.etNameAcc.setText(resource.data.name)
+                            layoutAccount.etPhoneAcc.setText(resource.data.phone)
+                            layoutAccount.etEmailAcc.setText(resource.data.email)
+
+                            currentUser = resource.data
+                        }
+                    }
+
+                }
+                is Resource.Error ->{
+                    Log.d("QueueObserver", "Error loading data: ${resource.message}")
+                    binding.shimmerAccount.hideShimmer()
+                    Toast.makeText(context, "Error: ${resource.message}", Toast.LENGTH_SHORT).show()
                 }
             }
+
         }
     }
 
     private fun initView(){
         with(binding){
-            btnChangePassword.setOnClickListener{
+            layoutAccount.btnChangePassword.setOnClickListener{
                 val intent = Intent(activity, MenuActivity::class.java)
                 intent.putExtra("MENU_TITLE", "Change Password")
                 startActivity(intent)
             }
 
 
-            btnSubmitAccount.setOnClickListener{
+            layoutAccount.btnSubmitAccount.setOnClickListener{
                 validateEdit()
                 activity?.finish()
             }
 
-            ivAddImage.setOnClickListener { openImageChooser() }
+            layoutAccount.ivAddImage.setOnClickListener { openImageChooser() }
         }
     }
 
@@ -121,38 +140,38 @@ class AccountFragment : Fragment() {
                 photo = handleImageUri(it)
             }
 
-            if (etNameAcc.length() > 32) {
-                textInputLayoutNameAcc.error = "Name cannot be longer than 32 characters"
-                textInputLayoutNameAcc.setErrorTextColor(colorError)
-                etNameAcc.requestFocus()
-            } else if (etNameAcc.text.toString().isEmpty()) {
-                textInputLayoutNameAcc.error = "Name is required"
-                textInputLayoutNameAcc.setErrorTextColor(colorError)
-                etNameAcc.requestFocus()
-            } else if (etNameAcc.text.toString() != user.name) {
-                updates["name"] = etNameAcc.text.toString()
-                textInputLayoutNameAcc.error = null
-                textInputLayoutNameAcc.isErrorEnabled = false
+            if (layoutAccount.etNameAcc.length() > 32) {
+                layoutAccount.textInputLayoutNameAcc.error = "Name cannot be longer than 32 characters"
+                layoutAccount.textInputLayoutNameAcc.setErrorTextColor(colorError)
+                layoutAccount.etNameAcc.requestFocus()
+            } else if (layoutAccount.etNameAcc.text.toString().isEmpty()) {
+                layoutAccount.textInputLayoutNameAcc.error = "Name is required"
+                layoutAccount.textInputLayoutNameAcc.setErrorTextColor(colorError)
+                layoutAccount.etNameAcc.requestFocus()
+            } else if (layoutAccount.etNameAcc.text.toString() != user.name) {
+                updates["name"] = layoutAccount.etNameAcc.text.toString()
+                layoutAccount.textInputLayoutNameAcc.error = null
+                layoutAccount.textInputLayoutNameAcc.isErrorEnabled = false
             } else {
-                textInputLayoutNameAcc.error = null
-                textInputLayoutNameAcc.isErrorEnabled = false
+                layoutAccount.textInputLayoutNameAcc.error = null
+                layoutAccount.textInputLayoutNameAcc.isErrorEnabled = false
             }
 
-            if (etPhoneAcc.text.toString().isEmpty()){
-                textInputLayoutPhoneAcc.error = "Phone is required"
-                textInputLayoutPhoneAcc.setErrorTextColor(colorError)
-                etPhoneAcc.requestFocus()
-            } else if (!Patterns.PHONE.matcher(etPhoneAcc.toString()).matches()){
-                textInputLayoutPhoneAcc.error = "Phone is invalid"
-                textInputLayoutPhoneAcc.setErrorTextColor(colorError)
-                etPhoneAcc.requestFocus()
-            } else if (etPhoneAcc.text.toString() != user.name) {
-                updates["phone"] = etPhoneAcc.text.toString()
-                textInputLayoutPhoneAcc.error = null
-                textInputLayoutPhoneAcc.isErrorEnabled = false
+            if (layoutAccount.etPhoneAcc.text.toString().isEmpty()){
+                layoutAccount.textInputLayoutPhoneAcc.error = "Phone is required"
+                layoutAccount.textInputLayoutPhoneAcc.setErrorTextColor(colorError)
+                layoutAccount.etPhoneAcc.requestFocus()
+            } else if (!Patterns.PHONE.matcher(layoutAccount.etPhoneAcc.toString()).matches()){
+                layoutAccount.textInputLayoutPhoneAcc.error = "Phone is invalid"
+                layoutAccount.textInputLayoutPhoneAcc.setErrorTextColor(colorError)
+                layoutAccount.etPhoneAcc.requestFocus()
+            } else if (layoutAccount.etPhoneAcc.text.toString() != user.name) {
+                updates["phone"] = layoutAccount.etPhoneAcc.text.toString()
+                layoutAccount.textInputLayoutPhoneAcc.error = null
+                layoutAccount.textInputLayoutPhoneAcc.isErrorEnabled = false
             } else {
-                textInputLayoutPhoneAcc.error = null
-                textInputLayoutPhoneAcc.isErrorEnabled = false
+                layoutAccount.textInputLayoutPhoneAcc.error = null
+                layoutAccount.textInputLayoutPhoneAcc.isErrorEnabled = false
             }
 
             if (updates.isNotEmpty() || photo != null) {
@@ -206,7 +225,7 @@ class AccountFragment : Fragment() {
             selectedImageUri = data?.data
             selectedImageUri?.let { uri ->
                 // Set the selected image URI to the ImageView
-                binding.ivAddImage.setImageURI(uri)
+                binding.layoutAccount.ivAddImage.setImageURI(uri)
             }
         }
     }
@@ -223,6 +242,13 @@ class AccountFragment : Fragment() {
         }
     }
 
+    private fun showAccount(){
+        binding.shimmerAccount.apply {
+            stopShimmer()
+            visibility = View.GONE
+        }
+        binding.layoutAccount.root.visibility = View.VISIBLE
+    }
 
 
     companion object {

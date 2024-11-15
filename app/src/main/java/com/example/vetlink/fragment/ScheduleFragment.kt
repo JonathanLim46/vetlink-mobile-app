@@ -135,6 +135,7 @@ class ScheduleFragment : Fragment() {
                 }
                 is Resource.Error ->{
                     Log.d("QueueObserver", "Error loading data: ${resource.message}")
+                    binding.shimmerSchedule.hideShimmer()
                     Toast.makeText(context, "Error: ${resource.message}", Toast.LENGTH_SHORT).show()
                 }
             }

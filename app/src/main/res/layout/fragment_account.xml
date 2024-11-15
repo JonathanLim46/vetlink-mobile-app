@@ -6,177 +6,23 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".fragment.AccountFragment">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <include
+        android:id="@+id/layoutAccount"
+        layout="@layout/layout_account"
+        android:visibility="gone"
+        />
+
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/shimmerAccount"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:visibility="visible"
+        >
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/ivAddImage"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:src="@drawable/img_add_profile"
-            app:civ_border_width="2dp"
-            app:civ_border_color="@color/lightwhite"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+        <include
+            layout="@layout/layout_account_shimmer"
             />
 
-        <TextView
-            android:id="@+id/tvNameAccount"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="14dp"
-            android:layout_marginTop="16dp"
-            android:text="Name"
-            android:textSize="15sp"
-            android:textStyle="bold"
-            app:layout_constraintTop_toBottomOf="@+id/ivAddImage"
-            app:layout_constraintStart_toStartOf="parent"
-            />
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/textInputLayoutNameAcc"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:layout_marginStart="14dp"
-            android:layout_marginEnd="14dp"
-            app:errorEnabled="true"
-            app:hintEnabled="false"
-            app:counterEnabled="true"
-            app:counterMaxLength="32"
-            app:boxStrokeColor="#B08BBB"
-            app:boxStrokeWidth="2dp"
-            app:boxStrokeWidthFocused="4dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvNameAccount"
-            app:layout_constraintStart_toStartOf="@+id/tvNameAccount">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etNameAcc"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:fontFamily="sans-serif-light"
-                android:text="@string/user_name"/>
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <TextView
-            android:id="@+id/tvEmailAccount"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="14dp"
-            android:layout_marginTop="16dp"
-            android:text="Email"
-            android:textSize="15sp"
-            android:textStyle="bold"
-            app:layout_constraintTop_toBottomOf="@+id/textInputLayoutNameAcc"
-            app:layout_constraintStart_toStartOf="parent"
-            />
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/textInputLayoutEmailAcc"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:layout_marginStart="14dp"
-            android:layout_marginEnd="14dp"
-            app:errorEnabled="true"
-            app:hintEnabled="false"
-            app:boxStrokeColor="#B08BBB"
-            app:boxStrokeWidth="2dp"
-            app:boxStrokeWidthFocused="4dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvEmailAccount"
-            app:layout_constraintStart_toStartOf="@+id/tvEmailAccount">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etEmailAcc"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:focusable="false"
-                android:cursorVisible="false"
-                android:textColor="@color/defaultIcon"
-                android:fontFamily="sans-serif-light"
-                android:text="@string/email"
-                android:inputType="textEmailAddress"/>
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <TextView
-            android:id="@+id/tvPhoneAccount"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="14dp"
-            android:layout_marginTop="16dp"
-            android:text="Phone"
-            android:textSize="15sp"
-            android:textStyle="bold"
-            app:layout_constraintTop_toBottomOf="@+id/textInputLayoutEmailAcc"
-            app:layout_constraintStart_toStartOf="parent"
-            />
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/textInputLayoutPhoneAcc"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:layout_marginStart="14dp"
-            android:layout_marginEnd="14dp"
-            app:errorEnabled="true"
-            app:hintEnabled="false"
-            app:boxStrokeColor="#B08BBB"
-            app:boxStrokeWidth="2dp"
-            app:boxStrokeWidthFocused="4dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvPhoneAccount"
-            app:layout_constraintStart_toStartOf="@+id/tvPhoneAccount">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etPhoneAcc"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:fontFamily="sans-serif-light"
-                android:text="08523942842"/>
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <Button
-            android:id="@+id/btnChangePassword"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="14dp"
-            android:layout_marginEnd="14dp"
-            android:layout_marginTop="20dp"
-            android:paddingStart="18dp"
-            android:text="CHANGE PASSWORD"
-            android:textColor="@color/black"
-            android:textStyle="bold"
-            android:textAlignment="textStart"
-            android:background="@drawable/outline_input"
-            app:backgroundTint="@null"
-            app:layout_constraintTop_toBottomOf="@id/textInputLayoutPhoneAcc"
-            app:layout_constraintStart_toStartOf="@id/textInputLayoutPhoneAcc"
-            app:layout_constraintEnd_toEndOf="parent"/>
-
-        <Button
-            android:id="@+id/btnSubmitAccount"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="14dp"
-            android:layout_marginEnd="14dp"
-            android:layout_marginBottom="20dp"
-            android:backgroundTint="#B08BBB"
-            android:text="Submit"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.facebook.shimmer.ShimmerFrameLayout>
 
 </FrameLayout>
