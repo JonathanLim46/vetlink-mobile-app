@@ -225,12 +225,15 @@ class PetDetailsFragment : Fragment() {
             val petBreed = selectedPetBreed?.id
             val genderPets = selectedGender
             val notePets = etNotePets.text.toString()
-            val photoPet: MultipartBody.Part = selectedImageUri.let { uri ->
-                val filePath = uri?.let { getFilePathFromUri(it) } // Get the file path from URI
+            val photoPet: MultipartBody.Part? = if (selectedImageUri != null) {
+                val filePath = getFilePathFromUri(selectedImageUri!!) // Get the file path from URI
                 val file = File(filePath) // Handle the file path correctly
                 val requestFile = RequestBody.create("image/*".toMediaTypeOrNull(), file)
                 MultipartBody.Part.createFormData("photo", file.name, requestFile)
+            } else {
+                null // If no image is selected, set photoPet to null
             }
+
 
 
             val colorError = ColorStateList.valueOf(Color.RED)
@@ -287,7 +290,9 @@ class PetDetailsFragment : Fragment() {
 
             // If form is valid, display a toast with all parameters
             if (isFormAddValid) {
-                sharedMenuActivityViewModel.addPet(namePets, petType.toString(), photoPet, petBreed.toString(), agePets, weightPets, genderPets!!, notePets)
+                if (photoPet != null) {
+                    sharedMenuActivityViewModel.addPet(namePets, petType.toString(), photoPet, petBreed.toString(), agePets, weightPets, genderPets!!, notePets)
+                }
             }
         }
     }

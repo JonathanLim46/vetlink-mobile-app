@@ -167,6 +167,9 @@ class MyPetsFragment : Fragment(),
         buttonReset.setOnClickListener {
             selectedCategory = null // Clear selected category
             petsCategoryListAdapter.resetSelection() // Reset the adapter selection
+            petsListAdapter.updateList(petsList)
+            petsListAdapter.notifyDataSetChanged()
+            dialog?.dismiss()
         }
 
         val buttonApply = viewFilter.findViewById<Button>(R.id.btnApply)
