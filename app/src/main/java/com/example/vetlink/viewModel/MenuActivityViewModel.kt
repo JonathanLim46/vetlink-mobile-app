@@ -81,8 +81,8 @@ class MenuActivityViewModel(
     val deletePetMessage: LiveData<String> get() = _deletePetMessage
     val _errorMessageDeletePet = MutableLiveData<String>()
 
-    private val _veterinerDetail = MutableLiveData<Veteriner>()
-    val veterinerDetail: LiveData<Veteriner> get() = _veterinerDetail
+    private val _veterinerDetail = MutableLiveData<Resource<Veteriner>>()
+    val veterinerDetail: LiveData<Resource<Veteriner>> get() = _veterinerDetail
 
     private val _errorMessageVeterinerDetail = MutableLiveData<String>()
     val errorMessageVeterinerDetail: LiveData<String> get() = _errorMessageVeterinerDetail
@@ -309,19 +309,25 @@ class MenuActivityViewModel(
     }
 
     fun getDetailClinic(id: Int){
+
+        _veterinerDetail.postValue(Resource.Loading())
+
         viewModelScope.launch {
             try {
                 val response = veterinerRepository?.getVeteriner(id)
                 if (response!!.isSuccess){
-                    _veterinerDetail.postValue(response.getOrNull()?.data)
+                    _veterinerDetail.postValue(response.getOrNull()
+                        ?.let { Resource.Success(it.data) })
                     Log.d("API_RESPONSE", "Veteriner detail fetched successfully: ${response.getOrNull()?.data}")
                 }
             }catch (e: ConnectException) {
                 _errorMessageVeterinerDetail.postValue("Unable to connect to the server. Please check your internet connection.")
                 Log.e("API_ERROR", "Network error: ${e.message}")
+                _veterinerDetail.postValue(Resource.Error("Unable to connect to the server. Please check your internet connection."))
             }catch (e: Exception){
                 _errorMessageVeterinerDetail.postValue("An error occurred. Please try again.")
                 Log.d("exception vet detail", e.message.toString())
+                _veterinerDetail.postValue(Resource.Error("An error occurred. Please try again."))
             }
         }
     }
