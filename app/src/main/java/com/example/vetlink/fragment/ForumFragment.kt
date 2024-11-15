@@ -53,6 +53,11 @@ class ForumFragment : Fragment() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        sharedMainActivityViewModel.getForums() // Trigger data refresh
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
