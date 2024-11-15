@@ -1,125 +1,140 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:scrollbars="none"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".fragment.ClinicPageFragment">
-    
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <LinearLayout
-            android:id="@+id/layoutClinic"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layoutTOPShimmer"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingBottom="15dp"
-            android:orientation="vertical"
-            android:background="@drawable/layout_border_rounded_clinic_page"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
+            android:layout_height="match_parent">
 
-            <com.google.android.material.imageview.ShapeableImageView
-                android:id="@+id/ivClinicPage"
+            <com.facebook.shimmer.ShimmerFrameLayout
+                android:id="@+id/shimmerClinicPage"
                 android:layout_width="match_parent"
-                android:layout_height="250dp"
-                android:scaleType="fitXY"
-                android:src="@drawable/img_rspets"
-                app:shapeAppearanceOverlay="@style/ImageClinicPage"
-                />
-
-            <TextView
-                android:id="@+id/tvClinicPage"
-                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
-                android:layout_marginTop="15dp"
-                android:text="@string/default_clinic"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                />
+                android:visibility="visible"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
-            <TextView
-                android:id="@+id/tvClinicLocationPage"
-                android:layout_width="wrap_content"
+                <include layout="@layout/layout_clinic_page_shimmer" />
+
+            </com.facebook.shimmer.ShimmerFrameLayout>
+
+            <LinearLayout
+                android:id="@+id/layoutClinic"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
-                android:layout_marginTop="5dp"
-                android:text="Babakan, Kota Bogor"
-                android:textSize="14sp"
-                android:drawablePadding="5dp"
-                app:drawableStartCompat="@drawable/icon_location" />
+                android:background="@drawable/layout_border_rounded_clinic_page"
+                android:orientation="vertical"
+                android:paddingBottom="15dp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
-        </LinearLayout>
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/ivClinicPage"
+                    android:layout_width="match_parent"
+                    android:layout_height="250dp"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/img_rspets"
+                    app:shapeAppearanceOverlay="@style/ImageClinicPage" />
+
+                <TextView
+                    android:id="@+id/tvClinicPage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginTop="15dp"
+                    android:text="@string/default_clinic"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvClinicLocationPage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginTop="5dp"
+                    android:drawablePadding="5dp"
+                    android:text="Babakan, Kota Bogor"
+                    android:textSize="14sp"
+                    app:drawableStartCompat="@drawable/icon_location" />
+
+            </LinearLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/layoutVisit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
-            android:paddingBottom="15dp"
             android:background="@drawable/layout_border_rounded_clinic_page"
-            app:layout_constraintTop_toBottomOf="@+id/layoutClinic"
+            android:paddingBottom="15dp"
             app:layout_constraintStart_toStartOf="parent"
-            >
+            app:layout_constraintTop_toBottomOf="@+id/layoutTOPShimmer">
 
             <TextView
                 android:id="@+id/tvVisitHeaderClinicPage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
                 android:layout_marginStart="15dp"
+                android:layout_marginTop="15dp"
                 android:text="Visit Information"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/tvVisitDateLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
+                android:fontFamily="sans-serif-light"
                 android:text="Select Visit Date"
                 android:textSize="14sp"
-                android:fontFamily="sans-serif-light"
-                app:layout_constraintTop_toBottomOf="@+id/tvVisitHeaderClinicPage"
                 app:layout_constraintStart_toStartOf="@+id/tvVisitHeaderClinicPage"
-                />
+                app:layout_constraintTop_toBottomOf="@+id/tvVisitHeaderClinicPage" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/textInputLayoutDateClinicPage"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
                 android:layout_marginStart="15dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginEnd="15dp"
                 android:clickable="false"
                 android:focusable="false"
                 android:focusableInTouchMode="false"
-                app:hintEnabled="false"
                 app:errorEnabled="true"
-                app:layout_constraintTop_toBottomOf="@+id/tvVisitDateLabel"
+                app:hintEnabled="false"
                 app:layout_constraintStart_toStartOf="@+id/tvVisitHeaderClinicPage"
-                >
+                app:layout_constraintTop_toBottomOf="@+id/tvVisitDateLabel">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etDateClinicPage"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Select Date"
-                    android:textColor="@color/hintColor"
-                    android:textColorHint="@color/hintColor"
                     android:background="@drawable/layout_border_edit_text"
-                    android:cursorVisible="false"
                     android:clickable="false"
+                    android:cursorVisible="false"
                     android:focusable="false"
                     android:focusableInTouchMode="false"
-                    />
+                    android:hint="Select Date"
+                    android:textColor="@color/hintColor"
+                    android:textColorHint="@color/hintColor" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -128,43 +143,40 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
+                android:fontFamily="sans-serif-light"
                 android:text="Choose your Pet for a visit"
                 android:textSize="14sp"
-                android:fontFamily="sans-serif-light"
-                app:layout_constraintTop_toBottomOf="@id/textInputLayoutDateClinicPage"
                 app:layout_constraintStart_toStartOf="@id/tvVisitDateLabel"
-                />
+                app:layout_constraintTop_toBottomOf="@id/textInputLayoutDateClinicPage" />
 
             <TextView
                 android:id="@+id/tvSelectPetsDialog"
                 android:layout_width="match_parent"
                 android:layout_height="55dp"
-                android:paddingStart="15dp"
                 android:layout_marginStart="15dp"
-                android:layout_marginEnd="15dp"
                 android:layout_marginTop="8dp"
-                android:text="Select your Pets"
-                android:textSize="15sp"
-                android:textColor="@color/hintColor"
-                android:gravity="center_vertical"
+                android:layout_marginEnd="15dp"
                 android:background="@drawable/layout_border_edit_text"
                 android:clickable="true"
                 android:focusable="true"
-                app:layout_constraintTop_toBottomOf="@+id/tvSelectPetsLabel"
+                android:gravity="center_vertical"
+                android:paddingStart="15dp"
+                android:text="Select your Pets"
+                android:textColor="@color/hintColor"
+                android:textSize="15sp"
                 app:layout_constraintStart_toStartOf="parent"
-                />
+                app:layout_constraintTop_toBottomOf="@+id/tvSelectPetsLabel" />
 
             <TextView
                 android:id="@+id/tvDetailVisitLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
+                android:fontFamily="sans-serif-light"
                 android:text="Detail Visit"
                 android:textSize="14sp"
-                android:fontFamily="sans-serif-light"
                 app:layout_constraintStart_toStartOf="@id/tvVisitDateLabel"
-                app:layout_constraintTop_toBottomOf="@+id/tvSelectPetsDialog"
-                />
+                app:layout_constraintTop_toBottomOf="@+id/tvSelectPetsDialog" />
 
             <TextView
                 android:id="@+id/tvDetailVisitDateLabel"
@@ -174,9 +186,8 @@
                 android:text="Visit Date"
                 android:textSize="12sp"
                 android:textStyle="bold"
-                app:layout_constraintTop_toBottomOf="@+id/tvDetailVisitLabel"
                 app:layout_constraintStart_toStartOf="@+id/tvDetailVisitLabel"
-                />
+                app:layout_constraintTop_toBottomOf="@+id/tvDetailVisitLabel" />
 
             <TextView
                 android:id="@+id/tvCenterLabel"
@@ -185,25 +196,23 @@
                 android:text=":"
                 android:textSize="12sp"
                 android:textStyle="bold"
-                app:layout_constraintHorizontal_bias="0.3"
-                app:layout_constraintTop_toTopOf="@+id/tvDetailVisitDateLabel"
-                app:layout_constraintStart_toStartOf="@+id/tvDetailVisitDateLabel"
                 app:layout_constraintEnd_toEndOf="parent"
-                />
+                app:layout_constraintHorizontal_bias="0.3"
+                app:layout_constraintStart_toStartOf="@+id/tvDetailVisitDateLabel"
+                app:layout_constraintTop_toTopOf="@+id/tvDetailVisitDateLabel" />
 
             <TextView
                 android:id="@+id/tvVisitDateUserSelect"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="20dp"
+                android:fontFamily="sans-serif-light"
                 android:text="-"
                 android:textSize="12sp"
-                android:fontFamily="sans-serif-light"
-                app:layout_constraintHorizontal_bias="1"
-                app:layout_constraintTop_toTopOf="@+id/tvDetailVisitDateLabel"
-                app:layout_constraintStart_toStartOf="@+id/tvDetailVisitDateLabel"
                 app:layout_constraintEnd_toEndOf="parent"
-                />
+                app:layout_constraintHorizontal_bias="1"
+                app:layout_constraintStart_toStartOf="@+id/tvDetailVisitDateLabel"
+                app:layout_constraintTop_toTopOf="@+id/tvDetailVisitDateLabel" />
 
             <TextView
                 android:id="@+id/tvDetailPetLabel"
@@ -214,10 +223,9 @@
                 android:text="Pet for a visit"
                 android:textSize="12sp"
                 android:textStyle="bold"
-                app:layout_constraintTop_toBottomOf="@+id/tvDetailVisitDateLabel"
-                app:layout_constraintStart_toStartOf="@+id/tvDetailVisitDateLabel"
                 app:layout_constraintBottom_toBottomOf="parent"
-                />
+                app:layout_constraintStart_toStartOf="@+id/tvDetailVisitDateLabel"
+                app:layout_constraintTop_toBottomOf="@+id/tvDetailVisitDateLabel" />
 
             <TextView
                 android:id="@+id/tvCenterLabel2"
@@ -226,25 +234,23 @@
                 android:text=":"
                 android:textSize="12sp"
                 android:textStyle="bold"
-                app:layout_constraintHorizontal_bias="0.3"
-                app:layout_constraintTop_toTopOf="@+id/tvDetailPetLabel"
-                app:layout_constraintStart_toStartOf="@+id/tvDetailPetLabel"
                 app:layout_constraintEnd_toEndOf="parent"
-                />
+                app:layout_constraintHorizontal_bias="0.3"
+                app:layout_constraintStart_toStartOf="@+id/tvDetailPetLabel"
+                app:layout_constraintTop_toTopOf="@+id/tvDetailPetLabel" />
 
             <TextView
                 android:id="@+id/tvPetUserSelect"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="20dp"
+                android:fontFamily="sans-serif-light"
                 android:text="-"
                 android:textSize="12sp"
-                android:fontFamily="sans-serif-light"
-                app:layout_constraintHorizontal_bias="1"
-                app:layout_constraintTop_toTopOf="@+id/tvDetailPetLabel"
-                app:layout_constraintStart_toStartOf="@+id/tvDetailPetLabel"
                 app:layout_constraintEnd_toEndOf="parent"
-                />
+                app:layout_constraintHorizontal_bias="1"
+                app:layout_constraintStart_toStartOf="@+id/tvDetailPetLabel"
+                app:layout_constraintTop_toTopOf="@+id/tvDetailPetLabel" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -253,15 +259,15 @@
             android:id="@+id/ivLocationButton"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:padding="10dp"
             android:layout_marginTop="95dp"
             android:layout_marginBottom="25dp"
-            android:src="@drawable/icon_location_button"
             android:background="@drawable/layout_circular_location"
+            android:padding="10dp"
             android:scaleType="center"
-            app:layout_constraintTop_toBottomOf="@id/layoutVisit"
-            app:layout_constraintStart_toStartOf="parent"
+            android:src="@drawable/icon_location_button"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/layoutVisit"
             app:layout_constraintVertical_bias="1"
             app:tint="@color/white" />
 
@@ -270,19 +276,15 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="15dp"
+            android:background="@drawable/layout_button_main"
             android:text="Visit Clinic"
             android:textSize="18sp"
-            android:background="@drawable/layout_button_main"
             app:backgroundTint="@null"
-            app:layout_constraintTop_toTopOf="@+id/ivLocationButton"
-            app:layout_constraintStart_toEndOf="@+id/ivLocationButton"
             app:layout_constraintEnd_toEndOf="parent"
-            />
-        
+            app:layout_constraintStart_toEndOf="@+id/ivLocationButton"
+            app:layout_constraintTop_toTopOf="@+id/ivLocationButton" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-
 
 
 </ScrollView>

@@ -17,6 +17,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.vetlink.R
+import com.example.vetlink.Resource
 import com.example.vetlink.activity.MenuActivity
 import com.example.vetlink.adapter.PetsSelectList
 import com.example.vetlink.adapter.PetsSelectListAdapter
@@ -53,16 +54,44 @@ class ClinicPageFragment : Fragment() {
     }
 
     private fun setupObservers() {
-        sharedMenuActivityViewModel.veterinerDetail.observe(viewLifecycleOwner) { veterinerDetail ->
-            with(binding) {
-                tvClinicPage.text = veterinerDetail.clinic_name
-                tvClinicLocationPage.text = veterinerDetail.city
-                Picasso.get().load(veterinerDetail.clinic_image).into(ivClinicPage)
-                clinicId = veterinerDetail.id
-                latitude = veterinerDetail.latitude
-                longitude = veterinerDetail.longitude
-                Log.d("Location", "$latitude, $longitude")
+        sharedMenuActivityViewModel.veterinerDetail.observe(viewLifecycleOwner) { resource ->
+
+            when(resource){
+                is Resource.Loading ->{
+                    Log.d("Shimmer", "Shimmer is starting")
+                    binding.shimmerClinicPage.apply {
+                        visibility = View.VISIBLE
+                        startShimmer()
+                    }
+                }
+                is Resource.Success ->{
+                    Log.d("Shimmer", "Shimmer is stopping")
+                    binding.shimmerClinicPage.apply {
+                        stopShimmer()
+                        visibility = View.GONE
+                    }
+                    binding.layoutClinic.visibility = View.VISIBLE
+                    with(binding) {
+                        if(resource.data != null){
+                            tvClinicPage.text = resource.data.clinic_name
+                            tvClinicLocationPage.text = resource.data.city
+                            Picasso.get().load(resource.data.clinic_image).into(ivClinicPage)
+                            clinicId = resource.data.id
+                            latitude = resource.data.latitude
+                            longitude = resource.data.longitude
+                            Log.d("Location", "$latitude, $longitude")
+                        } else {
+                            Log.d("API_Response", "Data is null or empty")
+                        }
+                    }
+                }
+                is Resource.Error ->{
+                    Log.d("QueueObserver", "Error loading data: ${resource.message}")
+                    binding.shimmerClinicPage.hideShimmer()
+                    Toast.makeText(context, "Error: ${resource.message}", Toast.LENGTH_SHORT).show()
+                }
             }
+
         }
 
         sharedMenuActivityViewModel.pets.observe(viewLifecycleOwner) { pets ->
@@ -195,7 +224,5 @@ class ClinicPageFragment : Fragment() {
         dialog.setContentView(view)
         dialog.setCancelable(true)
         dialog.show()
-
-
     }
 }
