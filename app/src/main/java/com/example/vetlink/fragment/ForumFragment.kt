@@ -53,6 +53,11 @@ class ForumFragment : Fragment() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        sharedMainActivityViewModel.getForums() // Trigger data refresh
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -94,6 +99,7 @@ class ForumFragment : Fragment() {
                 var userForumLost = userForum!!.filter { it.status == "lost" }
                 var userForumFound = userForum!!.filter { it.status == "found" }
                 otherForum = forums.filter { it.user.id != sharedMainActivityViewModel.user.value?.id }
+                Log.d("userForum", "${sharedMainActivityViewModel.user.value}")
 
                 binding.apply {
                     tvCountPost.text = userForum!!.size.toString()

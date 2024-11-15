@@ -84,6 +84,7 @@ class MainActivityViewModel(
             try {
                 val responseUser = authRepository.getProfile()
                 _getUserHome.postValue(Resource.Success(responseUser.data))
+                _user.postValue(responseUser.data)
             } catch (e: ConnectException) {
                 _errorMessageUserHome.postValue("Unable to connect to the server. Please check your internet connection.")
                 Log.e("API_ERROR", "Network error: ${e.message}")
