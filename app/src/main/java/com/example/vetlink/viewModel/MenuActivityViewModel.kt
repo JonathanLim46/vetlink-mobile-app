@@ -53,8 +53,8 @@ class MenuActivityViewModel(
     private val _errorMessagePet = MutableLiveData<String>()
     val errorMessagePet: LiveData<String> get() = _errorMessagePet
 
-    private val _petDetail = MutableLiveData<PetDetails>()
-    val petDetail: LiveData<PetDetails> get() = _petDetail
+    private val _petDetail = MutableLiveData<Resource<PetDetails>>()
+    val petDetail: LiveData<Resource<PetDetails>> get() = _petDetail
 
     private val _updateMessagePetUpdate = MutableLiveData<String>()
     val updateMessagePetUpdate: LiveData<String> get() = _updateMessagePetUpdate
@@ -211,22 +211,28 @@ class MenuActivityViewModel(
     }
 
     fun getPetDetails(petId: Int) {
+
+        _petDetail.postValue(Resource.Loading())
+
         viewModelScope.launch {
             try {
                 val response = petRepository?.getPetDetails(petId)
                 if (response!!.isSuccess){
-                    _petDetail.postValue(response.getOrNull()?.data)
+                    _petDetail.postValue(response.getOrNull()?.let { Resource.Success(it.data) })
                     Log.d("API_RESPONSE", "Pet details fetched successfully: ${response.getOrNull()?.data}")
                 }else{
                     _errorMessagePetDetail.postValue("An error occurred. Please try again.")
                     Toast.makeText(null, "An error occurred. Please try again.", Toast.LENGTH_SHORT).show()
+                    _petDetail.postValue(Resource.Error("An error occurred. Please try again."))
                 }
             }catch (e: ConnectException){
                 _errorMessagePetDetail.postValue("Unable to connect to the server. Please check your internet connection.")
                 Log.e("API_ERROR", "Network error: ${e.message}")
+                _petDetail.postValue(Resource.Error("Unable to connect to the server. Please check your internet connection."))
             }catch (e: Exception){
                 _errorMessagePetDetail.postValue("An error occurred. Please try again.")
                 Log.e("API_ERROR", "Delete Pet error: ${e.message}")
+                _petDetail.postValue(Resource.Error("An error occurred. Please try again."))
             }
         }
     }

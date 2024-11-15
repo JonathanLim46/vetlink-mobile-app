@@ -21,6 +21,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.vetlink.R
+import com.example.vetlink.Resource
 import com.example.vetlink.adapter.BreedListAdapter
 import com.example.vetlink.adapter.PetTypeListAdapter
 import com.example.vetlink.data.model.pets.PetBreed
@@ -88,23 +89,46 @@ class PetDetailsFragment : Fragment() {
                 activity?.finish()
             }
         }
-        sharedMenuActivityViewModel.petDetail.observe(viewLifecycleOwner){ petDetail ->
-            if (petDetail != null){
-                with(binding){
-                    Picasso.get().load(petDetail.photo).centerCrop().fit().into(ivAddImagePets)
-                    etNamePets.setText(petDetail.pet_name)
-                    etAgePets.setText(petDetail.age.toString())
-                    etWeightPets.setText(petDetail.weight)
-                    btnChoosePet.text = petDetail.type
-                    btnChooseBreed.text = petDetail.breed
-                    selectGender(petDetail.gender)
-                    etNotePets.setText(petDetail.notes)
+        sharedMenuActivityViewModel.petDetail.observe(viewLifecycleOwner){ resource ->
 
-                    currentPet = petDetail
+            when(resource) {
+                is Resource.Loading ->{
+                    binding.layoutEdit.visibility = View.GONE
+                    binding.shimmerPetDetails.apply {
+                        visibility = View.VISIBLE
+                        startShimmer()
+                    }
                 }
-            }else{
-                Toast.makeText(requireContext(), "An error was occurred!", Toast.LENGTH_SHORT).show()
+                is Resource.Success -> {
+                    binding.shimmerPetDetails.apply {
+                        stopShimmer()
+                        visibility = View.GONE
+                    }
+                    binding.layoutEdit.visibility = View.VISIBLE
+                    if (resource.data != null){
+                        with(binding){
+                            Picasso.get().load(resource.data.photo).centerCrop().fit().into(ivAddImagePets)
+                            etNamePets.setText(resource.data.pet_name)
+                            etAgePets.setText(resource.data.age.toString())
+                            etWeightPets.setText(resource.data.weight)
+                            btnChoosePet.text = resource.data.type
+                            btnChooseBreed.text = resource.data.breed
+                            selectGender(resource.data.gender)
+                            etNotePets.setText(resource.data.notes)
+
+                            currentPet = resource.data
+                        }
+                    }else{
+                        Toast.makeText(requireContext(), "An error was occurred!", Toast.LENGTH_SHORT).show()
+                    }
+                }
+                is Resource.Error ->{
+                    Log.d("QueueObserver", "Error loading data: ${resource.message}")
+                    binding.shimmerPetDetails.hideShimmer()
+                    Toast.makeText(context, "Error: ${resource.message}", Toast.LENGTH_SHORT).show()
+                }
             }
+
         }
         sharedMenuActivityViewModel.updateMessagePetUpdate.observe(viewLifecycleOwner){ updateStatus ->
             if (updateStatus != null){
