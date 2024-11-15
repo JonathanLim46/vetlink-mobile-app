@@ -47,8 +47,8 @@ class MenuActivityViewModel(
     val addPetResponse = MutableLiveData<PetAddResponse?>()
     val errorMessageAddPet = MutableLiveData<String>()
 
-    private val _pets = MutableLiveData<List<Pet>>()
-    val pets: LiveData<List<Pet>> get() = _pets
+    private val _pets = MutableLiveData<Resource<List<Pet>>>()
+    val pets: LiveData<Resource<List<Pet>>> get() = _pets
 
     private val _errorMessagePet = MutableLiveData<String>()
     val errorMessagePet: LiveData<String> get() = _errorMessagePet
@@ -171,17 +171,20 @@ class MenuActivityViewModel(
             try {
                 val responsePets = petRepository?.getPets()
                 if (responsePets!!.isSuccess){
-                    _pets.postValue(responsePets.getOrNull()?.data)
+                    _pets.postValue(Resource.Success(responsePets.getOrNull()?.data ?: emptyList()))
                     Log.d("API_RESPONSE", "Pets fetched successfully: ${responsePets.getOrNull()?.data}")
                 }else{
                     _errorMessagePet.postValue("An error occurred. Please try again.")
+                    _pets.postValue(Resource.Error("An error occurred. Please try again."))
                 }
             }catch (e: ConnectException) {
                 _errorMessagePet.postValue("Unable to connect to the server. Please check your internet connection.")
                 Log.e("API_ERROR", "Network error: ${e.message}")
+                _pets.postValue(Resource.Error("Unable to connect to the server. Please check your internet connection."))
             } catch (e: Exception) {
                 _errorMessagePet.postValue("An error occurred. Please try again.")
                 Log.e("API_ERROR", "Pet error: ${e.message}")
+                _pets.postValue(Resource.Error("An error occurred. Please try again."))
             }
         }
     }

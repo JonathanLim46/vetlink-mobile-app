@@ -6,6 +6,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,6 +19,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.vetlink.R
+import com.example.vetlink.Resource
 import com.example.vetlink.activity.MenuActivity
 import com.example.vetlink.adapter.PetsCategoryList
 import com.example.vetlink.adapter.PetsCategoryListAdapter
@@ -154,7 +156,7 @@ class MyPetsFragment : Fragment(),
         // Create pets category list and adapter
         val petsCategoryList = ArrayList<PetsCategoryList>()
         sharedMenuActivityViewModel.pets.value?.let {
-            addDataPetsCategoryToList(petsCategoryList, it)
+            it.data?.let { it1 -> addDataPetsCategoryToList(petsCategoryList, it1) }
         }
 
         val petsCategoryListAdapter = PetsCategoryListAdapter(petsCategoryList, this)
@@ -194,15 +196,41 @@ class MyPetsFragment : Fragment(),
     }
 
     private fun setupObservers() {
-        sharedMenuActivityViewModel.pets.observe(viewLifecycleOwner) { pets ->
-            if (pets != null) {
-                petsList.clear() // Clear the list before adding new data
-                petsList.addAll(pets.map { pet ->
-                    PetsList(pet.id, pet.photo, pet.type, pet.pet_name, pet.breed, pet.age.toString(), pet.weight, pet.gender)
-                })
-                binding.tvCountTotalPets.text = pets.size.toString()
-                petsListAdapter.notifyDataSetChanged() // Notify the adapter to refresh
+        sharedMenuActivityViewModel.pets.observe(viewLifecycleOwner) { resource ->
+
+            when(resource){
+
+                is Resource.Loading ->{
+                    binding.shimmerMyPets.startShimmer()
+                }
+                is Resource.Success ->{
+                    showPets()
+                    if (resource.data != null && resource.data.isNotEmpty()) {
+                        petsList.clear() // Clear the list before adding new data
+                        petsList.addAll(resource.data.map { pet ->
+                            PetsList(pet.id, pet.photo, pet.type, pet.pet_name, pet.breed, pet.age.toString(), pet.weight, pet.gender)
+                        })
+                        binding.tvCountTotalPets.text = resource.data.size.toString()
+                        petsListAdapter.notifyDataSetChanged() // Notify the adapter to refresh
+                    } else {
+                        petsList.clear()
+                        petsListAdapter.notifyDataSetChanged()
+                        binding.shimmerMyPets.apply {
+                            stopShimmer()
+                            visibility = View.GONE
+                        }
+                        binding.tvCountTotalPets.text = "0"
+                        binding.layoutMyPetsNull.visibility = View.VISIBLE
+                    }
+                }
+                is Resource.Error ->{
+                    Log.d("QueueObserver", "Error loading data: ${resource.message}")
+                    binding.shimmerMyPets.hideShimmer()
+                    Toast.makeText(context, "Error: ${resource.message}", Toast.LENGTH_SHORT).show()
+                }
+
             }
+
         }
 
         sharedMenuActivityViewModel.petDetail.observe(viewLifecycleOwner){ pet ->
@@ -217,11 +245,22 @@ class MyPetsFragment : Fragment(),
         }
 
         sharedMenuActivityViewModel.queues.observe(viewLifecycleOwner) { queues ->
-            if (queues.data != null) {
-                val ongoingCount = queues.data.count { it.status == "ongoing" }
-                binding.tvCountScheduledVisit.text = ongoingCount.toString()
-            } else {
-                binding.tvCountScheduledVisit.text = "0"
+
+            when(queues) {
+                is Resource.Loading ->{
+
+                }
+                is Resource.Success ->{
+                    if (queues.data != null) {
+                        val ongoingCount = queues.data.count { it.status == "ongoing" }
+                        binding.tvCountScheduledVisit.text = ongoingCount.toString()
+                    } else {
+                        binding.tvCountScheduledVisit.text = "0"
+                    }
+                }
+                is Resource.Error ->{
+
+                }
             }
         }
 
@@ -274,6 +313,15 @@ class MyPetsFragment : Fragment(),
         }
 
         dialog.show()
+    }
+
+    private fun showPets(){
+        binding.shimmerMyPets.apply {
+            stopShimmer()
+            visibility = View.GONE
+        }
+        binding.layoutMyPetsNull.visibility = View.GONE
+        binding.srlPets.visibility = View.VISIBLE
     }
 
     companion object {
