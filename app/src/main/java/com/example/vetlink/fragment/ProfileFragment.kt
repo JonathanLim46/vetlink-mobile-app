@@ -45,6 +45,11 @@ class ProfileFragment : Fragment() {
         return binding.root
     }
 
+    override fun onResume() {
+        super.onResume()
+        sharedMainActivityViewModel.fetchUser()
+    }
+
     private fun setupObservers() {
         // Observe user data from shared ViewModel
         sharedMainActivityViewModel.getUserHome.observe(viewLifecycleOwner) { resource ->
