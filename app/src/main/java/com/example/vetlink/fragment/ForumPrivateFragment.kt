@@ -4,6 +4,7 @@ import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +12,8 @@ import android.view.ViewGroup
 import android.view.Window
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
+import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.vetlink.R
@@ -21,6 +24,7 @@ import com.example.vetlink.adapter.RecyclerViewClickListener
 import com.example.vetlink.data.model.comment.Comment
 import com.example.vetlink.data.model.forums.Forum
 import com.example.vetlink.databinding.FragmentForumPrivateBinding
+import com.example.vetlink.viewModel.MainActivityViewModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 
@@ -33,9 +37,12 @@ private const val ARG_FORUMS = "userForums"
  * Use the [ForumPrivateFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
+
+
 class ForumPrivateFragment() : Fragment(), RecyclerViewClickListener<ForumPostList> {
     // TODO: Rename and change types of parameters
     private lateinit var binding: FragmentForumPrivateBinding
+    private val sharedMainActivityViewModel: MainActivityViewModel by activityViewModels()
 
     private var userForums: ArrayList<Forum>? = null
 
@@ -86,6 +93,7 @@ class ForumPrivateFragment() : Fragment(), RecyclerViewClickListener<ForumPostLi
                 for (forum in userForums!!) {
                     forumPostList.add(
                         ForumPostList(
+                            forum.id,
                             forum.user.photo,
                             forum.pet_image,
                             forum.user.username,
@@ -132,6 +140,7 @@ class ForumPrivateFragment() : Fragment(), RecyclerViewClickListener<ForumPostLi
             for (forum in filteredList) {
                 forumPostList.add(
                     ForumPostList(
+                        forum.id,
                         forum.user.photo,
                         forum.pet_image,
                         forum.user.username,
@@ -215,7 +224,13 @@ class ForumPrivateFragment() : Fragment(), RecyclerViewClickListener<ForumPostLi
                 val deletePost = viewLayout.findViewById<TextView>(R.id.tvThirdLineDialog)
                 deletePost.setOnClickListener{
                     dialog.dismiss()
-                    deletePostDialog()
+                    deletePostDialog(item.postId!!)
+                }
+
+                val editPost = viewLayout.findViewById<TextView>(R.id.tvSecondLineDialog)
+                editPost.setOnClickListener{
+                    dialog.dismiss()
+                    Log.d("Edit Post", "Edit Post ${item.postId}")
                 }
             }
 
@@ -228,7 +243,7 @@ class ForumPrivateFragment() : Fragment(), RecyclerViewClickListener<ForumPostLi
         }
     }
 
-    private fun deletePostDialog(){
+    private fun deletePostDialog(postId: Int){
         val dialog = Dialog(requireContext())
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setCancelable(false)
@@ -246,7 +261,14 @@ class ForumPrivateFragment() : Fragment(), RecyclerViewClickListener<ForumPostLi
         btnNo.text = "Cancel"
 
         btnYes.setOnClickListener {
-
+            sharedMainActivityViewModel.deleteForum(postId)
+            sharedMainActivityViewModel.deleteForumStatus.observe(viewLifecycleOwner){
+                if (it == 200) {
+                    Toast.makeText(requireContext(), "Post deleted successfully", Toast.LENGTH_SHORT).show()
+                    sharedMainActivityViewModel.getForums()
+                }
+            }
+            dialog.dismiss()
         }
         btnNo.setOnClickListener {
             dialog.dismiss()

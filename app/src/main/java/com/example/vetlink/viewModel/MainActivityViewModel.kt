@@ -76,6 +76,8 @@ class MainActivityViewModel(
     private val _logoutSuccess = MutableLiveData<Boolean>()
     val logoutSuccess: LiveData<Boolean> = _logoutSuccess
 
+    val deleteForumStatus = MutableLiveData<Int>()
+
     fun fetchUser() {
         viewModelScope.launch {
 
@@ -213,6 +215,15 @@ class MainActivityViewModel(
             } catch (e: Exception) {
                 _errorMessageQueues.postValue("An error occurred while fetching queues. Please try again.")
                 Log.e("API_ERROR", "Queue Error: ${e.message}", e)
+            }
+        }
+    }
+
+    fun deleteForum(id: Int){
+        viewModelScope.launch {
+            val response = forumRepository?.deleteForum(id)
+            if (response != null) {
+                deleteForumStatus.postValue(response.getOrNull()?.status)
             }
         }
     }
