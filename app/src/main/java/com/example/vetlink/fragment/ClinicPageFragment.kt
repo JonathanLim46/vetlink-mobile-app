@@ -67,7 +67,7 @@ class ClinicPageFragment : Fragment() {
 
         sharedMenuActivityViewModel.pets.observe(viewLifecycleOwner) { pets ->
             petsSelectList = ArrayList()
-            pets.forEach { pet ->
+            pets.data?.forEach { pet ->
                 petsSelectList!!.add(PetsSelectList(pet.id, pet.pet_name, pet.type, pet.photo))
             }
             petsSelectListAdapter?.notifyDataSetChanged()

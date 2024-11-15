@@ -160,6 +160,7 @@ class ClinicFragment : Fragment(), RecyclerViewClickListener<ClinicList>{
                     }
                 }
                 is Resource.Error -> {
+                    binding.shimmerClinicMain.hideShimmer()
                     Log.d("QueueObserver", "Error loading data: ${resource.message}")
                     Toast.makeText(requireContext(), "Failed to load profile, please try again.", Toast.LENGTH_SHORT).show()
                 }

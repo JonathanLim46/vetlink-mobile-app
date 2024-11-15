@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <TextView
+        android:id="@+id/tvLayer1"
+        android:layout_width="180dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/layout_shimmer_background"
+        app:layout_constraintVertical_bias="0"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <TextView
+        android:id="@+id/tvCountUpcoming"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="10dp"
+        android:background="@drawable/layout_shimmer_background"
+        app:layout_constraintBottom_toBottomOf="@id/tvLayer1"
+        app:layout_constraintTop_toTopOf="@+id/tvLayer1"
+        app:layout_constraintStart_toEndOf="@+id/tvLayer1"
+        />
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/layoutTop"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        app:cardCornerRadius="16dp"
+        app:cardBackgroundColor="@color/white"
+        app:cardUseCompatPadding="true"
+        app:layout_constraintTop_toBottomOf="@id/tvCountUpcoming"
+        app:layout_constraintBottom_toTopOf="@+id/tvLayer2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/tvLayer1"
+        >
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="6dp">
+
+            <TextView
+                android:id="@+id/tvDateSchedule"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginBottom="100dp"
+                android:gravity="center"
+                android:background="@drawable/layout_shimmer_background"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                />
+
+            <TextView
+                android:id="@+id/tvFullDate"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:background="@drawable/layout_shimmer_background"
+                app:layout_constraintHorizontal_bias="0"
+                app:layout_constraintTop_toTopOf="@+id/tvDateSchedule"
+                app:layout_constraintBottom_toBottomOf="@id/tvDateSchedule"
+                app:layout_constraintStart_toEndOf="@+id/tvDateSchedule"
+                app:layout_constraintEnd_toEndOf="parent"
+                />
+
+            <TextView
+                android:id="@+id/tvClinicNameSchedule"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:background="@drawable/layout_shimmer_background"
+                app:layout_constraintTop_toBottomOf="@+id/tvFullDate"
+                app:layout_constraintStart_toStartOf="@+id/tvFullDate"
+                />
+
+            <TextView
+                android:id="@+id/tvPetNameSchedule"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/layout_shimmer_background"
+                app:layout_constraintTop_toBottomOf="@+id/tvClinicNameSchedule"
+                app:layout_constraintStart_toStartOf="@+id/tvClinicNameSchedule"
+                />
+
+            <TextView
+                android:id="@+id/tvScheduleClinicLocation"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/layout_shimmer_background"
+                app:layout_constraintTop_toBottomOf="@+id/tvPetNameSchedule"
+                app:layout_constraintStart_toStartOf="@+id/tvClinicNameSchedule"
+                />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+
+    <TextView
+        android:id="@+id/tvLayer2"
+        android:layout_width="180dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="40dp"
+        android:background="@drawable/layout_shimmer_background"
+        app:layout_constraintTop_toBottomOf="@id/layoutTop"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <TextView
+        android:id="@+id/tvCountHistorySchedule"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="10dp"
+        android:background="@drawable/layout_shimmer_background"
+        app:layout_constraintBottom_toBottomOf="@id/tvLayer2"
+        app:layout_constraintTop_toTopOf="@+id/tvLayer2"
+        app:layout_constraintStart_toEndOf="@+id/tvLayer2"
+        />
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/layoutMiddle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        app:cardCornerRadius="16dp"
+        app:cardBackgroundColor="@color/white"
+        app:cardUseCompatPadding="true"
+        app:layout_constraintVertical_bias="0"
+        app:layout_constraintTop_toBottomOf="@id/tvLayer2"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/tvLayer2"
+        >
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="6dp">
+
+            <TextView
+                android:id="@+id/tvDateSchedule2"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginBottom="100dp"
+                android:gravity="center"
+                android:background="@drawable/layout_shimmer_background"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                />
+
+            <TextView
+                android:id="@+id/tvFullDate2"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:background="@drawable/layout_shimmer_background"
+                app:layout_constraintHorizontal_bias="0"
+                app:layout_constraintTop_toTopOf="@+id/tvDateSchedule2"
+                app:layout_constraintBottom_toBottomOf="@id/tvDateSchedule2"
+                app:layout_constraintStart_toEndOf="@+id/tvDateSchedule2"
+                app:layout_constraintEnd_toEndOf="parent"
+                />
+
+            <TextView
+                android:id="@+id/tvClinicNameSchedule2"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:background="@drawable/layout_shimmer_background"
+                app:layout_constraintTop_toBottomOf="@+id/tvFullDate2"
+                app:layout_constraintStart_toStartOf="@+id/tvFullDate2"
+                />
+
+            <TextView
+                android:id="@+id/tvPetNameSchedule2"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/layout_shimmer_background"
+                app:layout_constraintTop_toBottomOf="@+id/tvClinicNameSchedule2"
+                app:layout_constraintStart_toStartOf="@+id/tvClinicNameSchedule2"
+                />
+
+            <TextView
+                android:id="@+id/tvScheduleClinicLocation2"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/layout_shimmer_background"
+                app:layout_constraintTop_toBottomOf="@+id/tvPetNameSchedule2"
+                app:layout_constraintStart_toStartOf="@+id/tvPetNameSchedule2"
+                />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <TextView
+        android:id="@+id/tvLayer3"
+        android:layout_width="180dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="40dp"
+        android:background="@drawable/layout_shimmer_background"
+        app:layout_constraintTop_toBottomOf="@id/layoutMiddle"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <TextView
+        android:id="@+id/tvCountCancelSchedule"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="10dp"
+        android:background="@drawable/layout_shimmer_background"
+        app:layout_constraintBottom_toBottomOf="@id/tvLayer3"
+        app:layout_constraintTop_toTopOf="@+id/tvLayer3"
+        app:layout_constraintStart_toEndOf="@+id/tvLayer3"
+        />
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/layoutBottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        app:cardCornerRadius="16dp"
+        app:cardBackgroundColor="@color/white"
+        app:cardUseCompatPadding="true"
+        app:layout_constraintVertical_bias="0"
+        app:layout_constraintTop_toBottomOf="@id/tvLayer3"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/tvLayer3"
+        >
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="6dp">
+
+            <TextView
+                android:id="@+id/tvDateSchedule3"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginBottom="100dp"
+                android:gravity="center"
+                android:background="@drawable/layout_shimmer_background"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                />
+
+            <TextView
+                android:id="@+id/tvFullDate3"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:background="@drawable/layout_shimmer_background"
+                app:layout_constraintHorizontal_bias="0"
+                app:layout_constraintTop_toTopOf="@+id/tvDateSchedule3"
+                app:layout_constraintBottom_toBottomOf="@id/tvDateSchedule3"
+                app:layout_constraintStart_toEndOf="@+id/tvDateSchedule3"
+                app:layout_constraintEnd_toEndOf="parent"
+                />
+
+            <TextView
+                android:id="@+id/tvClinicNameSchedule3"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:background="@drawable/layout_shimmer_background"
+                app:layout_constraintTop_toBottomOf="@+id/tvFullDate3"
+                app:layout_constraintStart_toStartOf="@+id/tvFullDate3"
+                />
+
+            <TextView
+                android:id="@+id/tvPetNameSchedule3"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/layout_shimmer_background"
+                app:layout_constraintTop_toBottomOf="@+id/tvClinicNameSchedule3"
+                app:layout_constraintStart_toStartOf="@+id/tvClinicNameSchedule3"
+                />
+
+            <TextView
+                android:id="@+id/tvScheduleClinicLocation3"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/layout_shimmer_background"
+                app:layout_constraintTop_toBottomOf="@+id/tvPetNameSchedule3"
+                app:layout_constraintStart_toStartOf="@+id/tvPetNameSchedule3"
+                />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

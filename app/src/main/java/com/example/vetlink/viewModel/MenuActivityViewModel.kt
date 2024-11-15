@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.vetlink.Resource
 import com.example.vetlink.data.model.pets.Pet
 import com.example.vetlink.data.model.pets.PetAddResponse
 import com.example.vetlink.data.model.pets.PetDetails
@@ -31,8 +32,8 @@ class MenuActivityViewModel(
     private val forumRepository: ForumRepository?
 ): ViewModel() {
 
-    private val _user = MutableLiveData<User>()
-    val user: LiveData<User> get() = _user
+    private val _user = MutableLiveData<Resource<User>>()
+    val user: LiveData<Resource<User>> get() = _user
 
     private val _errorMessageUser = MutableLiveData<String>()
     val errorMessageUser: LiveData<String> get() = _errorMessageUser
@@ -46,8 +47,8 @@ class MenuActivityViewModel(
     val addPetResponse = MutableLiveData<PetAddResponse?>()
     val errorMessageAddPet = MutableLiveData<String>()
 
-    private val _pets = MutableLiveData<List<Pet>>()
-    val pets: LiveData<List<Pet>> get() = _pets
+    private val _pets = MutableLiveData<Resource<List<Pet>>>()
+    val pets: LiveData<Resource<List<Pet>>> get() = _pets
 
     private val _errorMessagePet = MutableLiveData<String>()
     val errorMessagePet: LiveData<String> get() = _errorMessagePet
@@ -70,8 +71,8 @@ class MenuActivityViewModel(
     private val _errorMessagePetTypeBreed = MutableLiveData<String>()
     val errorMessagePetTypeBreed: LiveData<String> get() = _errorMessagePetTypeBreed
 
-    private val _queues = MutableLiveData<List<Queue>>()
-    val queues: LiveData<List<Queue>> get() = _queues
+    private val _queues = MutableLiveData<Resource<List<Queue>>>()
+    val queues: LiveData<Resource<List<Queue>>> get() = _queues
 
     private val _errorMessageQueues = MutableLiveData<String>()
     val errorMessageQueues: LiveData<String> get() = _errorMessageQueues
@@ -97,16 +98,21 @@ class MenuActivityViewModel(
     val logoutSuccess: LiveData<Boolean> = _logoutSuccess
 
     fun fetchProfile() {
+
+        _user.postValue(Resource.Loading())
+
         viewModelScope.launch {
             try {
                 val responseUser = authRepository.getProfile()
-                _user.postValue(responseUser.data)
+                _user.postValue(Resource.Success(responseUser.data))
             } catch (e: ConnectException) {
                 _errorMessageUser.postValue("Unable to connect to the server. Please check your internet connection.")
                 Log.e("API_ERROR", "Network Error: ${e.message}")
+                _user.postValue(Resource.Error("Unable to connect to the server. Please check your internet connection."))
             } catch (e: Exception){
                 _errorMessageUser.postValue("An error occurred. Please try again.")
                 Log.e("API_ERROR", "Fetch user error: ${e.message}")
+                _user.postValue(Resource.Error("An error occurred. Please try again."))
             }
         }
     }
@@ -165,17 +171,20 @@ class MenuActivityViewModel(
             try {
                 val responsePets = petRepository?.getPets()
                 if (responsePets!!.isSuccess){
-                    _pets.postValue(responsePets.getOrNull()?.data)
+                    _pets.postValue(Resource.Success(responsePets.getOrNull()?.data ?: emptyList()))
                     Log.d("API_RESPONSE", "Pets fetched successfully: ${responsePets.getOrNull()?.data}")
                 }else{
                     _errorMessagePet.postValue("An error occurred. Please try again.")
+                    _pets.postValue(Resource.Error("An error occurred. Please try again."))
                 }
             }catch (e: ConnectException) {
                 _errorMessagePet.postValue("Unable to connect to the server. Please check your internet connection.")
                 Log.e("API_ERROR", "Network error: ${e.message}")
+                _pets.postValue(Resource.Error("Unable to connect to the server. Please check your internet connection."))
             } catch (e: Exception) {
                 _errorMessagePet.postValue("An error occurred. Please try again.")
                 Log.e("API_ERROR", "Pet error: ${e.message}")
+                _pets.postValue(Resource.Error("An error occurred. Please try again."))
             }
         }
     }
@@ -268,22 +277,27 @@ class MenuActivityViewModel(
             return
         }
 
+        _queues.postValue(Resource.Loading())
+
         viewModelScope.launch {
             try {
                 val responseQueues = queueRepository.getQueues()
                 if (responseQueues.isSuccess) {
-                    _queues.postValue(responseQueues.getOrNull()?.data)
+                    _queues.postValue(Resource.Success(responseQueues.getOrNull()?.data ?: emptyList()))
                     Log.d("API_RESPONSE", "Queues fetched successfully: ${responseQueues.getOrNull()?.data}")
                 } else {
                     _errorMessageQueues.postValue("An error occurred while fetching queues. Please try again.")
                     Log.e("API_ERROR", "Queue fetch failed: ${responseQueues.exceptionOrNull()}")
+                    _queues.postValue(Resource.Error("An error occurred while fetching queues. Please try again."))
                 }
             } catch (e: ConnectException) {
                 _errorMessageQueues.postValue("Unable to connect to the server. Please check your internet connection.")
                 Log.e("API_ERROR", "Network error: ${e.message}")
+                _queues.postValue(Resource.Error("Unable to connect to the server. Please check your internet connection."))
             } catch (e: Exception) {
                 _errorMessageQueues.postValue("An error occurred while fetching queues. Please try again.")
                 Log.e("API_ERROR", "Queue Error: ${e.message}", e)
+                _queues.postValue(Resource.Error("An error occurred while fetching queues. Please try again."))
             }
         }
     }

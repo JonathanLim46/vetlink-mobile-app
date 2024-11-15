@@ -210,7 +210,7 @@ class ForumFormFragment : Fragment(), RecyclerViewClickListener<Pet> {
 
         // Observe pets and set up the adapter
         sharedmenuActivityViewModel.pets.observe(viewLifecycleOwner) { pets ->
-            petAdapter = PetForumSelectAdapter(pets)
+            petAdapter = pets.data?.let { PetForumSelectAdapter(it) }!!
             recyclerView.adapter = petAdapter
             petAdapter.setClickListener(this@ForumFormFragment)
         }
