@@ -217,8 +217,8 @@ class MyPetsFragment : Fragment(),
         }
 
         sharedMenuActivityViewModel.queues.observe(viewLifecycleOwner) { queues ->
-            if (queues != null) {
-                val ongoingCount = queues.count { it.status == "ongoing" }
+            if (queues.data != null) {
+                val ongoingCount = queues.data.count { it.status == "ongoing" }
                 binding.tvCountScheduledVisit.text = ongoingCount.toString()
             } else {
                 binding.tvCountScheduledVisit.text = "0"

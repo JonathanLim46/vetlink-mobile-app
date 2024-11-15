@@ -7,10 +7,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.vetlink.R
+import com.example.vetlink.Resource
 import com.example.vetlink.adapter.ScheduleList
 import com.example.vetlink.adapter.ScheduleListAdapter
 import com.example.vetlink.data.model.queue.Queue
@@ -61,61 +63,82 @@ class ScheduleFragment : Fragment() {
     }
 
     private fun setupObservers(){
-        sharedMenuActivityViewModel.queues.observe(viewLifecycleOwner){ queues ->
-            var upComing = queues.filter { it.status == "ongoing" }
-            var history = queues.filter { it.status == "finished" }
-            var cancel = queues.filter { it.status == "canceled" }
+        sharedMenuActivityViewModel.queues.observe(viewLifecycleOwner){ resource ->
 
-            binding.tvCountUpcoming.text = if (upComing.isNotEmpty()) "(" + upComing.size.toString() + ")" else "(0)"
-            binding.tvCountHistorySchedule.text = if (history.isNotEmpty()) "(" + history.size.toString() + ")" else "(0)"
-            binding.tvCountCancelSchedule.text = if (cancel.isNotEmpty()) "(" + cancel.size.toString() + ")" else "(0)"
+            when(resource){
+                is Resource.Loading ->{
+                    binding.shimmerSchedule.startShimmer()
+                }
+                is Resource.Success ->{
 
-            var upComingList = ArrayList(upComing.map { queue ->
-                ScheduleList(
-                    scheduleDate = dateFormat.format(queue.appointment_time),
-                    scheduleFullDate = fullDateFormat.format(queue.appointment_time),
-                    scheduleClinicName = queue.veteriner.clinic_name,
-                    schedulePetName = queue.pet.name,
-                    scheduleClinicFullLocation = queue.veteriner.city
-                )
-            })
-            binding.rvUpComing.adapter = ScheduleListAdapter(upComingList)
-            binding.rvUpComing.adapter?.notifyDataSetChanged()
+                    if(resource.data != null){
 
-            var historyList = ArrayList(history.map { queue ->
-                ScheduleList(
-                    scheduleDate = dateFormat.format(queue.appointment_time),
-                    scheduleFullDate = fullDateFormat.format(queue.appointment_time),
-                    scheduleClinicName = queue.veteriner.clinic_name,
-                    schedulePetName = queue.pet.name,
-                    scheduleClinicFullLocation = queue.veteriner.city
-                )
-            })
-            binding.rvHistory.adapter = ScheduleListAdapter(historyList)
-            binding.rvHistory.adapter?.notifyDataSetChanged()
+                        var upComing = resource.data.filter { it.status == "ongoing" }
+                        var history = resource.data.filter { it.status == "finished" }
+                        var cancel = resource.data.filter { it.status == "canceled" }
 
-            var cancelList = ArrayList(cancel.map { queue ->
-                ScheduleList(
-                    scheduleDate = dateFormat.format(queue.appointment_time),
-                    scheduleFullDate = fullDateFormat.format(queue.appointment_time),
-                    scheduleClinicName = queue.veteriner.clinic_name,
-                    schedulePetName = queue.pet.name,
-                    scheduleClinicFullLocation = queue.veteriner.city
-                )
-            })
+                        binding.tvCountUpcoming.text = if (upComing.isNotEmpty()) "(" + upComing.size.toString() + ")" else "(0)"
+                        binding.tvCountHistorySchedule.text = if (history.isNotEmpty()) "(" + history.size.toString() + ")" else "(0)"
+                        binding.tvCountCancelSchedule.text = if (cancel.isNotEmpty()) "(" + cancel.size.toString() + ")" else "(0)"
 
-            binding.rvCancel.adapter = ScheduleListAdapter(cancelList)
-            binding.rvCancel.adapter?.notifyDataSetChanged()
+                        var upComingList = ArrayList(upComing.map { queue ->
+                            ScheduleList(
+                                scheduleDate = dateFormat.format(queue.appointment_time),
+                                scheduleFullDate = fullDateFormat.format(queue.appointment_time),
+                                scheduleClinicName = queue.veteriner.clinic_name,
+                                schedulePetName = queue.pet.name,
+                                scheduleClinicFullLocation = queue.veteriner.city
+                            )
+                        })
+                        binding.rvUpComing.adapter = ScheduleListAdapter(upComingList)
+                        binding.rvUpComing.adapter?.notifyDataSetChanged()
+
+                        var historyList = ArrayList(history.map { queue ->
+                            ScheduleList(
+                                scheduleDate = dateFormat.format(queue.appointment_time),
+                                scheduleFullDate = fullDateFormat.format(queue.appointment_time),
+                                scheduleClinicName = queue.veteriner.clinic_name,
+                                schedulePetName = queue.pet.name,
+                                scheduleClinicFullLocation = queue.veteriner.city
+                            )
+                        })
+                        binding.rvHistory.adapter = ScheduleListAdapter(historyList)
+                        binding.rvHistory.adapter?.notifyDataSetChanged()
+
+                        var cancelList = ArrayList(cancel.map { queue ->
+                            ScheduleList(
+                                scheduleDate = dateFormat.format(queue.appointment_time),
+                                scheduleFullDate = fullDateFormat.format(queue.appointment_time),
+                                scheduleClinicName = queue.veteriner.clinic_name,
+                                schedulePetName = queue.pet.name,
+                                scheduleClinicFullLocation = queue.veteriner.city
+                            )
+                        })
+
+                        binding.rvCancel.adapter = ScheduleListAdapter(cancelList)
+                        binding.rvCancel.adapter?.notifyDataSetChanged()
 
 
 
-            if (upComingList.isEmpty() && historyList.isEmpty() && cancelList.isEmpty()){
-                binding.scrollViewSchedule.visibility = View.GONE
-                binding.layoutScheduleNull.visibility = View.VISIBLE
-            } else {
-                binding.layoutScheduleNull.visibility = View.GONE
-                binding.scrollViewSchedule.visibility = View.VISIBLE
+                        if (upComingList.isEmpty() && historyList.isEmpty() && cancelList.isEmpty()){
+                            showSchedule()
+                            binding.scrollViewSchedule.visibility = View.GONE
+                            binding.layoutScheduleNull.visibility = View.VISIBLE
+                        } else {
+                            showSchedule()
+                            binding.layoutScheduleNull.visibility = View.GONE
+                            binding.scrollViewSchedule.visibility = View.VISIBLE
+                        }
+
+                    }
+
+                }
+                is Resource.Error ->{
+                    Log.d("QueueObserver", "Error loading data: ${resource.message}")
+                    Toast.makeText(context, "Error: ${resource.message}", Toast.LENGTH_SHORT).show()
+                }
             }
+
 
         }
     }
@@ -135,32 +158,11 @@ class ScheduleFragment : Fragment() {
         }
     }
 
-    private fun addDataToUpComing(){
-        scheduleList.add(
-            ScheduleList("4", "Friday, October 2024",
-            "Klinik Hewan IPB", "Mbal",
-            "Dramaga, Kab. Bogor")
-        )
-        scheduleList.add(
-            ScheduleList("4", "Friday, October 2024",
-                "Klinik Hewan IPB", "Mbal",
-                "Dramaga, Kab. Bogor")
-        )
-        scheduleList.add(
-            ScheduleList("4", "Friday, October 2024",
-                "Klinik Hewan IPB", "Mbal",
-                "Dramaga, Kab. Bogor")
-        )
-        scheduleList.add(
-            ScheduleList("4", "Friday, October 2024",
-                "Klinik Hewan IPB", "Mbal",
-                "Dramaga, Kab. Bogor")
-        )
-        scheduleList.add(
-            ScheduleList("4", "Friday, October 2024",
-                "Klinik Hewan IPB", "Mbal",
-                "Dramaga, Kab. Bogor")
-        )
+    private fun showSchedule(){
+        binding.shimmerSchedule.apply {
+            stopShimmer()
+            visibility = View.GONE
+        }
     }
 
 

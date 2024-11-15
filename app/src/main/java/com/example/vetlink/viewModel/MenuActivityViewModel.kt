@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.vetlink.Resource
 import com.example.vetlink.data.model.pets.Pet
 import com.example.vetlink.data.model.pets.PetAddResponse
 import com.example.vetlink.data.model.pets.PetDetails
@@ -70,8 +71,8 @@ class MenuActivityViewModel(
     private val _errorMessagePetTypeBreed = MutableLiveData<String>()
     val errorMessagePetTypeBreed: LiveData<String> get() = _errorMessagePetTypeBreed
 
-    private val _queues = MutableLiveData<List<Queue>>()
-    val queues: LiveData<List<Queue>> get() = _queues
+    private val _queues = MutableLiveData<Resource<List<Queue>>>()
+    val queues: LiveData<Resource<List<Queue>>> get() = _queues
 
     private val _errorMessageQueues = MutableLiveData<String>()
     val errorMessageQueues: LiveData<String> get() = _errorMessageQueues
@@ -268,22 +269,27 @@ class MenuActivityViewModel(
             return
         }
 
+        _queues.postValue(Resource.Loading())
+
         viewModelScope.launch {
             try {
                 val responseQueues = queueRepository.getQueues()
                 if (responseQueues.isSuccess) {
-                    _queues.postValue(responseQueues.getOrNull()?.data)
+                    _queues.postValue(Resource.Success(responseQueues.getOrNull()?.data ?: emptyList()))
                     Log.d("API_RESPONSE", "Queues fetched successfully: ${responseQueues.getOrNull()?.data}")
                 } else {
                     _errorMessageQueues.postValue("An error occurred while fetching queues. Please try again.")
                     Log.e("API_ERROR", "Queue fetch failed: ${responseQueues.exceptionOrNull()}")
+                    _queues.postValue(Resource.Error("An error occurred while fetching queues. Please try again."))
                 }
             } catch (e: ConnectException) {
                 _errorMessageQueues.postValue("Unable to connect to the server. Please check your internet connection.")
                 Log.e("API_ERROR", "Network error: ${e.message}")
+                _queues.postValue(Resource.Error("Unable to connect to the server. Please check your internet connection."))
             } catch (e: Exception) {
                 _errorMessageQueues.postValue("An error occurred while fetching queues. Please try again.")
                 Log.e("API_ERROR", "Queue Error: ${e.message}", e)
+                _queues.postValue(Resource.Error("An error occurred while fetching queues. Please try again."))
             }
         }
     }

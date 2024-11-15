@@ -150,14 +150,28 @@
 
         </ScrollView>
 
+
+
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    <!-- shimmer layout -->
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/shimmerSchedule"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="visible"
+        >
+
+        <include layout="@layout/layout_schedule_shimmer"/>
+
+    </com.facebook.shimmer.ShimmerFrameLayout>
 
     <!--   if data null    -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layoutScheduleNull"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="visible"
+        android:visibility="gone"
         >
         
         <ImageView
