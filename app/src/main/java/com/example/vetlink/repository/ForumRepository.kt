@@ -1,6 +1,7 @@
 package com.example.vetlink.repository
 
 import com.example.vetlink.data.model.forums.ForumAddResponse
+import com.example.vetlink.data.model.forums.ForumDeleteResponse
 import com.example.vetlink.data.model.forums.ForumsResponse
 import com.example.vetlink.data.network.ForumApi
 import com.example.vetlink.data.network.RetrofitInstance
@@ -44,4 +45,25 @@ class ForumRepository(val session: SessionManager) {
             Result.failure(e)
         }
     }
+
+    suspend fun deleteForum(id: Int): Result<ForumDeleteResponse> {
+        return try {
+            val response = forumApi.deleteForum(id)
+            if (response.status == 200){
+                Result.success(response)
+            } else {
+                Result.failure(Exception("Failed with status: ${response.status}"))
+            }
+        }catch (e: HttpException) {
+            // Handle HTTP errors (e.g., 404, 500)
+            Result.failure(Exception("HTTP error: ${e.code()} - ${e.message}"))
+        } catch (e: IOException) {
+            // Handle network-related errors (e.g., no internet)
+            Result.failure(Exception("Network error: ${e.message}"))
+        } catch (e: Exception) {
+            // Handle any other exceptions
+            Result.failure(e)
+        }
+    }
+
 }
