@@ -160,6 +160,14 @@ class HomeFragment : Fragment(), RecyclerViewClickListener<ClinicList> {
                                 binding.layoutHomeVisitHistory.ivClinicHistory.setImageResource(R.drawable.img_rspets)
                             }
                             layoutHomeVisitHistory.tvClinicLocationHistory.text = resource.data.city
+
+                            layoutHomeVisitHistory.btnReturnVisit.setOnClickListener{
+                                val intent = Intent(activity, MenuActivity::class.java)
+                                intent.putExtra("MENU_TITLE", "Clinic")
+                                intent.putExtra("CLINIC_ID", resource.data.id)
+                                startActivity(intent)
+                            }
+
                         } else {
                             Log.d("Queue Latest : ", "Queue is null")
                             layoutVisitHistory.visibility = View.GONE
@@ -327,6 +335,16 @@ class HomeFragment : Fragment(), RecyclerViewClickListener<ClinicList> {
                 (activity as? MainActivity)?.navigateToTab(R.id.forumPage)
             }
 
+            includeHome.ivCreateSchedule.setOnClickListener{
+                (activity as? MainActivity)?.navigateToTab(R.id.clinicPage)
+            }
+
+            includeHome.layoutHome.setOnClickListener{
+                val intent = Intent(requireContext(), MenuActivity::class.java)
+                intent.putExtra("MENU_TITLE", "Schedule")
+                startActivity(intent)
+            }
+
         }
     }
 
@@ -430,6 +448,7 @@ class HomeFragment : Fragment(), RecyclerViewClickListener<ClinicList> {
     override fun onItemClicke(view: View, item: ClinicList) {
         val intent = Intent(activity, MenuActivity::class.java)
         intent.putExtra("MENU_TITLE", "Clinic")
+        intent.putExtra("CLINIC_ID", item.clinicId)
         startActivity(intent)
     }
 
