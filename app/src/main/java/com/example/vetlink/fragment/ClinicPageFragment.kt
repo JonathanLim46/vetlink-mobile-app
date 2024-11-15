@@ -180,11 +180,6 @@ class ClinicPageFragment : Fragment() {
 
         val rvSelectPet = view.findViewById<RecyclerView>(R.id.rvSelectPetForum)
         rvSelectPet.layoutManager = LinearLayoutManager(requireContext())
-        rvSelectPet.adapter = petsSelectListAdapter
-
-        dialog.setContentView(view)
-        dialog.setCancelable(true)
-        dialog.show()
 
         // Initialize petsSelectListAdapter with click listener and update selected pet
         petsSelectListAdapter = PetsSelectListAdapter(petsSelectList!!) { selectedPetName, selectedPetId ->
@@ -192,8 +187,15 @@ class ClinicPageFragment : Fragment() {
             binding.tvPetUserSelect.text = selectedPetName
             binding.tvSelectPetsDialog.text = selectedPetName
             Toast.makeText(requireContext(), "Selected Pet ID: $petId", Toast.LENGTH_SHORT).show()
+            dialog.dismiss()
         }
         petsSelectListAdapter!!.notifyDataSetChanged()
+
+        rvSelectPet.adapter = petsSelectListAdapter
+        dialog.setContentView(view)
+        dialog.setCancelable(true)
+        dialog.show()
+
 
     }
 }
