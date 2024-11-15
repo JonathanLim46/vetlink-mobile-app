@@ -77,6 +77,7 @@ class ForumPublicFragment: Fragment(), RecyclerViewClickListener<ForumPostList> 
                 for (forum in lostForums) {
                     forumPostList.add(
                         ForumPostList(
+                            forum.id,
                             forum.user.photo,
                             forum.pet_image,
                             forum.user.username,
