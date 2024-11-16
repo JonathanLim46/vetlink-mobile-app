@@ -39,7 +39,7 @@ class ForumFragment : Fragment() {
     private var param2: String? = null
 
     var userForum: List<Forum>? = null
-    var otherForum: List<Forum>? = null
+    var postForums: List<Forum>? = null
 
     private lateinit var binding: FragmentForumBinding
 
@@ -98,7 +98,7 @@ class ForumFragment : Fragment() {
                 userForum = forums.filter { it.user.id == sharedMainActivityViewModel.user.value?.id }
                 var userForumLost = userForum!!.filter { it.status == "lost" }
                 var userForumFound = userForum!!.filter { it.status == "found" }
-                otherForum = forums.filter { it.user.id != sharedMainActivityViewModel.user.value?.id }
+                postForums = forums
 
                 binding.apply {
                     tvCountPost.text = userForum!!.size.toString()
@@ -125,9 +125,9 @@ class ForumFragment : Fragment() {
     }
 
     private fun setAdapter(){
-        if (otherForum != null && userForum != null){
+        if (postForums != null && userForum != null){
             val tabArrayList = arrayOf("All Board", "My Board")
-            val adapter = ForumPageAdapter(requireActivity(), tabArrayList.size, otherForum!!, userForum!!)
+            val adapter = ForumPageAdapter(requireActivity(), tabArrayList.size, postForums!!, userForum!!)
             binding.apply {
                 viewPagerForum.adapter = adapter
                 TabLayoutMediator(tabLayoutForum, viewPagerForum) {tab, position ->

@@ -174,9 +174,8 @@ class ForumPublicFragment: Fragment(), RecyclerViewClickListener<ForumPostList> 
                     sharedMainActivityViewModel.addCommentStatus.observe(viewLifecycleOwner){ addCommentStatus ->
                         if (addCommentStatus == 201) {
                             sharedMainActivityViewModel.getComments(item.postId)
-
+                            etReplyComment.text = null
                         }
-                        Log.d("statusAdd", "$addCommentStatus")
                     }
                 }
 
@@ -190,7 +189,6 @@ class ForumPublicFragment: Fragment(), RecyclerViewClickListener<ForumPostList> 
             }
 
             show()
-
 
             val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
             bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
@@ -236,10 +234,10 @@ class ForumPublicFragment: Fragment(), RecyclerViewClickListener<ForumPostList> 
          */
         // TODO: Rename and change types and number of parameters
         @JvmStatic
-        fun newInstance(otherForums: List<Forum>) =
+        fun newInstance(postForums: List<Forum>) =
             ForumPublicFragment().apply {
                 arguments = Bundle().apply {
-                    putParcelableArrayList(ARG_FORUMS, ArrayList(otherForums))
+                    putParcelableArrayList(ARG_FORUMS, ArrayList(postForums))
                 }
             }
     }

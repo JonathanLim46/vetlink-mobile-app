@@ -255,7 +255,13 @@ class ForumPrivateFragment() : Fragment(), RecyclerViewClickListener<ForumPostLi
                 // Handle the click event
                 btnSendComment.setOnClickListener {
                     val comment = etReplyComment.text.toString()
-                    Log.d("COMMENT", "$comment ${item.postId}")
+                    sharedMainActivityViewModel.addComment(item.postId!!, comment)
+                    sharedMainActivityViewModel.addCommentStatus.observe(viewLifecycleOwner){ addCommentStatus ->
+                        if (addCommentStatus == 201) {
+                            sharedMainActivityViewModel.getComments(item.postId)
+                            etReplyComment.text = null
+                        }
+                    }
                 }
 
             } else if (view.tag == "postMenu"){
@@ -277,7 +283,6 @@ class ForumPrivateFragment() : Fragment(), RecyclerViewClickListener<ForumPostLi
                         }
                     }
                 }
-
 
                 val editPost = viewLayout.findViewById<TextView>(R.id.tvSecondLineDialog)
                 editPost.setOnClickListener{
