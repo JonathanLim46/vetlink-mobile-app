@@ -12,5 +12,4 @@ data class ForumPostList(
     val postDescription: String,
     val postLastSeen: String,
     val postCharacteristics: String,
-    val postComments: List<Comment>
 )
