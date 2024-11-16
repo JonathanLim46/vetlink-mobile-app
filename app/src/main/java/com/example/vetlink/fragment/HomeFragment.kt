@@ -50,6 +50,7 @@ class HomeFragment : Fragment(), RecyclerViewClickListener<ClinicList> {
     private lateinit var clinicList: ArrayList<ClinicList>
     private lateinit var allClinicList: ArrayList<ClinicList>
     private lateinit var clinicListAdapter: ClinicListAdapter
+    private var cityNow: String? = null
 
     // Schedule
     val dateFormat = SimpleDateFormat("dd", Locale.getDefault())
@@ -236,25 +237,42 @@ class HomeFragment : Fragment(), RecyclerViewClickListener<ClinicList> {
 
         // veteriner
         sharedMainActivityViewModel.veteriners.observe(viewLifecycleOwner) { resource ->
-
-            when (resource){
+            when (resource) {
                 is Resource.Loading -> {
+                    getLastLocation()
                     binding.shimmerClinic.startShimmer()
                 }
                 is Resource.Success -> {
-                    showClinic()
-                    if(resource.data != null){
-                        resource.data?.take(5)?.forEach{ veteriner ->
+                    if (resource.data != null && resource.data.isNotEmpty()) {
+                        Log.d("City Now ", "$cityNow")
+                        val filteredClinics = resource.data.filter { it.city == cityNow }
 
-                            val openTimeFormatted = outputFormat.format(inputFormat.parse(veteriner.open_time)!!)
-                            val closeTimeFormatted = outputFormat.format(inputFormat.parse(veteriner.close_time)!!)
-                            allClinicList.add(ClinicList(veteriner.id, veteriner.clinic_image, veteriner.clinic_name, veteriner.city, "Buka | $openTimeFormatted - $closeTimeFormatted"))
+                        Log.d("filter list", "${filteredClinics.size}")
+
+                        if (filteredClinics.isNotEmpty()) {
+                            showClinic()
+                            filteredClinics.take(5).forEach { veteriner ->
+                                val openTimeFormatted = outputFormat.format(inputFormat.parse(veteriner.open_time)!!)
+                                val closeTimeFormatted = outputFormat.format(inputFormat.parse(veteriner.close_time)!!)
+                                allClinicList.add(
+                                    ClinicList(
+                                        veteriner.id,
+                                        veteriner.clinic_image,
+                                        veteriner.clinic_name,
+                                        veteriner.city,
+                                        "Buka | $openTimeFormatted - $closeTimeFormatted"
+                                    )
+                                )
+                            }
+                            clinicList.clear()
+                            clinicList.addAll(allClinicList)
+                            clinicListAdapter.notifyDataSetChanged()
+                            getLastLocation()
+                        } else {
+                            showClinicNull()
                         }
-                        clinicList.clear()
-                        clinicList.addAll(allClinicList)
-                        clinicListAdapter.notifyDataSetChanged()
-
-                        getLastLocation()
+                    } else {
+                        showClinicNull()
                     }
                 }
                 is Resource.Error -> {
@@ -263,8 +281,6 @@ class HomeFragment : Fragment(), RecyclerViewClickListener<ClinicList> {
                     binding.shimmerLayout.hideShimmer()
                 }
             }
-
-
         }
 
         sharedMainActivityViewModel.forums.observe(viewLifecycleOwner) { forums ->
@@ -299,6 +315,7 @@ class HomeFragment : Fragment(), RecyclerViewClickListener<ClinicList> {
     }
 
     private fun initView() {
+
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(requireContext())
         with(binding){
 
@@ -317,15 +334,6 @@ class HomeFragment : Fragment(), RecyclerViewClickListener<ClinicList> {
                 clinicListAdapter.notifyDataSetChanged()
                 srlList.isRefreshing = false
             }
-
-            layoutHomeToolbar.tvNameHome.text = "Loading.."
-
-//            View More
-//            tvViewMoreClinic.setOnClickListener{
-//                val intent = Intent(activity, MainActivity::class.java)
-//                intent.putExtra("fragment", "clinicFragment")
-//                startActivity(intent)
-//            }
 
             tvViewMoreClinic.setOnClickListener {
                 (activity as? MainActivity)?.navigateToTab(R.id.clinicPage)
@@ -385,6 +393,7 @@ class HomeFragment : Fragment(), RecyclerViewClickListener<ClinicList> {
 
                     if(city != null){
                         Log.d("Location City : ", "$city")
+                        cityNow = city
                         dataClinic(city)
                     } else {
                         if (isAdded) {
@@ -443,6 +452,14 @@ class HomeFragment : Fragment(), RecyclerViewClickListener<ClinicList> {
             visibility = View.GONE
         }
         binding.rvClinicList.visibility = View.VISIBLE
+    }
+
+    private fun showClinicNull(){
+        binding.shimmerClinic.apply {
+            stopShimmer()
+            visibility = View.GONE
+        }
+        binding.tvClinicNull.visibility = View.VISIBLE
     }
 
     override fun onItemClicke(view: View, item: ClinicList) {
