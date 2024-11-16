@@ -46,6 +46,7 @@
             />
 
         <ImageView
+            android:id="@+id/ivSendComment"
             android:layout_width="21dp"
             android:layout_height="21dp"
             android:layout_marginEnd="25dp"
