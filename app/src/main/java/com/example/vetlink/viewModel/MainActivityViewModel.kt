@@ -77,6 +77,7 @@ class MainActivityViewModel(
     val logoutSuccess: LiveData<Boolean> = _logoutSuccess
 
     val deleteForumStatus = MutableLiveData<Int>()
+    val updateForumStatus = MutableLiveData<Int>()
 
     fun fetchUser() {
         viewModelScope.launch {
@@ -224,6 +225,15 @@ class MainActivityViewModel(
             val response = forumRepository?.deleteForum(id)
             if (response != null) {
                 deleteForumStatus.postValue(response.getOrNull()?.status)
+            }
+        }
+    }
+
+    fun updateForum(id: Int){
+        viewModelScope.launch {
+            val response = forumRepository?.updateForum(id)
+            if (response != null) {
+                updateForumStatus.postValue(response.getOrNull()?.status)
             }
         }
     }

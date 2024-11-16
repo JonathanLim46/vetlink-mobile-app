@@ -2,6 +2,7 @@ package com.example.vetlink.data.network
 
 import com.example.vetlink.data.model.forums.ForumAddResponse
 import com.example.vetlink.data.model.forums.ForumDeleteResponse
+import com.example.vetlink.data.model.forums.ForumUpdateResponse
 import com.example.vetlink.data.model.forums.ForumsResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -27,4 +28,6 @@ interface ForumApi {
     @DELETE("customer/forum/{id}")
     suspend fun deleteForum(@Path("id") id: Int): ForumDeleteResponse
 
+    @POST("customer/forum/{id}")
+    suspend fun updateForum(@Path("id") id: Int): ForumUpdateResponse
 }

@@ -230,7 +230,15 @@ class ForumPrivateFragment() : Fragment(), RecyclerViewClickListener<ForumPostLi
                 val editPost = viewLayout.findViewById<TextView>(R.id.tvSecondLineDialog)
                 editPost.setOnClickListener{
                     dialog.dismiss()
-                    Log.d("Edit Post", "Edit Post ${item.postId}")
+                    item.postId?.let { it1 -> sharedMainActivityViewModel.updateForum(it1) }
+                    sharedMainActivityViewModel.updateForumStatus.observe(viewLifecycleOwner){
+                        if (it == 200) {
+                            Toast.makeText(requireContext(), "Post updated successfully", Toast.LENGTH_SHORT).show()
+                            sharedMainActivityViewModel.getForums()
+                        }else{
+                            Toast.makeText(requireContext(), "Post update failed", Toast.LENGTH_SHORT).show()
+                        }
+                    }
                 }
             }
 
@@ -266,6 +274,8 @@ class ForumPrivateFragment() : Fragment(), RecyclerViewClickListener<ForumPostLi
                 if (it == 200) {
                     Toast.makeText(requireContext(), "Post deleted successfully", Toast.LENGTH_SHORT).show()
                     sharedMainActivityViewModel.getForums()
+                }else{
+                    Toast.makeText(requireContext(), "Post deletion failed", Toast.LENGTH_SHORT).show()
                 }
             }
             dialog.dismiss()
