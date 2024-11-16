@@ -265,9 +265,8 @@ class ForumPrivateFragment() : Fragment(), RecyclerViewClickListener<ForumPostLi
                     deletePostDialog(item.postId!!)
                 }
 
-                val editPost = viewLayout.findViewById<TextView>(R.id.tvSecondLineDialog)
-                editPost.setOnClickListener{
-                    dialog.dismiss()
+                val markFound = viewLayout.findViewById<TextView>(R.id.tvFirstLineDialog)
+                markFound.setOnClickListener{
                     item.postId?.let { it1 -> sharedMainActivityViewModel.updateForum(it1) }
                     sharedMainActivityViewModel.updateForumStatus.observe(viewLifecycleOwner){
                         if (it == 200) {
@@ -277,6 +276,12 @@ class ForumPrivateFragment() : Fragment(), RecyclerViewClickListener<ForumPostLi
                             Toast.makeText(requireContext(), "Post update failed", Toast.LENGTH_SHORT).show()
                         }
                     }
+                }
+
+
+                val editPost = viewLayout.findViewById<TextView>(R.id.tvSecondLineDialog)
+                editPost.setOnClickListener{
+                    dialog.dismiss()
                 }
             }
 
