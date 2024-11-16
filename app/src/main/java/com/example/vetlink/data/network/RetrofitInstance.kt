@@ -46,7 +46,7 @@ object RetrofitInstance {
     // Create Retrofit instance
     fun getRetrofit(session: SessionManager): Retrofit {
         return Retrofit.Builder()
-            .baseUrl("http://192.168.1.7:8000/api/") // Replace with your base URL
+            .baseUrl("http://192.168.51.109:8000/api/") // Replace with your base URL
             .client(getOkHttpClient(session))
             .addConverterFactory(GsonConverterFactory.create(getGson())) // Use Gson for JSON conversion
             .build()

@@ -144,19 +144,35 @@ class ClinicFragment : Fragment(), RecyclerViewClickListener<ClinicList>{
 
             when(resource){
                 is Resource.Loading -> {
+                    getLastLocation()
                     binding.shimmerClinicMain.startShimmer()
                 }
                 is Resource.Success -> {
-                    showClinic()
-                    if (resource.data != null){
-                        allClinicList.clear()
-                        resource.data?.forEach{ veteriner ->
-                            val openTimeFormatted = outputFormat.format(inputFormat.parse(veteriner.open_time)!!)
-                            val closeTimeFormatted = outputFormat.format(inputFormat.parse(veteriner.close_time)!!)
-                            allClinicList.add(ClinicList(veteriner.id,veteriner.clinic_image, veteriner.clinic_name, veteriner.city, "Buka | $openTimeFormatted - $closeTimeFormatted"))
-                        }
+                    val filterClinic = resource.data?.filter { it.city.lowercase() == binding.tvLocationClinic.text.toString().lowercase() }
 
-                        clinicList.addAll(allClinicList)
+                    Log.d("Location", "${binding.tvLocationClinic.text}")
+                    if (filterClinic != null) {
+                        Log.d("List", "${filterClinic.size}")
+                    }
+                    if (filterClinic != null) {
+                        if (filterClinic.isNotEmpty()){
+                            showClinic()
+                            allClinicList.clear()
+                            filterClinic.forEach{ veteriner ->
+                                val openTimeFormatted = outputFormat.format(inputFormat.parse(veteriner.open_time)!!)
+                                val closeTimeFormatted = outputFormat.format(inputFormat.parse(veteriner.close_time)!!)
+                                allClinicList.add(ClinicList(veteriner.id,veteriner.clinic_image, veteriner.clinic_name, veteriner.city, "Buka | $openTimeFormatted - $closeTimeFormatted"))
+                            }
+
+                            clinicList.addAll(allClinicList)
+                        } else {
+                            Log.d("Data Clinic:", "Null")
+                            binding.shimmerClinicMain.apply {
+                                stopShimmer()
+                                visibility = View.GONE
+                            }
+                            binding.tvClinicPageNull.visibility = View.VISIBLE
+                        }
                     }
                 }
                 is Resource.Error -> {
@@ -255,7 +271,6 @@ class ClinicFragment : Fragment(), RecyclerViewClickListener<ClinicList>{
 
                     if(city != null){
                         Log.d("Location City : ", "$city")
-
                         binding.tvLocationClinic.text = city
 
                         dataClinic()

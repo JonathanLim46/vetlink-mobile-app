@@ -111,6 +111,13 @@ class HomeFragment : Fragment(), RecyclerViewClickListener<ClinicList> {
         initView()
         setupObservers()
 
+        cityNow = sharedMainActivityViewModel.cityNow
+        if (cityNow != null) {
+            dataClinic(cityNow!!)
+        } else {
+            getLastLocation()
+        }
+
         return binding.root
     }
 
@@ -394,6 +401,7 @@ class HomeFragment : Fragment(), RecyclerViewClickListener<ClinicList> {
                     if(city != null){
                         Log.d("Location City : ", "$city")
                         cityNow = city
+                        sharedMainActivityViewModel.cityNow = city
                         dataClinic(city)
                     } else {
                         if (isAdded) {

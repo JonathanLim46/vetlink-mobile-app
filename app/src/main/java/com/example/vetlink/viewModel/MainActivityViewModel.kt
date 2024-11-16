@@ -32,6 +32,8 @@ class MainActivityViewModel(
     private val forumRepository: ForumRepository?
 ): ViewModel() {
 
+    var cityNow: String? = null
+
     private val _user = MutableLiveData<User>()
     val user: LiveData<User> get() = _user
 
