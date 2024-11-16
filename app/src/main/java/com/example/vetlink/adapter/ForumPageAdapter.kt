@@ -10,7 +10,7 @@ import com.example.vetlink.fragment.ForumPublicFragment
 class ForumPageAdapter(
     fragment: FragmentActivity,
     val totalTabs : Int,
-    val otherForums: List<Forum>,
+    val postForums: List<Forum>,
     val userForums: List<Forum>
 ): FragmentStateAdapter(fragment) {
     override fun getItemCount(): Int {
@@ -20,7 +20,7 @@ class ForumPageAdapter(
     override fun createFragment(position: Int): Fragment {
         return when(position){
             0 -> {
-                ForumPublicFragment.newInstance(otherForums)
+                ForumPublicFragment.newInstance(postForums)
             }
             1 -> {
                 ForumPrivateFragment.newInstance(userForums)
