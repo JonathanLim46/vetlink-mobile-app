@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.vetlink.Resource
+import com.example.vetlink.data.model.comment.Comment
 import com.example.vetlink.data.model.forums.Forum
 import com.example.vetlink.data.model.pets.Pet
 import com.example.vetlink.data.model.queue.LatestQueue
@@ -73,11 +74,18 @@ class MainActivityViewModel(
     private val _errorMessageForums = MutableLiveData<String>()
     val errorMessageForums: LiveData<String> get() = _errorMessageForums
 
+    private val _forumsComments = MutableLiveData<List<Comment>>()
+    val forumsComments: LiveData<List<Comment>> get() = _forumsComments
+
+    private val _errorMessageForumsComments = MutableLiveData<String>()
+    val errorMessageForumsComments: LiveData<String> get() = _errorMessageForumsComments
+
     private val _logoutSuccess = MutableLiveData<Boolean>()
     val logoutSuccess: LiveData<Boolean> = _logoutSuccess
 
     val deleteForumStatus = MutableLiveData<Int>()
     val updateForumStatus = MutableLiveData<Int>()
+    val addCommentStatus = MutableLiveData<Int>()
 
     fun fetchUser() {
         viewModelScope.launch {
@@ -262,6 +270,48 @@ class MainActivityViewModel(
         viewModelScope.launch {
             val responseLogout = authRepository.logout()
             _logoutSuccess.postValue(responseLogout)
+        }
+    }
+
+    fun getComments(postId: Int) {
+        viewModelScope.launch {
+            try {
+                val response = forumRepository?.getForumComments(postId)
+                if (response != null) {
+                    _forumsComments.postValue(response.getOrNull()?.data)
+                }else{
+                    _errorMessageForumsComments.postValue("An error occurred. Please try again.")
+                }
+            } catch (e: ConnectException) {
+                _errorMessageForumsComments.postValue("Unable to connect to the server. Please check your internet connection.")
+                Log.e("API_ERROR", "Network error: ${e.message}")
+            } catch (e: Exception) {
+                _errorMessageForums.postValue("An error occurred while fetching queues. Please try again.")
+                Log.e("API_ERROR", "Comments Error: ${e.message}", e)
+            }
+        }
+    }
+
+    fun addComment(postId: Int, comment: String){
+        viewModelScope.launch {
+            try {
+                val response = forumRepository?.addForumComment(postId, comment)
+                if (response != null) {
+                    if (response.getOrNull()?.status == 201){
+                        addCommentStatus.postValue(response.getOrNull()!!.status)
+                    } else{
+                        _errorMessageForumsComments.postValue("An error occurred. Please try again.")
+                    }
+                }else{
+                    _errorMessageForumsComments.postValue("An error occurred. Please try again.")
+                }
+            }catch (e: ConnectException) {
+                _errorMessageForumsComments.postValue("Unable to connect to the server. Please check your internet connection.")
+                Log.e("API_ERROR", "Network error: ${e.message}")
+            } catch (e: Exception) {
+                _errorMessageForums.postValue("An error occurred while fetching queues. Please try again.")
+                Log.e("API_ERROR", "Create Comments Error: ${e.message}", e)
+            }
         }
     }
 

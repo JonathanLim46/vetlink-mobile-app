@@ -4,13 +4,18 @@ import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
+import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.vetlink.R
@@ -21,6 +26,7 @@ import com.example.vetlink.adapter.RecyclerViewClickListener
 import com.example.vetlink.data.model.comment.Comment
 import com.example.vetlink.data.model.forums.Forum
 import com.example.vetlink.databinding.FragmentForumPublicBinding
+import com.example.vetlink.viewModel.MainActivityViewModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 
@@ -39,6 +45,8 @@ class ForumPublicFragment: Fragment(), RecyclerViewClickListener<ForumPostList> 
     private lateinit var binding: FragmentForumPublicBinding
     private lateinit var forumPostList: ArrayList<ForumPostList>
     private lateinit var forumPostListAdapter: ForumPostListAdapter
+
+    private val sharedMainActivityViewModel: MainActivityViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -86,7 +94,6 @@ class ForumPublicFragment: Fragment(), RecyclerViewClickListener<ForumPostList> 
                             forum.description,
                             forum.last_seen,
                             forum.characteristics,
-                            forum.comments
                         )
                     )
                 }
@@ -103,6 +110,7 @@ class ForumPublicFragment: Fragment(), RecyclerViewClickListener<ForumPostList> 
                 R.layout.dialog_bottom_sheet_post
             }
             "postComment" -> {
+                sharedMainActivityViewModel.getComments(item.postId!!)
                 R.layout.dialog_bottom_sheet_comment
             }
 
@@ -124,10 +132,55 @@ class ForumPublicFragment: Fragment(), RecyclerViewClickListener<ForumPostList> 
                 val rvComments = viewLayout.findViewById<RecyclerView>(R.id.rvCommentForum)
                 rvComments.layoutManager = LinearLayoutManager(context)
 
-                // Assuming you can get the list of comments for the post
-                val commentsList = getCommentsForPost(item) // A function that retrieves comments
-                val commentAdapter = CommentListAdapter(commentsList)
-                rvComments.adapter = commentAdapter
+
+                sharedMainActivityViewModel.forumsComments.observe(viewLifecycleOwner){ comments ->
+                    val commentAdapter = CommentListAdapter(comments)
+                    rvComments.adapter = commentAdapter
+                }
+
+                val btnSendComment = viewLayout.findViewById<ImageView>(R.id.ivSendComment)
+                val etReplyComment = viewLayout.findViewById<TextView>(R.id.etReplyComment)
+
+                // Initial state: disable the button if there's no text
+                btnSendComment.isEnabled = false
+                btnSendComment.setColorFilter(Color.GRAY)
+
+                // Add a TextWatcher to the EditText
+                etReplyComment.addTextChangedListener(object : TextWatcher {
+                    override fun afterTextChanged(s: Editable?) {
+                        // If the text is not empty, enable the button
+                        if (!s.isNullOrEmpty()) {
+                            btnSendComment.isEnabled = true
+                            btnSendComment.setColorFilter(Color.BLUE) // Optional: Change the button color to indicate it's enabled
+                        } else {
+                            btnSendComment.isEnabled = false
+                            btnSendComment.setColorFilter(Color.GRAY) // Optional: Change the button color to indicate it's disabled
+                        }
+                    }
+
+                    override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                        // Not used
+                    }
+
+                    override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                        // Not used
+                    }
+                })
+
+                // Handle the click event
+                btnSendComment.setOnClickListener {
+                    val comment = etReplyComment.text.toString()
+                    sharedMainActivityViewModel.addComment(item.postId!!, comment)
+                    sharedMainActivityViewModel.addCommentStatus.observe(viewLifecycleOwner){ addCommentStatus ->
+                        if (addCommentStatus == 201) {
+                            sharedMainActivityViewModel.getComments(item.postId)
+
+                        }
+                        Log.d("statusAdd", "$addCommentStatus")
+                    }
+                }
+
+
             } else if (view.tag == "postMenu"){
                 val deletePost = viewLayout.findViewById<TextView>(R.id.tvThirdLineDialog)
                 deletePost.setOnClickListener{
@@ -143,12 +196,6 @@ class ForumPublicFragment: Fragment(), RecyclerViewClickListener<ForumPostList> 
             bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
             bottomSheetBehavior.isHideable = true
         }
-    }
-
-    // Example function to get comments for a post
-    private fun getCommentsForPost(post: ForumPostList): List<Comment> {
-        // In practice, you may retrieve this data from a server or database
-        return post.postComments
     }
 
     private fun deletePostDialog(){

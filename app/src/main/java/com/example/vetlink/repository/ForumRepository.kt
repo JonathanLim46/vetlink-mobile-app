@@ -1,5 +1,7 @@
 package com.example.vetlink.repository
 
+import com.example.vetlink.data.model.forums.CommentAddResponse
+import com.example.vetlink.data.model.forums.CommentsResponse
 import com.example.vetlink.data.model.forums.ForumAddResponse
 import com.example.vetlink.data.model.forums.ForumDeleteResponse
 import com.example.vetlink.data.model.forums.ForumUpdateResponse
@@ -83,6 +85,36 @@ class ForumRepository(val session: SessionManager) {
             Result.failure(Exception("Network error: ${e.message}"))
         } catch (e: Exception) {
             // Handle any other exceptions
+            Result.failure(e)
+        }
+    }
+
+    suspend fun addForumComment(id: Int, comment: String): Result<CommentAddResponse> {
+        return try {
+            val response = forumApi.addComment(id, comment)
+            Result.success(response)
+        } catch (e: HttpException) {
+            // Handle HTTP errors (e.g., 404, 500)
+            Result.failure(Exception("HTTP error: ${e.code()} - ${e.message}"))
+        } catch (e: IOException) {
+            // Handle network-related errors (e.g., no internet)
+            Result.failure(Exception("Network error: ${e.message}"))
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    suspend fun getForumComments(id: Int): Result<CommentsResponse> {
+        return try {
+            val response = forumApi.getComments(id)
+            Result.success(response)
+        } catch (e: HttpException) {
+            // Handle HTTP errors (e.g., 404, 500)
+            Result.failure(Exception("HTTP error: ${e.code()} - ${e.message}"))
+        } catch (e: IOException) {
+            // Handle network-related errors (e.g., no internet)
+            Result.failure(Exception("Network error: ${e.message}"))
+        }catch (e: Exception) {
             Result.failure(e)
         }
     }

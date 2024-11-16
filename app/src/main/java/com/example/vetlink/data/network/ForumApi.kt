@@ -1,5 +1,7 @@
 package com.example.vetlink.data.network
 
+import com.example.vetlink.data.model.forums.CommentAddResponse
+import com.example.vetlink.data.model.forums.CommentsResponse
 import com.example.vetlink.data.model.forums.ForumAddResponse
 import com.example.vetlink.data.model.forums.ForumDeleteResponse
 import com.example.vetlink.data.model.forums.ForumUpdateResponse
@@ -7,6 +9,8 @@ import com.example.vetlink.data.model.forums.ForumsResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.http.DELETE
+import retrofit2.http.Field
+import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
 import retrofit2.http.Multipart
 import retrofit2.http.POST
@@ -30,4 +34,12 @@ interface ForumApi {
 
     @POST("customer/forum/{id}")
     suspend fun updateForum(@Path("id") id: Int): ForumUpdateResponse
+
+    @GET("customer/comments/{id}")
+    suspend fun getComments(@Path("id") id: Int): CommentsResponse
+
+    @FormUrlEncoded
+    @POST("customer/comment/{id}")
+    suspend fun addComment(@Path("id") id: Int, @Field("content") comment: String): CommentAddResponse
+
 }
