@@ -31,6 +31,7 @@ class ForumPostListAdapter(
         val postLastSeen: TextView = itemView.findViewById(R.id.tvLastSeenData)
         val postCharacteristics: TextView = itemView.findViewById(R.id.tvCharacteristicsData)
         val postComment: ImageView = itemView.findViewById(R.id.ivCommentPost)
+        val postShare: ImageView = itemView.findViewById(R.id.ivSharePost)
     }
 
     fun setClickListener(clickListener: RecyclerViewClickListener<ForumPostList>){
@@ -76,6 +77,13 @@ class ForumPostListAdapter(
             "lost" -> holder.postStatus.setTextColor(ContextCompat.getColor(context, R.color.red))
             "found" -> holder.postStatus.setTextColor(ContextCompat.getColor(context, R.color.green))
         }
+
+        if (forumPostList.postStatus.lowercase() == "found"){
+            holder.postShare.visibility = View.GONE
+        } else {
+            holder.postShare.visibility = View.VISIBLE
+        }
+
         holder.postHeader.text = forumPostList.postHeader
         holder.postDescription.text = forumPostList.postDescription
         holder.postLastSeen.text = forumPostList.postLastSeen
@@ -83,6 +91,7 @@ class ForumPostListAdapter(
 
         holder.postMenu.tag = "postMenu"
         holder.postComment.tag = "postComment"
+        holder.postShare.tag = "postShare"
 
         holder.postMenu.setOnClickListener{
             listener?.onItemClicke(it, forumPostList)
@@ -92,5 +101,8 @@ class ForumPostListAdapter(
             listener?.onItemClicke(it, forumPostList)
         }
 
+        holder.postShare.setOnClickListener{
+            listener?.onItemClicke(it, forumPostList)
+        }
     }
 }

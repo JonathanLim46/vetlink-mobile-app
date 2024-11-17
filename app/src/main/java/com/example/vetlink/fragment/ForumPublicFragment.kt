@@ -1,6 +1,7 @@
 package com.example.vetlink.fragment
 
 import android.app.Dialog
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -29,6 +30,7 @@ import com.example.vetlink.databinding.FragmentForumPublicBinding
 import com.example.vetlink.viewModel.MainActivityViewModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.squareup.picasso.Picasso
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -105,6 +107,31 @@ class ForumPublicFragment: Fragment(), RecyclerViewClickListener<ForumPostList> 
     override fun onItemClicke(view: View, item: ForumPostList) {
         val dialog = activity?.let { BottomSheetDialog(it) }
 
+        if (view.tag == "postShare"){
+            val header = "Lost Animal Announcement - ${item.postHeader}"
+            val lastSeen = "Last seen in ${item.postLastSeen}"
+            val characteristics = "With the following characteristics : ${item.postCharacteristics}"
+            val contactInfo = "Jika Anda memiliki informasi atau melihat kucing ini, harap hubungi [Nomor Kontak] secepatnya." +
+                    "\n*note: harap isi nomor telepon atau kontak yang sesuai."
+            val message = """
+$header
+
+$lastSeen
+
+$characteristics
+
+$contactInfo
+""".trimIndent()
+            val sendIntent = Intent().apply {
+                action = Intent.ACTION_SEND
+                putExtra(Intent.EXTRA_TEXT, message)
+                type = "text/plain"
+            }
+            val shareIntent = Intent.createChooser(sendIntent, null)
+            startActivity(shareIntent)
+            return
+        }
+
         val layoutId = when(view.tag){
             "postMenu" -> {
                 R.layout.dialog_bottom_sheet_post
@@ -180,9 +207,11 @@ class ForumPublicFragment: Fragment(), RecyclerViewClickListener<ForumPostList> 
                 }
 
 
-            } else if (view.tag == "postMenu"){
+
+
+            } else if (view.tag == "postMenu") {
                 val deletePost = viewLayout.findViewById<TextView>(R.id.tvThirdLineDialog)
-                deletePost.setOnClickListener{
+                deletePost.setOnClickListener {
                     dialog.dismiss()
                     deletePostDialog()
                 }

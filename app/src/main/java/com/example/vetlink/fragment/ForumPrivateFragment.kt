@@ -1,6 +1,7 @@
 package com.example.vetlink.fragment
 
 import android.app.Dialog
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -194,6 +195,31 @@ class ForumPrivateFragment() : Fragment(), RecyclerViewClickListener<ForumPostLi
     override fun onItemClicke(view: View, item: ForumPostList) {
         val dialog = activity?.let { BottomSheetDialog(it) }
 
+        if (view.tag == "postShare"){
+            val header = "Lost Animal Announcement - ${item.postHeader}"
+            val lastSeen = "Last seen in ${item.postLastSeen}"
+            val characteristics = "With the following characteristics : ${item.postCharacteristics}"
+            val contactInfo = "Jika Anda memiliki informasi atau melihat kucing ini, harap hubungi [Nomor Kontak] secepatnya." +
+                    "\n*note: harap isi nomor telepon atau kontak yang sesuai."
+            val message = """
+$header
+
+$lastSeen
+
+$characteristics
+
+$contactInfo
+""".trimIndent()
+            val sendIntent = Intent().apply {
+                action = Intent.ACTION_SEND
+                putExtra(Intent.EXTRA_TEXT, message)
+                type = "text/plain"
+            }
+            val shareIntent = Intent.createChooser(sendIntent, null)
+            startActivity(shareIntent)
+            return
+        }
+
         val layoutId = when(view.tag){
             "postMenu" -> {
                 R.layout.dialog_bottom_sheet_post
@@ -282,8 +308,8 @@ class ForumPrivateFragment() : Fragment(), RecyclerViewClickListener<ForumPostLi
                     sharedMainActivityViewModel.updateForumStatusResponse.observe(viewLifecycleOwner) {
                         if (it == 200) {
                             Toast.makeText(requireContext(), "Post updated successfully", Toast.LENGTH_SHORT).show()
-                            sharedMainActivityViewModel.getForums() // Trigger refresh of forums
-                        } else {
+                            sharedMainActivityViewModel.getForums()
+                            dialog.dismiss()
                             Toast.makeText(requireContext(), "Post update failed", Toast.LENGTH_SHORT).show()
                         }
                     }
