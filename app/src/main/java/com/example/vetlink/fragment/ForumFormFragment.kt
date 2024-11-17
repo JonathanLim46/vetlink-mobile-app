@@ -188,7 +188,7 @@ class ForumFormFragment : Fragment(), RecyclerViewClickListener<Pet> {
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == SignupActivity.REQUEST_CODE_IMAGE_PICKER) {
+        if (requestCode == ForumFormFragment.REQUEST_CODE_IMAGE_PICKER) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 // Permission granted, open the image chooser
                 openImageChooser()
@@ -232,7 +232,6 @@ class ForumFormFragment : Fragment(), RecyclerViewClickListener<Pet> {
 
                 }
             }
-        private const val REQUEST_CODE_READ_EXTERNAL_STORAGE = 101
         private const val REQUEST_CODE_IMAGE_PICKER = 102
     }
 

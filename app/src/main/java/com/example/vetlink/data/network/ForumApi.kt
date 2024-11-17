@@ -29,11 +29,22 @@ interface ForumApi {
         @Part photo: MultipartBody.Part? = null,
     ): ForumAddResponse
 
+    @GET("customer/forum/{id}")
+    suspend fun getForum(@Path("id") id: Int): ForumAddResponse
+
     @DELETE("customer/forum/{id}")
     suspend fun deleteForum(@Path("id") id: Int): ForumDeleteResponse
 
+    @Multipart
     @POST("customer/forum/{id}")
-    suspend fun updateForum(@Path("id") id: Int): ForumUpdateResponse
+    suspend fun updateForum(
+        @Path("id") id: Int,
+        @PartMap params: Map<String, @JvmSuppressWildcards RequestBody>,
+        @Part photo: MultipartBody.Part? = null,
+    ): ForumUpdateResponse
+
+    @POST("customer/forum/status/{id}")
+    suspend fun updateStatus(@Path("id") id: Int): ForumUpdateResponse
 
     @GET("customer/comments/{id}")
     suspend fun getComments(@Path("id") id: Int): CommentsResponse
