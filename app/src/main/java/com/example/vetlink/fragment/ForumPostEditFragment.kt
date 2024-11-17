@@ -17,10 +17,12 @@ import com.example.vetlink.activity.SignupActivity
 import com.example.vetlink.data.model.forums.Forum
 import com.example.vetlink.databinding.FragmentForumPostEditBinding
 import com.example.vetlink.viewModel.MainActivityViewModel
+import com.example.vetlink.viewModel.MenuActivityViewModel
 import com.squareup.picasso.Picasso
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.File
 import java.net.URI
@@ -36,7 +38,7 @@ import java.net.URI
 class ForumPostEditFragment : Fragment() {
     private var forum: Forum? = null
     private var petImageUri: Uri? = null
-    private val sharedMainActivityViewModel: MainActivityViewModel by activityViewModels()
+    private val sharedMenuActivityViewModel: MenuActivityViewModel by activityViewModels()
 
     private lateinit var binding: FragmentForumPostEditBinding
 
@@ -63,7 +65,7 @@ class ForumPostEditFragment : Fragment() {
     }
 
     private fun setupObserver() {
-        sharedMainActivityViewModel.forum.observe(viewLifecycleOwner) { forum ->
+        sharedMenuActivityViewModel.forum.observe(viewLifecycleOwner) { forum ->
             this.forum = forum
             Log.d("currentForum", "$forum")
         }
@@ -72,7 +74,7 @@ class ForumPostEditFragment : Fragment() {
 
     private fun initViews() {
         with(binding) {
-            sharedMainActivityViewModel.forum.observe(viewLifecycleOwner) { forum ->
+            sharedMenuActivityViewModel.forum.observe(viewLifecycleOwner) { forum ->
 
                 etPostTitle.setText(forum.title)
                 etPostLastSeen.setText(forum.last_seen)
@@ -88,7 +90,7 @@ class ForumPostEditFragment : Fragment() {
 
             btnSubmitPost.setOnClickListener {
                 val updates = mutableMapOf<String, Any>()
-                var photoPart: MultipartBody.Part? = null
+                var photo: MultipartBody.Part? = null
 
                 if (etPostTitle.text.toString().takeIf { it.isNotBlank() } != forum!!.title?.takeIf { it.isNotBlank() }) {
                     updates["title"] = etPostTitle.text.toString().ifEmpty { "" }
@@ -108,10 +110,11 @@ class ForumPostEditFragment : Fragment() {
 
                 // Image handling
                 petImageUri?.let {
-                    photoPart = handleImageUri(it)  // Handle the photo as a MultipartBody.Part
+                    photo = handleImageUri(it)
+                    Log.d("PhotoPart", "$photo")
                 }
 
-                if (updates.isNotEmpty() || photoPart != null) {
+                if (updates.isNotEmpty() || photo != null) {
                     val params = mutableMapOf<String, RequestBody>()
 
                     // Convert updates to RequestBody, excluding the photo field
@@ -120,16 +123,8 @@ class ForumPostEditFragment : Fragment() {
                         params[key] = requestBody
                     }
 
-//                    Log.d("params", "$params $photoPart")
-                    sharedMainActivityViewModel.updateForum(forum!!.id, params, photoPart)
-                    sharedMainActivityViewModel.updateForumPostStatus.observe(viewLifecycleOwner) {
-                        if (it == 200) {
-                            Toast.makeText(requireContext(), "Post updated successfully", Toast.LENGTH_SHORT).show()
-                            requireActivity().supportFragmentManager.popBackStack()
-                        } else if (it == -1) {
-                            Toast.makeText(requireContext(), "Failed to update post. Please try again.", Toast.LENGTH_SHORT).show()
-                        }
-                    }
+                    sharedMenuActivityViewModel.updateForum(forum!!.id, params, photo)
+                    activity?.finish()
                 }
             }
         }
@@ -144,6 +139,7 @@ class ForumPostEditFragment : Fragment() {
         }
         return null
     }
+
 
     private fun getFilePathFromUri(uri: Uri): String? {
         val cursor = requireContext().contentResolver.query(uri, arrayOf(android.provider.MediaStore.Images.Media.DATA), null, null, null)

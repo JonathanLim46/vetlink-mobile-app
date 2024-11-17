@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.vetlink.Resource
+import com.example.vetlink.data.model.forums.Forum
 import com.example.vetlink.data.model.pets.Pet
 import com.example.vetlink.data.model.pets.PetAddResponse
 import com.example.vetlink.data.model.pets.PetDetails
@@ -59,6 +60,9 @@ class MenuActivityViewModel(
     private val _updateMessagePetUpdate = MutableLiveData<String>()
     val updateMessagePetUpdate: LiveData<String> get() = _updateMessagePetUpdate
 
+    private val _updateMessageForumUpdate = MutableLiveData<String>()
+    val updateMessageForumUpdate: LiveData<String> get() = _updateMessageForumUpdate
+
     private val _errorMessagePetUpdate = MutableLiveData<String>()
     val errorMessagePetUpdate: LiveData<String> get() = _errorMessagePetUpdate
 
@@ -77,6 +81,12 @@ class MenuActivityViewModel(
     private val _errorMessageQueues = MutableLiveData<String>()
     val errorMessageQueues: LiveData<String> get() = _errorMessageQueues
 
+    private val _forum = MutableLiveData<Forum>()
+    val forum: LiveData<Forum> get() = _forum
+
+    private val _errorMessageForums = MutableLiveData<String>()
+    val errorMessageForums: LiveData<String> get() = _errorMessageForums
+
     private val _deletePetMessage = MutableLiveData<String>()
     val deletePetMessage: LiveData<String> get() = _deletePetMessage
     val _errorMessageDeletePet = MutableLiveData<String>()
@@ -93,6 +103,9 @@ class MenuActivityViewModel(
     val errorMessageAddForum = MutableLiveData<String>()
 
     private val _errorMessageAddQueue = MutableLiveData<String>()
+
+    private val _updateForumPostStatus = MutableLiveData<Int>()
+    val updateForumPostStatus: LiveData<Int> = _updateForumPostStatus
 
     private val _logoutSuccess = MutableLiveData<Boolean>()
     val logoutSuccess: LiveData<Boolean> = _logoutSuccess
@@ -240,11 +253,11 @@ class MenuActivityViewModel(
     fun updatePet(
         id: Int,
         params: MutableMap<String, RequestBody>,
-        photoPart: MultipartBody.Part?
+        photo: MultipartBody.Part?
     ) {
         viewModelScope.launch {
             try {
-                val response = petRepository?.editPet(id, params, photoPart)
+                val response = petRepository?.editPet(id, params, photo)
                 if (response!!.isSuccess){
                     _updateMessagePetUpdate.postValue("Update success!")
                 }
@@ -368,6 +381,44 @@ class MenuActivityViewModel(
             } else {
                 errorMessageAddForum.postValue("Failed to add pet. Please try again.")
                 Log.e("API_ERROR", "Add Forum failed: ${response?.exceptionOrNull()}")
+            }
+        }
+    }
+
+    fun getForum(id: Int){
+        viewModelScope.launch {
+            try {
+                val response = forumRepository?.getForum(id)
+                if (response != null && response.getOrNull()?.status == 200) {
+                    _forum.postValue(response.getOrNull()?.data)
+                }else{
+                    _errorMessageForums.postValue("An error occurred. Please try again.")
+                }
+            }catch (e: ConnectException) {
+                _errorMessageQueues.postValue("Unable to connect to the server. Please check your internet connection.")
+                Log.e("API_ERROR", "Network error: ${e.message}")
+            } catch (e: Exception) {
+                _errorMessageQueues.postValue("An error occurred while fetching queues. Please try again.")
+                Log.e("API_ERROR", "Queue Error: ${e.message}", e)
+            }
+        }
+    }
+
+    fun updateForum(
+        id: Int,
+        params: MutableMap<String, RequestBody>,
+        photo: MultipartBody.Part?) {
+        viewModelScope.launch {
+            val result = forumRepository!!.updateForum(id = id, params = params, photo = photo)
+            result.onSuccess { response ->
+//                 Update the LiveData with the status
+//                _updateForumPostStatus.postValue(response.status)
+                _updateMessagePetUpdate.postValue("Update Success")
+                Log.d("UpdateForum", "Success: ${response.message}")
+            }.onFailure { exception ->
+                // Update the LiveData with a failure status
+                _updateForumPostStatus.postValue(-1)
+                Log.e("UpdateForum", "Error: ${exception.message}")
             }
         }
     }

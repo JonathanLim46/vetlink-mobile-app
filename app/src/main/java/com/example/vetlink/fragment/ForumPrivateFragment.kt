@@ -1,5 +1,6 @@
 package com.example.vetlink.fragment
 
+import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Intent
 import android.graphics.Color
@@ -20,6 +21,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.vetlink.R
+import com.example.vetlink.activity.MenuActivity
 import com.example.vetlink.adapter.CommentListAdapter
 import com.example.vetlink.adapter.ForumPostList
 import com.example.vetlink.adapter.ForumPostListAdapter
@@ -61,6 +63,12 @@ class ForumPrivateFragment() : Fragment(), RecyclerViewClickListener<ForumPostLi
         arguments?.let {
             userForums = it.getParcelableArrayList<Forum>(ARG_FORUMS)
         }
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    override fun onResume() {
+        super.onResume()
+        forumPostListAdapter.notifyDataSetChanged()
     }
 
     override fun onCreateView(
@@ -318,16 +326,10 @@ $contactInfo
                 val editPost = viewLayout.findViewById<TextView>(R.id.tvSecondLineDialog)
                 editPost.setOnClickListener{
                     dialog.dismiss()
-
-                    // Create an instance of the fragment you want to open, let's say it's `EditPostFragment`
-                    sharedMainActivityViewModel.getForum(item.postId!!)
-                    val editPostFragment = ForumPostEditFragment.newInstance()
-
-                    // Use the FragmentManager to replace the current fragment with the EditPostFragment
-                    requireActivity().supportFragmentManager.beginTransaction()
-                        .replace(R.id.frame_layout, editPostFragment) // `frame_layout` should be the ID of your container in your activity
-                        .addToBackStack(null) // This will add the transaction to the back stack, so the user can navigate back
-                        .commit()
+                    val intent = Intent(requireActivity(), MenuActivity::class.java)
+                    intent.putExtra("vetID", item.postId)
+                    intent.putExtra("MENU_TITLE", "Edit Pet")
+                    startActivity(intent)
                 }
             }
 
