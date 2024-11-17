@@ -278,6 +278,7 @@ class ForumPrivateFragment() : Fragment(), RecyclerViewClickListener<ForumPostLi
                         if (it == 200) {
                             Toast.makeText(requireContext(), "Post updated successfully", Toast.LENGTH_SHORT).show()
                             sharedMainActivityViewModel.getForums()
+                            dialog.dismiss()
                         }else{
                             Toast.makeText(requireContext(), "Post update failed", Toast.LENGTH_SHORT).show()
                         }
