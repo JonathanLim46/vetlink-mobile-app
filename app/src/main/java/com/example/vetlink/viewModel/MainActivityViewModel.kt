@@ -8,22 +8,18 @@ import androidx.lifecycle.viewModelScope
 import com.example.vetlink.Resource
 import com.example.vetlink.data.model.comment.Comment
 import com.example.vetlink.data.model.forums.Forum
-import com.example.vetlink.data.model.pets.Pet
 import com.example.vetlink.data.model.queue.LatestQueue
 import com.example.vetlink.data.model.queue.Queue
 import com.example.vetlink.data.model.user.User
 import com.example.vetlink.data.model.veteriner.Veteriner
 import com.example.vetlink.repository.AuthRepository
 import com.example.vetlink.repository.ForumRepository
-import com.example.vetlink.repository.PetRepository
 import com.example.vetlink.repository.QueueRepository
 import com.example.vetlink.repository.VeterinerRepository
 import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
-import okhttp3.Response
 import java.net.ConnectException
-import kotlin.math.log
 
 class MainActivityViewModel(
     private val authRepository: AuthRepository,
@@ -76,6 +72,9 @@ class MainActivityViewModel(
     private val _errorMessageForums = MutableLiveData<String>()
     val errorMessageForums: LiveData<String> get() = _errorMessageForums
 
+    private val _forum = MutableLiveData<Forum>()
+    val forum: LiveData<Forum> get() = _forum
+
     private val _forumsComments = MutableLiveData<List<Comment>>()
     val forumsComments: LiveData<List<Comment>> get() = _forumsComments
 
@@ -83,10 +82,14 @@ class MainActivityViewModel(
     val errorMessageForumsComments: LiveData<String> get() = _errorMessageForumsComments
 
     private val _logoutSuccess = MutableLiveData<Boolean>()
-    val logoutSuccess: LiveData<Boolean> = _logoutSuccess
+    val logoutSuccess: LiveData<Boolean> get() = _logoutSuccess
+
+    private val _updateForumPostStatus = MutableLiveData<Int>()
+    val updateForumPostStatus: LiveData<Int> = _updateForumPostStatus
 
     val deleteForumStatus = MutableLiveData<Int>()
-    val updateForumStatus = MutableLiveData<Int>()
+    val updateForumStatusResponse = MutableLiveData<Int>()
+    val errorForumStatus = MutableLiveData<String>()
     val addCommentStatus = MutableLiveData<Int>()
 
     fun fetchUser() {
@@ -204,16 +207,10 @@ class MainActivityViewModel(
     }
 
     fun getForums(){
-        if (forumRepository == null){
-            Log.e("API_ERROR", "ForumRepository is null")
-            _errorMessageForums.postValue("ForumRepository is not initialized.")
-            return
-        }
-
         viewModelScope.launch {
             try {
-                val responseForums = forumRepository.getForums()
-                if (responseForums.isSuccess) {
+                val responseForums = forumRepository?.getForums()
+                if (responseForums!!.isSuccess) {
                     _forums.postValue(responseForums.getOrNull()?.data)
                     Log.d("API_RESPONSE", "Queues fetched successfully: ${responseForums.getOrNull()?.data}")
                 } else {
@@ -221,6 +218,25 @@ class MainActivityViewModel(
                     Log.e("API_ERROR", "Queue fetch failed: ${responseForums.exceptionOrNull()}")
                 }
             } catch (e: ConnectException) {
+                _errorMessageQueues.postValue("Unable to connect to the server. Please check your internet connection.")
+                Log.e("API_ERROR", "Network error: ${e.message}")
+            } catch (e: Exception) {
+                _errorMessageQueues.postValue("An error occurred while fetching queues. Please try again.")
+                Log.e("API_ERROR", "Queue Error: ${e.message}", e)
+            }
+        }
+    }
+
+    fun getForum(id: Int){
+        viewModelScope.launch {
+            try {
+                val response = forumRepository?.getForum(id)
+                if (response != null && response.getOrNull()?.status == 200) {
+                    _forum.postValue(response.getOrNull()?.data)
+                }else{
+                    _errorMessageForums.postValue("An error occurred. Please try again.")
+                }
+            }catch (e: ConnectException) {
                 _errorMessageQueues.postValue("Unable to connect to the server. Please check your internet connection.")
                 Log.e("API_ERROR", "Network error: ${e.message}")
             } catch (e: Exception) {
@@ -239,11 +255,37 @@ class MainActivityViewModel(
         }
     }
 
-    fun updateForum(id: Int){
+    fun updateForum(
+        id: Int,
+        params: MutableMap<String, RequestBody>,
+        photo: MultipartBody.Part?) {
         viewModelScope.launch {
-            val response = forumRepository?.updateForum(id)
-            if (response != null) {
-                updateForumStatus.postValue(response.getOrNull()?.status)
+            val result = forumRepository!!.updateForum(id = id, params = params, photo = photo)
+            result.onSuccess { response ->
+//                 Update the LiveData with the status
+                _updateForumPostStatus.postValue(response.status)
+                Log.d("UpdateForum", "Success: ${response.message}")
+            }.onFailure { exception ->
+                // Update the LiveData with a failure status
+                _updateForumPostStatus.postValue(-1)
+                Log.e("UpdateForum", "Error: ${exception.message}")
+            }
+        }
+    }
+
+    fun updateForumStatus(id: Int){
+        viewModelScope.launch {
+            try {
+                val response = forumRepository?.updateForumStatus(id)
+                if (response != null) {
+                    updateForumStatusResponse.postValue(response.getOrNull()?.status)
+                }
+            }catch (e: ConnectException){
+                errorForumStatus.postValue("Unable to connect to the server. Please check your internet connection.")
+                Log.e("API_ERROR", "Network error: ${e.message}")
+            }catch (e: Exception){
+                errorForumStatus.postValue("An error occurred while fetching queues. Please try again.")
+                Log.e("API_ERROR", "Edit Forum Status Error: ${e.message}", e)
             }
         }
     }

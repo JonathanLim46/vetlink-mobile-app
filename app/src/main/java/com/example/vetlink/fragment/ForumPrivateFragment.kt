@@ -6,7 +6,6 @@ import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -24,7 +23,6 @@ import com.example.vetlink.adapter.CommentListAdapter
 import com.example.vetlink.adapter.ForumPostList
 import com.example.vetlink.adapter.ForumPostListAdapter
 import com.example.vetlink.adapter.RecyclerViewClickListener
-import com.example.vetlink.data.model.comment.Comment
 import com.example.vetlink.data.model.forums.Forum
 import com.example.vetlink.databinding.FragmentForumPrivateBinding
 import com.example.vetlink.viewModel.MainActivityViewModel
@@ -72,8 +70,13 @@ class ForumPrivateFragment() : Fragment(), RecyclerViewClickListener<ForumPostLi
         binding = FragmentForumPrivateBinding.inflate(inflater, container, false)
 
         initView()
+        setupObserver()
 
         return binding.root
+    }
+
+    private fun setupObserver() {
+
     }
 
 
@@ -259,7 +262,6 @@ class ForumPrivateFragment() : Fragment(), RecyclerViewClickListener<ForumPostLi
                     sharedMainActivityViewModel.addCommentStatus.observe(viewLifecycleOwner){ addCommentStatus ->
                         if (addCommentStatus == 201) {
                             sharedMainActivityViewModel.getComments(item.postId)
-                            etReplyComment.text = null
                         }
                     }
                 }
@@ -272,13 +274,16 @@ class ForumPrivateFragment() : Fragment(), RecyclerViewClickListener<ForumPostLi
                 }
 
                 val markFound = viewLayout.findViewById<TextView>(R.id.tvFirstLineDialog)
-                markFound.setOnClickListener{
-                    item.postId?.let { it1 -> sharedMainActivityViewModel.updateForum(it1) }
-                    sharedMainActivityViewModel.updateForumStatus.observe(viewLifecycleOwner){
+                markFound.setOnClickListener {
+                    dialog.dismiss()
+                    item.postId?.let { postId ->
+                        sharedMainActivityViewModel.updateForumStatus(postId)
+                    }
+                    sharedMainActivityViewModel.updateForumStatusResponse.observe(viewLifecycleOwner) {
                         if (it == 200) {
                             Toast.makeText(requireContext(), "Post updated successfully", Toast.LENGTH_SHORT).show()
-                            sharedMainActivityViewModel.getForums()
-                        }else{
+                            sharedMainActivityViewModel.getForums() // Trigger refresh of forums
+                        } else {
                             Toast.makeText(requireContext(), "Post update failed", Toast.LENGTH_SHORT).show()
                         }
                     }
@@ -287,6 +292,16 @@ class ForumPrivateFragment() : Fragment(), RecyclerViewClickListener<ForumPostLi
                 val editPost = viewLayout.findViewById<TextView>(R.id.tvSecondLineDialog)
                 editPost.setOnClickListener{
                     dialog.dismiss()
+
+                    // Create an instance of the fragment you want to open, let's say it's `EditPostFragment`
+                    sharedMainActivityViewModel.getForum(item.postId!!)
+                    val editPostFragment = ForumPostEditFragment.newInstance()
+
+                    // Use the FragmentManager to replace the current fragment with the EditPostFragment
+                    requireActivity().supportFragmentManager.beginTransaction()
+                        .replace(R.id.frame_layout, editPostFragment) // `frame_layout` should be the ID of your container in your activity
+                        .addToBackStack(null) // This will add the transaction to the back stack, so the user can navigate back
+                        .commit()
                 }
             }
 
