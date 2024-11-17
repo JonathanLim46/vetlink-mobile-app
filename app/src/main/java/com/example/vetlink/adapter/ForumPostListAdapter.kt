@@ -10,6 +10,8 @@ import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.vetlink.R
+import com.squareup.picasso.MemoryPolicy
+import com.squareup.picasso.NetworkPolicy
 import com.squareup.picasso.Picasso
 
 class ForumPostListAdapter(
@@ -59,18 +61,26 @@ class ForumPostListAdapter(
 
     override fun onBindViewHolder(holder: ForumPostViewHolder, position: Int) {
         val forumPostList = forumPostList[position]
-        if (forumPostList.postImageProfile != null){
-            Picasso.get().load(forumPostList.postImageProfile).into(holder.postImageProfile)
-        }
-        else{
+
+        if (forumPostList.postImageProfile != null) {
+            Picasso.get()
+                .load(forumPostList.postImageProfile)
+                .networkPolicy(NetworkPolicy.NO_CACHE)
+                .memoryPolicy(MemoryPolicy.NO_CACHE)
+                .into(holder.postImageProfile)
+        } else {
             holder.postImageProfile.setImageResource(R.drawable.img_default_profile)
         }
-        if (forumPostList.postImagePets != null){
-            Picasso.get().load(forumPostList.postImagePets).into(holder.postImagePets)
-        }
-        else{
+        if (forumPostList.postImagePets != null) {
+            Picasso.get()
+                .load(forumPostList.postImagePets)
+                .networkPolicy(NetworkPolicy.NO_CACHE)
+                .memoryPolicy(MemoryPolicy.NO_CACHE)
+                .into(holder.postImagePets)
+        } else {
             holder.postImagePets.setImageResource(R.drawable.icon_pets)
         }
+
         holder.postUsername.text = forumPostList.postUsername
         holder.postStatus.text = forumPostList.postStatus.replaceFirstChar { it.uppercaseChar() }
         when (forumPostList.postStatus.lowercase()) {

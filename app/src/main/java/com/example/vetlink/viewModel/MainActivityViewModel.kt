@@ -84,8 +84,7 @@ class MainActivityViewModel(
     private val _logoutSuccess = MutableLiveData<Boolean>()
     val logoutSuccess: LiveData<Boolean> get() = _logoutSuccess
 
-    private val _updateForumPostStatus = MutableLiveData<Int>()
-    val updateForumPostStatus: LiveData<Int> = _updateForumPostStatus
+
 
     val deleteForumStatus = MutableLiveData<Int>()
     val updateForumStatusResponse = MutableLiveData<Int>()
@@ -251,24 +250,6 @@ class MainActivityViewModel(
             val response = forumRepository?.deleteForum(id)
             if (response != null) {
                 deleteForumStatus.postValue(response.getOrNull()?.status)
-            }
-        }
-    }
-
-    fun updateForum(
-        id: Int,
-        params: MutableMap<String, RequestBody>,
-        photo: MultipartBody.Part?) {
-        viewModelScope.launch {
-            val result = forumRepository!!.updateForum(id = id, params = params, photo = photo)
-            result.onSuccess { response ->
-//                 Update the LiveData with the status
-                _updateForumPostStatus.postValue(response.status)
-                Log.d("UpdateForum", "Success: ${response.message}")
-            }.onFailure { exception ->
-                // Update the LiveData with a failure status
-                _updateForumPostStatus.postValue(-1)
-                Log.e("UpdateForum", "Error: ${exception.message}")
             }
         }
     }

@@ -1,6 +1,7 @@
 package com.example.vetlink.activity
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -20,6 +21,7 @@ import com.example.vetlink.fragment.ClinicPageFragment
 import com.example.vetlink.fragment.FaqCategoryFragment
 import com.example.vetlink.fragment.FaqFragment
 import com.example.vetlink.fragment.ForumFormFragment
+import com.example.vetlink.fragment.ForumPostEditFragment
 import com.example.vetlink.fragment.MyPetsFragment
 import com.example.vetlink.fragment.PetDetailsFragment
 import com.example.vetlink.fragment.ScheduleFragment
@@ -125,6 +127,13 @@ class MenuActivity : AppCompatActivity() {
         } else if(menuTitle == "Loss Publications"){
             val publikasiFragment = FaqCategoryFragment.newInstance("Loss")
             replaceFragment(publikasiFragment)
+        } else if(menuTitle == "Edit Pet") {
+            val vetId = intent.getIntExtra("vetID", 0)
+            menuActivityViewModel.getForum(vetId)
+            val editPostFragment = ForumPostEditFragment.newInstance()
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.frame_layout_menu, editPostFragment)
+                .commit()
         }
     }
 

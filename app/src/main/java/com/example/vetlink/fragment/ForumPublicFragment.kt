@@ -1,5 +1,7 @@
 package com.example.vetlink.fragment
 
+import android.annotation.SuppressLint
+import android.app.Activity
 import android.app.Dialog
 import android.content.Intent
 import android.graphics.Color
@@ -16,6 +18,7 @@ import android.view.Window
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -55,6 +58,12 @@ class ForumPublicFragment: Fragment(), RecyclerViewClickListener<ForumPostList> 
         arguments?.let {
             otherForums = it.getParcelableArrayList(ARG_FORUMS)
         }
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    override fun onResume() {
+        super.onResume()
+        forumPostListAdapter.notifyDataSetChanged()
     }
 
     override fun onCreateView(

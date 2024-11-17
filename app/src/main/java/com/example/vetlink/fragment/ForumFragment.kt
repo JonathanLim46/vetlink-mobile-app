@@ -1,5 +1,6 @@
 package com.example.vetlink.fragment
 
+import android.app.Activity
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
@@ -22,6 +23,9 @@ import com.example.vetlink.viewModel.MainActivityViewModel
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.Tab
 import com.google.android.material.tabs.TabLayoutMediator
+import com.squareup.picasso.MemoryPolicy
+import com.squareup.picasso.NetworkPolicy
+import com.squareup.picasso.Picasso
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -64,9 +68,9 @@ class ForumFragment : Fragment() {
     ): View? {
         binding = FragmentForumBinding.inflate(inflater, container, false)
 
-        setupObserver()
-        initView()
 
+        initView()
+        setupObserver()
         return binding.root
     }
 
@@ -107,6 +111,7 @@ class ForumFragment : Fragment() {
                 }
 
                 // Call setAdapter after data is initialized
+
                 setAdapter()
             } else {
                 binding.tvDataNull.visibility = View.VISIBLE
