@@ -142,36 +142,54 @@ class ClinicFragment : Fragment(), RecyclerViewClickListener<ClinicList>{
     private fun setupObservers(){
         sharedMainActivityViewModel.veteriners.observe(viewLifecycleOwner) { resource ->
 
-            when(resource){
+            when (resource) {
                 is Resource.Loading -> {
                     getLastLocation()
                     binding.shimmerClinicMain.startShimmer()
                 }
                 is Resource.Success -> {
-                    val filterClinic = resource.data?.filter { it.city.lowercase() == binding.tvLocationClinic.text.toString().lowercase() }
+                    allClinicList.clear()
+                    clinicList.clear()
+
+                    resource.data?.forEach { allVet ->
+                        val openTimeFormatted = outputFormat.format(inputFormat.parse(allVet.open_time)!!)
+                        val closeTimeFormatted = outputFormat.format(inputFormat.parse(allVet.close_time)!!)
+                        allClinicList.add(
+                            ClinicList(
+                                allVet.id,
+                                allVet.clinic_image,
+                                allVet.clinic_name,
+                                allVet.city,
+                                "Buka | $openTimeFormatted - $closeTimeFormatted"
+                            )
+                        )
+                    }
+
+                    val filterClinic = allClinicList.filter {
+                        it.clinicLocation.equals(binding.tvLocationClinic.text.toString(), ignoreCase = true)
+                    }
 
                     Log.d("Location", "${binding.tvLocationClinic.text}")
-                    if (filterClinic != null) {
-                        Log.d("List", "${filterClinic.size}")
-                    }
-                    if (filterClinic != null) {
-                        if (filterClinic.isNotEmpty()){
-                            showClinic()
-                            allClinicList.clear()
-                            filterClinic.forEach{ veteriner ->
-                                val openTimeFormatted = outputFormat.format(inputFormat.parse(veteriner.open_time)!!)
-                                val closeTimeFormatted = outputFormat.format(inputFormat.parse(veteriner.close_time)!!)
-                                allClinicList.add(ClinicList(veteriner.id,veteriner.clinic_image, veteriner.clinic_name, veteriner.city, "Buka | $openTimeFormatted - $closeTimeFormatted"))
-                            }
+                    Log.d("List", "Filtered list size: ${filterClinic.size}")
 
-                            clinicList.addAll(allClinicList)
-                        } else {
-                            Log.d("Data Clinic:", "Null")
-                            binding.shimmerClinicMain.apply {
-                                stopShimmer()
-                                visibility = View.GONE
-                            }
-                            binding.tvClinicPageNull.visibility = View.VISIBLE
+                    if (filterClinic.isNotEmpty()) {
+                        showClinic()
+                        filterClinic.forEach { veteriner ->
+                            clinicList.add(
+                                ClinicList(
+                                    veteriner.clinicId,
+                                    veteriner.clinicImage,
+                                    veteriner.clinicName,
+                                    veteriner.clinicLocation,
+                                    veteriner.clinicTimeOpen
+                                )
+                            )
+                        }
+                    } else {
+                        Log.d("Data Clinic:", "No data found for selected city")
+                        binding.shimmerClinicMain.apply {
+                            stopShimmer()
+                            visibility = View.GONE
                         }
                     }
                 }
@@ -181,13 +199,13 @@ class ClinicFragment : Fragment(), RecyclerViewClickListener<ClinicList>{
                     Toast.makeText(requireContext(), "Failed to load profile, please try again.", Toast.LENGTH_SHORT).show()
                 }
             }
-
         }
     }
 
     private fun filterList(query: String){
 
         with(binding){
+            Log.d("Query:", query)
 
             if(!::clinicListAdapter.isInitialized){
                 clinicListAdapter = ClinicListAdapter(clinicList, true)
@@ -200,6 +218,8 @@ class ClinicFragment : Fragment(), RecyclerViewClickListener<ClinicList>{
             if(query.isEmpty()){
                 dataClinic()
             }else {
+                Log.d("Query:", query)
+                Log.d("Clinic List", allClinicList.size.toString())
                 for (clinic in allClinicList){
                     if (clinic.clinicName.lowercase().contains(query.lowercase())){
                         clinicList.add(clinic)
