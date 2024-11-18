@@ -13,7 +13,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.vetlink.R
@@ -21,8 +25,15 @@ import com.example.vetlink.Resource
 import com.example.vetlink.activity.MenuActivity
 import com.example.vetlink.adapter.PetsSelectList
 import com.example.vetlink.adapter.PetsSelectListAdapter
+import com.example.vetlink.data.model.queue.Queue
 import com.example.vetlink.databinding.FragmentClinicPageBinding
+import com.example.vetlink.repository.AuthRepository
+import com.example.vetlink.repository.ForumRepository
+import com.example.vetlink.repository.QueueRepository
+import com.example.vetlink.repository.VeterinerRepository
+import com.example.vetlink.viewModel.MainActivityViewModel
 import com.example.vetlink.viewModel.MenuActivityViewModel
+import com.example.vetlink.viewModel.ViewModelFactory
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.squareup.picasso.Picasso
 import java.text.SimpleDateFormat
@@ -34,13 +45,13 @@ class ClinicPageFragment : Fragment() {
     private lateinit var binding: FragmentClinicPageBinding
     private var petsSelectList: ArrayList<PetsSelectList>? = null
     private var petsSelectListAdapter: PetsSelectListAdapter? = null
-    private val sharedMenuActivityViewModel: MenuActivityViewModel by activityViewModels()
     private var clinicId: Int? = null
     private var petId: Int? = null
     private var appointmentDate: String? = null
     private var longitude: Float? = null
     private var latitude: Float? = null
 
+    private val sharedMenuActivityViewModel: MenuActivityViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -200,6 +211,7 @@ class ClinicPageFragment : Fragment() {
             return
         }
         sharedMenuActivityViewModel.addQueue(petId!!, clinicId!!, appointmentDate!!)
+
     }
 
     private fun selectPetsDialog() {

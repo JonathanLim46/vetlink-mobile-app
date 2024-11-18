@@ -78,10 +78,13 @@ class HomeFragment : Fragment(), RecyclerViewClickListener<ClinicList> {
         super.onResume()
         clinicList.clear()
         getLastLocation()
+
+
         sharedMainActivityViewModel.getVeteriners()
-        binding.tvClinicNull.visibility = View.GONE
-        Toast.makeText(requireContext(), "Home TerResume", Toast.LENGTH_LONG).show()
+        sharedMainActivityViewModel.getQueues()
+        sharedMainActivityViewModel.getLatestQueue()
     }
+
 
     override fun onRequestPermissionsResult(
         requestCode: Int,
@@ -171,6 +174,9 @@ class HomeFragment : Fragment(), RecyclerViewClickListener<ClinicList> {
                     is Resource.Success -> {
                         showVisitHistory()
                         if (resource.data != null){
+                            binding.layoutVisitHistoryNull.visibility = View.GONE
+                            binding.layoutVisitHistory.visibility = View.VISIBLE
+
                             layoutHomeVisitHistory.tvClinicNameHistory.text = resource.data.clinic_name
                             if (resource.data.clinic_image != null){
                                 Picasso.get().load(resource.data.clinic_image).resize(150, 150).centerCrop().into(binding.layoutHomeVisitHistory.ivClinicHistory)
@@ -224,6 +230,8 @@ class HomeFragment : Fragment(), RecyclerViewClickListener<ClinicList> {
 
                     with(binding){
                         if(firstDataUpComing != null){
+                            includeHome.layoutHomeNull.visibility = View.GONE
+                            includeHome.layoutHome.visibility = View.VISIBLE
                             Log.d("QueueObserver", "Upcoming queue found: $firstDataUpComing")
                             includeHome.tvVisit.text = "There is " + upComing?.size.toString() + " visit(s) for your pets."
                             includeHome.tvTanggal.text = dateFormat.format(firstDataUpComing.appointment_time)
@@ -267,6 +275,7 @@ class HomeFragment : Fragment(), RecyclerViewClickListener<ClinicList> {
                         Log.d("filter list", "${filteredClinics.size}")
 
                         if (filteredClinics.isNotEmpty()) {
+                            binding.tvClinicNull.visibility = View.GONE
                             allClinicList.clear()
                             showClinic()
                             filteredClinics.take(5).forEach { veteriner ->

@@ -366,7 +366,6 @@ class MenuActivityViewModel(
                 Log.e("API_ERROR", "Queue Error: ${e.message}", e)
             }
         }
-
     }
 
     fun addForum(
