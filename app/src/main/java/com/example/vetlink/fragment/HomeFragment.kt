@@ -120,6 +120,7 @@ class HomeFragment : Fragment(), RecyclerViewClickListener<ClinicList> {
         initView()
         setupObservers()
 
+        allClinicList.clear()
         cityNow = sharedMainActivityViewModel.cityNow
         if (cityNow != null) {
             dataClinic(cityNow!!)
@@ -266,6 +267,7 @@ class HomeFragment : Fragment(), RecyclerViewClickListener<ClinicList> {
                         Log.d("filter list", "${filteredClinics.size}")
 
                         if (filteredClinics.isNotEmpty()) {
+                            allClinicList.clear()
                             showClinic()
                             filteredClinics.take(5).forEach { veteriner ->
                                 val openTimeFormatted = outputFormat.format(inputFormat.parse(veteriner.open_time)!!)
