@@ -76,7 +76,7 @@ class HomeFragment : Fragment(), RecyclerViewClickListener<ClinicList> {
 
     override fun onResume() {
         super.onResume()
-        allClinicList.clear()
+        clinicList.clear()
         getLastLocation()
         sharedMainActivityViewModel.getVeteriners()
         binding.tvClinicNull.visibility = View.GONE
@@ -120,7 +120,7 @@ class HomeFragment : Fragment(), RecyclerViewClickListener<ClinicList> {
         initView()
         setupObservers()
 
-        allClinicList.clear()
+        clinicList.clear()
         cityNow = sharedMainActivityViewModel.cityNow
         if (cityNow != null) {
             dataClinic(cityNow!!)
@@ -354,7 +354,7 @@ class HomeFragment : Fragment(), RecyclerViewClickListener<ClinicList> {
             clinicListAdapter.clickListener(this@HomeFragment)
 
             srlList.setOnRefreshListener {
-                allClinicList.clear()
+                clinicList.clear()
                 getLastLocation()
                 sharedMainActivityViewModel.getVeteriners()
                 binding.tvClinicNull.visibility = View.GONE
