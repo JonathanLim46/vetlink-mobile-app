@@ -296,10 +296,10 @@ class HomeFragment : Fragment(), RecyclerViewClickListener<ClinicList> {
 
             with(binding){
                 if (firstData != null) {
-                    Log.d("Response Data: ", "${firstData.title}")
+                    Log.d("Response Data: ", "${firstData}")
 
-                    // GK BISA GET NAMA USER --> ERROR
                     tvUserNamePostMissingSpotlight.text = firstData.user.username
+
                     tvStatusPostMissingSpotlight.text = firstData.status.capitalize()
                     tvTitleSeenPostSpotlight.text = firstData.title
                     tvLastSeenPostSpotlight.text = firstData.last_seen
@@ -313,6 +313,12 @@ class HomeFragment : Fragment(), RecyclerViewClickListener<ClinicList> {
                         Picasso.get().load(firstData.pet_image).resize(250, 250).centerCrop().into(binding.ivPetMissing)
                     }else{
                         binding.ivPetMissing.setImageResource(R.drawable.img_cats)
+                    }
+
+                    if (firstData.user.photo != null){
+                        Picasso.get().load(firstData.user.photo).resize(50, 50).centerCrop().into(binding.ivUserPhotoPostMissingSpotlight)
+                    }else{
+                        binding.ivUserPhotoPostMissingSpotlight.setImageResource(R.drawable.img_default_profile)
                     }
                 }
             }
