@@ -72,8 +72,9 @@ class ForumPostListAdapter(
             holder.postImageProfile.setImageResource(R.drawable.img_default_profile)
         }
         if (forumPostList.postImagePets != null) {
+            val imageUrl = forumPostList.postImagePets + "?timestamp=" + System.currentTimeMillis()
             Picasso.get()
-                .load(forumPostList.postImagePets)
+                .load(imageUrl)
                 .networkPolicy(NetworkPolicy.NO_CACHE)
                 .memoryPolicy(MemoryPolicy.NO_CACHE)
                 .into(holder.postImagePets)
