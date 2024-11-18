@@ -74,6 +74,15 @@ class HomeFragment : Fragment(), RecyclerViewClickListener<ClinicList> {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        allClinicList.clear()
+        getLastLocation()
+        sharedMainActivityViewModel.getVeteriners()
+        binding.tvClinicNull.visibility = View.GONE
+        Toast.makeText(requireContext(), "Home TerResume", Toast.LENGTH_LONG).show()
+    }
+
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
@@ -343,7 +352,10 @@ class HomeFragment : Fragment(), RecyclerViewClickListener<ClinicList> {
             clinicListAdapter.clickListener(this@HomeFragment)
 
             srlList.setOnRefreshListener {
+                allClinicList.clear()
                 getLastLocation()
+                sharedMainActivityViewModel.getVeteriners()
+                binding.tvClinicNull.visibility = View.GONE
                 clinicListAdapter.notifyDataSetChanged()
                 srlList.isRefreshing = false
             }
@@ -390,6 +402,7 @@ class HomeFragment : Fragment(), RecyclerViewClickListener<ClinicList> {
                     displayLocationDetails(location)
                 } else {
                     clearClinicList("Location not available")
+                    getLastLocation()
                 }
             }
         } else {
@@ -432,7 +445,7 @@ class HomeFragment : Fragment(), RecyclerViewClickListener<ClinicList> {
         clinicList.clear()
         clinicListAdapter.notifyDataSetChanged()
         if (isAdded) {
-            Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
+            Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
         }
     }
 
