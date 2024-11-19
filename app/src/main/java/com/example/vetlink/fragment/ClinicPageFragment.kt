@@ -233,10 +233,11 @@ class ClinicPageFragment : Fragment() {
         rvSelectPet.adapter = petsSelectListAdapter
         dialog.setContentView(view)
         dialog.setCancelable(true)
-        dialog.show()
+
         if (petsSelectList!!.size == 0){
             Toast.makeText(requireContext(),"No pets found", Toast.LENGTH_SHORT).show()
-            dialog.dismiss()
+        }else{
+            dialog.show()
         }
     }
 
