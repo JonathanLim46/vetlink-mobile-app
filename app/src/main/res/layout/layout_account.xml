@@ -38,7 +38,7 @@
         app:boxStrokeWidth="2dp"
         app:boxStrokeWidthFocused="4dp"
         app:counterEnabled="true"
-        app:counterMaxLength="32"
+        app:counterMaxLength="16"
         app:errorEnabled="true"
         app:hintEnabled="false"
         app:layout_constraintEnd_toEndOf="parent"
