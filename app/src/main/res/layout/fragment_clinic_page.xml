@@ -60,16 +60,102 @@
                     android:textStyle="bold" />
 
                 <TextView
+                    android:id="@+id/tvTimePage"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginEnd="15dp"
+                    android:layout_marginTop="5dp"
+                    android:text="Time"
+                    android:textSize="14sp"/>
+
+                <TextView
                     android:id="@+id/tvLocationPage"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="15dp"
                     android:layout_marginEnd="15dp"
                     android:layout_marginTop="5dp"
-                    android:drawablePadding="5dp"
-                    android:text="Bogor"
-                    android:textSize="14sp"
-                    app:drawableStartCompat="@drawable/icon_location" />
+                    android:text="Depok"
+                    android:textSize="14sp"/>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginTop="15dp"
+                    >
+
+                    <TextView
+                        android:id="@+id/labelMoreInfo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="More Info"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        />
+
+                    <TextView
+                        android:id="@+id/tvAddressLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:text="Address"
+                        android:textSize="12sp"
+                        android:textStyle="bold"
+                        android:drawablePadding="5dp"
+                        android:drawableLeft="@drawable/icon_forum_post"
+                        app:layout_constraintTop_toBottomOf="@+id/labelMoreInfo"
+                        app:layout_constraintStart_toStartOf="parent"
+                        />
+
+                    <TextView
+                        android:id="@+id/tvAddressPage"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginEnd="15dp"
+                        android:text="Jalan Bulungan"
+                        android:textSize="12sp"
+                        app:layout_constraintHorizontal_bias="0"
+                        app:layout_constraintTop_toBottomOf="@+id/tvAddressLabel"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        />
+
+                    <TextView
+                        android:id="@+id/tvPhoneLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:text="Phone Number"
+                        android:textSize="12sp"
+                        android:textStyle="bold"
+                        android:drawablePadding="5dp"
+                        android:drawableLeft="@drawable/icon_forum_post"
+                        app:layout_constraintTop_toBottomOf="@+id/tvAddressPage"
+                        app:layout_constraintStart_toStartOf="parent"
+                        />
+
+                    <TextView
+                        android:id="@+id/tvPhonePage"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginEnd="15dp"
+                        android:text="Jalan Bulungan"
+                        android:textSize="12sp"
+                        app:layout_constraintHorizontal_bias="0"
+                        app:layout_constraintTop_toBottomOf="@+id/tvPhoneLabel"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
             </LinearLayout>
 
