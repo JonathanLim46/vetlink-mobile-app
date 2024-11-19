@@ -59,8 +59,9 @@ class ClinicPageFragment : Fragment() {
     ): View {
         binding = FragmentClinicPageBinding.inflate(inflater, container, false)
 
-        setupObservers()
+
         initView()
+        setupObservers()
         return binding.root
     }
 
@@ -70,23 +71,18 @@ class ClinicPageFragment : Fragment() {
             when(resource){
                 is Resource.Loading ->{
                     Log.d("Shimmer", "Shimmer is starting")
-                    binding.shimmerClinicPage.apply {
-                        visibility = View.VISIBLE
-                        startShimmer()
-                    }
+                    binding.shimmerClinicPage.startShimmer()
                 }
                 is Resource.Success ->{
-                    Log.d("Shimmer", "Shimmer is stopping")
-                    binding.shimmerClinicPage.apply {
-                        stopShimmer()
-                        visibility = View.GONE
-                    }
-                    binding.layoutClinic.visibility = View.VISIBLE
+                    showClinic()
                     with(binding) {
                         if(resource.data != null){
+                            Log.d("Data Clinic :" ,resource.data.city)
+
                             tvClinicPage.text = resource.data.clinic_name
-                            tvClinicLocationPage.text = resource.data.city
-                            Picasso.get().load(resource.data.clinic_image).into(ivClinicPage)
+                            tvLocationPage.text = resource.data.city
+
+                            Picasso.get().load(resource.data.clinic_image).into(ivPageClinic)
                             clinicId = resource.data.id
                             latitude = resource.data.latitude
                             longitude = resource.data.longitude
@@ -203,7 +199,7 @@ class ClinicPageFragment : Fragment() {
             return
         }
         if (petId == null) {
-            Toast.makeText(requireContext(), "Pet ID is null", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "Please choose a pet before visiting the clinic.", Toast.LENGTH_SHORT).show()
             return
         }
         if (appointmentDate == null) {
@@ -236,5 +232,13 @@ class ClinicPageFragment : Fragment() {
         dialog.setContentView(view)
         dialog.setCancelable(true)
         dialog.show()
+    }
+
+    private fun showClinic(){
+        binding.shimmerClinicPage.apply {
+            stopShimmer()
+            visibility = View.GONE
+        }
+        binding.layoutClinic.visibility = View.VISIBLE
     }
 }
