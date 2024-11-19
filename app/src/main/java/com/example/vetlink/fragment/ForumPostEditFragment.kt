@@ -3,6 +3,8 @@ package com.example.vetlink.fragment
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -97,6 +99,14 @@ class ForumPostEditFragment : Fragment() {
             btnSubmitPost.setOnClickListener {
                 val updates = mutableMapOf<String, Any>()
                 var photo: MultipartBody.Part? = null
+
+                if (etPostTitle.text.toString().length > 32){
+                    textInputLayoutPostTitle.isErrorEnabled = true
+                    textInputLayoutPostTitle.error = "Title cannot exceed 32 characters"
+                    textInputLayoutPostTitle.setErrorTextColor(ColorStateList.valueOf(Color.RED))
+                    Toast.makeText(requireContext(), "Title cannot exceed 32 characters", Toast.LENGTH_SHORT).show()
+                    return@setOnClickListener
+                }
 
                 if (etPostTitle.text.toString().takeIf { it.isNotBlank() } != forum!!.title?.takeIf { it.isNotBlank() }) {
                     updates["title"] = etPostTitle.text.toString().ifEmpty { "" }

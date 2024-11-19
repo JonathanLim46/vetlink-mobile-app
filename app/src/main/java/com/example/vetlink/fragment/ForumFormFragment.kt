@@ -119,9 +119,9 @@ class ForumFormFragment : Fragment(), RecyclerViewClickListener<Pet> {
 
                 if(title.toString().length > 32){
                     textInputLayoutPostTitle.isErrorEnabled = true
-                    textInputLayoutPostTitle.error = "Title cannot exceed 36 characters"
+                    textInputLayoutPostTitle.error = "Title cannot exceed 32 characters"
                     textInputLayoutPostTitle.setErrorTextColor(ColorStateList.valueOf(Color.RED))
-                    Toast.makeText(requireContext(), "Title cannot exceed 36 characters", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "Title cannot exceed 32 characters", Toast.LENGTH_SHORT).show()
                     return@setOnClickListener
                 }
 
