@@ -296,6 +296,7 @@ $contactInfo
                     sharedMainActivityViewModel.addCommentStatus.observe(viewLifecycleOwner){ addCommentStatus ->
                         if (addCommentStatus == 201) {
                             sharedMainActivityViewModel.getComments(item.postId)
+                            etReplyComment.text = null
                         }
                     }
                 }
