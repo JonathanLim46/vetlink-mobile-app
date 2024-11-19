@@ -3,6 +3,8 @@ package com.example.vetlink.fragment
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.graphics.Paint
 import android.net.Uri
 import android.os.Bundle
@@ -111,6 +113,17 @@ class ForumFormFragment : Fragment(), RecyclerViewClickListener<Pet> {
                 val lastSeen = etPostLastSeen.text
                 val characteristics = etPostCharacteristics.text
                 val description = etPostDescription.text
+
+                textInputLayoutPostTitle.error = null
+                textInputLayoutPostTitle.isErrorEnabled = false
+
+                if(title.toString().length > 36){
+                    textInputLayoutPostTitle.isErrorEnabled = true
+                    textInputLayoutPostTitle.error = "Title cannot exceed 36 characters"
+                    textInputLayoutPostTitle.setErrorTextColor(ColorStateList.valueOf(Color.RED))
+                    Toast.makeText(requireContext(), "Title cannot exceed 36 characters", Toast.LENGTH_SHORT).show()
+                    return@setOnClickListener
+                }
 
                 if (title?.isNotEmpty() == true && lastSeen?.isNotEmpty() == true && characteristics?.isNotEmpty() == true && description?.isNotEmpty() == true) {
                     val params: MutableMap<String, RequestBody> = mutableMapOf(

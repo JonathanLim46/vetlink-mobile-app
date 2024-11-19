@@ -83,7 +83,7 @@
             app:hintTextColor="@color/black"
             app:errorEnabled="true"
             app:counterEnabled="true"
-            app:counterMaxLength="32"
+            app:counterMaxLength="36"
             app:layout_constraintTop_toBottomOf="@+id/tvSelectPhotoOwnPets"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
