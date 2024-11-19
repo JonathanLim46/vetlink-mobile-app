@@ -1,6 +1,7 @@
 package com.example.vetlink.viewModel
 
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -15,6 +16,9 @@ class LoginActivityViewModel(private val repository: AuthRepository) : ViewModel
 
     val loginResponse = MutableLiveData<LoginResponse>()
     val errorMessage = MutableLiveData<String>()
+
+    private val _logoutSuccess = MutableLiveData<Boolean>()
+    val logoutSuccess: LiveData<Boolean> get() = _logoutSuccess
 
     fun loginUser(identifier: String, password: String) {
         viewModelScope.launch {
@@ -44,6 +48,13 @@ class LoginActivityViewModel(private val repository: AuthRepository) : ViewModel
                 errorMessage.postValue("An error occurred. Please try again.") // Generic error message
                 Log.e("API_ERROR", "Login error: ${e.message}")
             }
+        }
+    }
+
+    fun performLogout(){
+        viewModelScope.launch {
+            val responseLogout = repository.logout()
+            _logoutSuccess.postValue(responseLogout)
         }
     }
 }

@@ -67,10 +67,15 @@ class LoginActivity : AppCompatActivity() {
         loginViewModel.loginResponse.observe(this) { loginResponse ->
             loginResponse?.let {
                 if (loginResponse.status == 200) {
-                    val intent = Intent(this, MainActivity::class.java)
-                    startActivity(intent)
-                    toast(loginResponse.data.token)
-                    finish()
+                    if (loginResponse.data.user.role == "customer"){
+                        val intent = Intent(this, MainActivity::class.java)
+                        startActivity(intent)
+                        finish()
+                    }else{
+                        toast("Anda bukan customer. Silahkan gunakan website!")
+                        loadingAlert.stopAlertDialog()
+                        loginViewModel.performLogout()
+                    }
                 }else{
                     loadingAlert.stopAlertDialog()
                     toast(loginResponse.message)
