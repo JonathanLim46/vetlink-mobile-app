@@ -148,7 +148,12 @@ class AccountFragment : Fragment() {
                 layoutAccount.textInputLayoutNameAcc.error = "Name is required"
                 layoutAccount.textInputLayoutNameAcc.setErrorTextColor(colorError)
                 layoutAccount.etNameAcc.requestFocus()
-            } else if (layoutAccount.etNameAcc.text.toString() != user.name) {
+            } else if (layoutAccount.etNameAcc.text.toString() == user.name){
+                layoutAccount.textInputLayoutNameAcc.error = "Name is required"
+                layoutAccount.textInputLayoutNameAcc.setErrorTextColor(colorError)
+                layoutAccount.etNameAcc.requestFocus()
+            }
+            else if (layoutAccount.etNameAcc.text.toString() != user.name) {
                 updates["name"] = layoutAccount.etNameAcc.text.toString()
                 layoutAccount.textInputLayoutNameAcc.error = null
                 layoutAccount.textInputLayoutNameAcc.isErrorEnabled = false
@@ -161,11 +166,11 @@ class AccountFragment : Fragment() {
                 layoutAccount.textInputLayoutPhoneAcc.error = "Phone is required"
                 layoutAccount.textInputLayoutPhoneAcc.setErrorTextColor(colorError)
                 layoutAccount.etPhoneAcc.requestFocus()
-            } else if (!Patterns.PHONE.matcher(layoutAccount.etPhoneAcc.toString()).matches()){
+            } else if (!Patterns.PHONE.matcher(layoutAccount.etPhoneAcc.text.toString()).matches()){
                 layoutAccount.textInputLayoutPhoneAcc.error = "Phone is invalid"
                 layoutAccount.textInputLayoutPhoneAcc.setErrorTextColor(colorError)
                 layoutAccount.etPhoneAcc.requestFocus()
-            } else if (layoutAccount.etPhoneAcc.text.toString() != user.name) {
+            } else if (layoutAccount.etPhoneAcc.text.toString() != user.phone) {
                 updates["phone"] = layoutAccount.etPhoneAcc.text.toString()
                 layoutAccount.textInputLayoutPhoneAcc.error = null
                 layoutAccount.textInputLayoutPhoneAcc.isErrorEnabled = false
