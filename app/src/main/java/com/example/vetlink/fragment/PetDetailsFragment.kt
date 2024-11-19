@@ -189,6 +189,13 @@ class PetDetailsFragment : Fragment() {
             val updates = mutableMapOf<String, Any>()
             var photoPart: MultipartBody.Part? = null
 
+            if(etNamePets.text.toString().length > 8){
+                textInputLayoutNamePets.error = "Pet name cannot exceed 8 characters"
+                textInputLayoutNamePets.setErrorTextColor(ColorStateList.valueOf(Color.RED))
+                etNamePets.requestFocus()
+                return@with
+            }
+
             // Handling the pet name
             if (etNamePets.text.toString() != pet.pet_name) {
                 updates["pet_name"] = etNamePets.text.toString()
@@ -269,7 +276,13 @@ class PetDetailsFragment : Fragment() {
                 textInputLayoutNamePets.setErrorTextColor(colorError)
                 etNamePets.requestFocus()
                 isFormAddValid = false
-            } else {
+            } else if (namePets.length > 8 ){
+                textInputLayoutNamePets.error = "Pet name cannot exceed 8 characters"
+                textInputLayoutNamePets.setErrorTextColor(colorError)
+                etNamePets.requestFocus()
+                isFormAddValid = false
+            }
+            else {
                 textInputLayoutNamePets.isErrorEnabled = false
             }
 
