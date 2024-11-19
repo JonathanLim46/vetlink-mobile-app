@@ -145,12 +145,16 @@ class SignupActivity : AppCompatActivity() {
                     val name = etName.text.toString()
                     if (name.isEmpty()) {
                         textInputLayoutNameSign.error = "Name is required"
-                    }else{
+                    } else if (name.length > 16){
+                        textInputLayoutNameSign.error = "Name cannot be longer than 16 characters"
+                    }
+                    else{
                         textInputLayoutNameSign.error = null
                         textInputLayoutNameSign.isErrorEnabled = false
                     }
                 }
             }
+
             etEmail.setOnFocusChangeListener{ _, hasFocus ->
                 if (!hasFocus){
                     val email = etEmail.text.toString()
@@ -252,7 +256,12 @@ class SignupActivity : AppCompatActivity() {
             binding.textInputLayoutPassword.setErrorTextColor(colorError)
             binding.textInputLayoutPassword.setErrorIconTintList(colorError)
             isFormValid = false
-        } else {
+        } else if(password.length < 8){
+            binding.textInputLayoutPassword.error = "Password cannot be less than 8 characters"
+            binding.textInputLayoutPassword.setErrorTextColor(colorError)
+            binding.textInputLayoutPassword.setErrorIconTintList(colorError)
+            isFormValid = false
+        }else {
             binding.textInputLayoutPassword.error = null
             binding.textInputLayoutPassword.isErrorEnabled = false
         }
