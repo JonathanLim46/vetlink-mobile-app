@@ -121,7 +121,6 @@ class AccountFragment : Fragment() {
 
             layoutAccount.btnSubmitAccount.setOnClickListener{
                 validateEdit()
-                activity?.finish()
             }
 
             layoutAccount.ivAddImage.setOnClickListener { openImageChooser() }
@@ -135,25 +134,23 @@ class AccountFragment : Fragment() {
             val user = currentUser ?: return
             val updates = mutableMapOf<String, Any>()
             var photo: MultipartBody.Part? = null
+            var isValid = true
 
             selectedImageUri?.let {
                 photo = handleImageUri(it)
             }
 
-            if (layoutAccount.etNameAcc.length() > 32) {
+            if (layoutAccount.etNameAcc.text.toString().length > 16) {
                 layoutAccount.textInputLayoutNameAcc.error = "Name cannot be longer than 32 characters"
                 layoutAccount.textInputLayoutNameAcc.setErrorTextColor(colorError)
                 layoutAccount.etNameAcc.requestFocus()
+                isValid = false
             } else if (layoutAccount.etNameAcc.text.toString().isEmpty()) {
                 layoutAccount.textInputLayoutNameAcc.error = "Name is required"
                 layoutAccount.textInputLayoutNameAcc.setErrorTextColor(colorError)
                 layoutAccount.etNameAcc.requestFocus()
-            } else if (layoutAccount.etNameAcc.text.toString() == user.name){
-                layoutAccount.textInputLayoutNameAcc.error = "Name is required"
-                layoutAccount.textInputLayoutNameAcc.setErrorTextColor(colorError)
-                layoutAccount.etNameAcc.requestFocus()
-            }
-            else if (layoutAccount.etNameAcc.text.toString() != user.name) {
+                isValid = false
+            } else if (layoutAccount.etNameAcc.text.toString() != user.name) {
                 updates["name"] = layoutAccount.etNameAcc.text.toString()
                 layoutAccount.textInputLayoutNameAcc.error = null
                 layoutAccount.textInputLayoutNameAcc.isErrorEnabled = false
@@ -166,10 +163,12 @@ class AccountFragment : Fragment() {
                 layoutAccount.textInputLayoutPhoneAcc.error = "Phone is required"
                 layoutAccount.textInputLayoutPhoneAcc.setErrorTextColor(colorError)
                 layoutAccount.etPhoneAcc.requestFocus()
+                isValid = false
             } else if (!Patterns.PHONE.matcher(layoutAccount.etPhoneAcc.text.toString()).matches()){
                 layoutAccount.textInputLayoutPhoneAcc.error = "Phone is invalid"
                 layoutAccount.textInputLayoutPhoneAcc.setErrorTextColor(colorError)
                 layoutAccount.etPhoneAcc.requestFocus()
+                isValid = false
             } else if (layoutAccount.etPhoneAcc.text.toString() != user.phone) {
                 updates["phone"] = layoutAccount.etPhoneAcc.text.toString()
                 layoutAccount.textInputLayoutPhoneAcc.error = null
@@ -179,15 +178,19 @@ class AccountFragment : Fragment() {
                 layoutAccount.textInputLayoutPhoneAcc.isErrorEnabled = false
             }
 
-            if (updates.isNotEmpty() || photo != null) {
-                val params = mutableMapOf<String, RequestBody>()
+            if (isValid){
+                if (updates.isNotEmpty() || photo != null) {
+                    val params = mutableMapOf<String, RequestBody>()
 
-                updates.forEach { (key, value) ->
-                    val requestBody = value.toString().toRequestBody("text/plain".toMediaTypeOrNull())
-                    params[key] = requestBody
+                    updates.forEach { (key, value) ->
+                        val requestBody = value.toString().toRequestBody("text/plain".toMediaTypeOrNull())
+                        params[key] = requestBody
+                    }
+
+                    sharedMenuActivityViewModel.updateUser(params, photo)
                 }
 
-                sharedMenuActivityViewModel.updateUser(params, photo)
+                activity?.finish()
             }
 
         }
