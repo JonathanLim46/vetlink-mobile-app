@@ -51,6 +51,9 @@ class ClinicPageFragment : Fragment() {
     private var longitude: Float? = null
     private var latitude: Float? = null
 
+    val inputFormat = SimpleDateFormat("HH:mm:ss", Locale.getDefault())
+    val outputFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
+
     private val sharedMenuActivityViewModel: MenuActivityViewModel by activityViewModels()
 
     override fun onCreateView(
@@ -77,11 +80,16 @@ class ClinicPageFragment : Fragment() {
                     showClinic()
                     with(binding) {
                         if(resource.data != null){
+
+                            val openTimeFormatted = outputFormat.format(inputFormat.parse(resource.data.open_time)!!)
+                            val closeTimeFormatted = outputFormat.format(inputFormat.parse(resource.data.close_time)!!)
                             Log.d("Data Clinic :" ,resource.data.city)
 
                             tvClinicPage.text = resource.data.clinic_name
+                            tvTimePage.text = "Buka | $openTimeFormatted - $closeTimeFormatted"
                             tvLocationPage.text = resource.data.city
-
+                            tvAddressPage.text = resource.data.address
+                            tvPhonePage.text = resource.data.phone_number
                             Picasso.get().load(resource.data.clinic_image).into(ivPageClinic)
                             clinicId = resource.data.id
                             latitude = resource.data.latitude
