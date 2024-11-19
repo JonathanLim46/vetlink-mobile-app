@@ -221,7 +221,13 @@ class PetDetailsFragment : Fragment() {
             }
 
             if (btnChooseBreed.text.toString() != pet.breed) {
-                updates["breed"] = selectedPetBreed?.id.toString()  // Send PetBreed ID
+                if (selectedPetBreed != null){
+                    updates["breed"] = selectedPetBreed?.id.toString()// Send PetBreed ID
+                }else{
+                    Toast.makeText(requireContext(), "Please choose a pet breed.", Toast.LENGTH_SHORT).show()
+                    return
+                }
+
             }
 
             if (selectedGender != pet.gender) {
@@ -241,6 +247,8 @@ class PetDetailsFragment : Fragment() {
                     val requestBody = value.toString().toRequestBody("text/plain".toMediaTypeOrNull())
                     params[key] = requestBody
                 }
+
+                Log.d("Breed", "$selectedPetBreed")
 
                 sharedMenuActivityViewModel.updatePet(pet.id, params, photoPart)
             }
@@ -397,7 +405,8 @@ class PetDetailsFragment : Fragment() {
             PetTypeListAdapter(options as List<PetType>) { selectedOption ->
                 Log.d("PetDetailsFragment", "Selected Pet Type ID: ${(selectedOption as PetType).id}")
                 selectedPetType = selectedOption
-                selectedPetBreed = null // Reset breed selection
+                selectedPetBreed = null // Reset breed
+                binding.btnChooseBreed.text = "Choose Breed" // Clear breed text
                 onSelect(selectedOption)
                 dialog?.dismiss()
             }

@@ -80,6 +80,8 @@ class ClinicFragment : Fragment(), RecyclerViewClickListener<ClinicList>{
     ): View? {
 
         binding = FragmentClinicBinding.inflate(inflater, container, false)
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(requireContext())
+        getLastLocation()
         setupObservers()
         initView()
 
