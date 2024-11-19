@@ -126,6 +126,11 @@ class ForumFragment : Fragment() {
                 intent.putExtra("MENU_TITLE", "Postingan Baru")
                 startActivity(intent)
             }
+
+            refreshForum.setOnRefreshListener {
+                sharedMainActivityViewModel.getForums()
+                refreshForum.isRefreshing = false
+            }
         }
     }
 
@@ -137,6 +142,7 @@ class ForumFragment : Fragment() {
                 viewPagerForum.adapter = adapter
                 TabLayoutMediator(tabLayoutForum, viewPagerForum) {tab, position ->
                     tab.text = tabArrayList[position]
+
                 }.attach()
 
                 tabLayoutForum.setSelectedTabIndicatorColor(Color.GRAY)

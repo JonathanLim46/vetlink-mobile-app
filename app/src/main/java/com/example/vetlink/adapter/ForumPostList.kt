@@ -5,7 +5,7 @@ import com.example.vetlink.data.model.comment.Comment
 data class ForumPostList(
     val postId: Int? = null,
     val postImageProfile: String?,
-    val postImagePets: String,
+    var postImagePets: String,
     val postUsername: String,
     val postStatus: String,
     val postHeader: String,

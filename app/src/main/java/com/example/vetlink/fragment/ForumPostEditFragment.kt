@@ -18,6 +18,8 @@ import com.example.vetlink.data.model.forums.Forum
 import com.example.vetlink.databinding.FragmentForumPostEditBinding
 import com.example.vetlink.viewModel.MainActivityViewModel
 import com.example.vetlink.viewModel.MenuActivityViewModel
+import com.squareup.picasso.MemoryPolicy
+import com.squareup.picasso.NetworkPolicy
 import com.squareup.picasso.Picasso
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -81,7 +83,11 @@ class ForumPostEditFragment : Fragment() {
                 etPostCharacteristics.setText(forum.characteristics)
                 etPostDescription.setText(forum.description)
                 tvNullPostImagePets.visibility = View.GONE
-                Picasso.get().load(forum.pet_image).into(ivPostImagePets)
+                Picasso.get()
+                    .load(forum.pet_image)
+                    .memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE)
+                    .networkPolicy(NetworkPolicy.NO_CACHE, NetworkPolicy.NO_STORE)
+                    .into(ivPostImagePets)
             }
 
             ivPostImagePets.setOnClickListener {
