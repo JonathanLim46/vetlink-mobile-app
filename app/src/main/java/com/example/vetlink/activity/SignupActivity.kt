@@ -25,6 +25,7 @@ import android.Manifest
 import android.content.pm.PackageManager
 import android.util.Log
 import com.example.vetlink.LoadingAlert
+import com.google.android.material.textfield.TextInputLayout
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -36,6 +37,8 @@ class SignupActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySignupBinding
     private lateinit var session: SessionManager
     private lateinit var loadingAlert: LoadingAlert
+
+    private var isFormValid = true
 
     private val registerViewModel: RegisterActivityViewModel by viewModels {
         ViewModelFactory(AuthRepository(session))
@@ -70,6 +73,52 @@ class SignupActivity : AppCompatActivity() {
             }
         }
 
+        registerViewModel.checkEmailResponse.observe(this) { checkEmailResponse ->
+            loadingAlert.stopAlertDialog()
+            if (checkEmailResponse.status == 200){
+                if (checkEmailResponse.isExists == true){
+                    binding.textInputLayoutEmail.error = "Email already exists"
+                    binding.textInputLayoutEmail.setErrorTextColor(ColorStateList.valueOf(Color.RED))
+                    binding.textInputLayoutEmail.setErrorIconTintList(ColorStateList.valueOf(Color.RED))
+                    binding.etEmail.requestFocus()
+                    isFormValid = false
+                }else{
+                    isFormValid = true
+                    binding.textInputLayoutEmail.error = null
+                    binding.textInputLayoutEmail.isErrorEnabled = false
+                    // Set end icon mode to custom
+                    binding.textInputLayoutEmail.endIconMode = TextInputLayout.END_ICON_CUSTOM
+
+                    // Set a checkmark icon to indicate success
+                    binding.textInputLayoutEmail.setEndIconDrawable(R.drawable.baseline_check_24) // Use your check icon drawable resource
+                    binding.textInputLayoutEmail.setEndIconTintList(ColorStateList.valueOf(Color.GREEN)) // Set color for the checkmark
+                }
+            }
+        }
+
+        registerViewModel.checkUsernameResponse.observe(this){ checkUsernameResponse ->
+            loadingAlert.stopAlertDialog()
+            if (checkUsernameResponse.status == 200){
+                if (checkUsernameResponse.isExists == true){
+                    binding.textInputLayoutUsernameSign.error = "Username already exists"
+                    binding.textInputLayoutUsernameSign.setErrorTextColor(ColorStateList.valueOf(Color.RED))
+                    binding.textInputLayoutUsernameSign.setErrorIconTintList(ColorStateList.valueOf(Color.RED))
+                    binding.etUsername.requestFocus()
+                    isFormValid = false
+                }else{
+                    isFormValid = true
+                    binding.textInputLayoutUsernameSign.error = null
+                    binding.textInputLayoutUsernameSign.isErrorEnabled = false
+                    // Set end icon mode to custom
+                    binding.textInputLayoutUsernameSign.endIconMode = TextInputLayout.END_ICON_CUSTOM
+
+                    // Set a checkmark icon to indicate success
+                    binding.textInputLayoutUsernameSign.setEndIconDrawable(R.drawable.baseline_check_24) // Use your check icon drawable resource
+                    binding.textInputLayoutUsernameSign.setEndIconTintList(ColorStateList.valueOf(Color.GREEN)) // Set color for the checkmark
+                }
+            }
+        }
+
         initView()
     }
 
@@ -91,6 +140,44 @@ class SignupActivity : AppCompatActivity() {
                 }
             }
 
+            etName.setOnFocusChangeListener{ _, hasFocus ->
+                if (!hasFocus) {
+                    val name = etName.text.toString()
+                    if (name.isEmpty()) {
+                        textInputLayoutNameSign.error = "Name is required"
+                    }else{
+                        textInputLayoutNameSign.error = null
+                        textInputLayoutNameSign.isErrorEnabled = false
+                    }
+                }
+            }
+            etEmail.setOnFocusChangeListener{ _, hasFocus ->
+                if (!hasFocus){
+                    val email = etEmail.text.toString()
+                    if (email.isNotEmpty() && Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                        loadingAlert.startAlertDialog()
+                        registerViewModel.checkEmail(email)
+                    }else if (email.isEmpty()){
+                        textInputLayoutEmail.error = "Email is required"
+                    } else {
+                        textInputLayoutEmail.error = "Invalid email format"
+                    }
+                }
+            }
+
+            etUsername.setOnFocusChangeListener { _, hasFocus ->
+                if (!hasFocus) {
+                    val username = etUsername.text.toString()
+                    if (username.isNotEmpty()) {
+                        loadingAlert.startAlertDialog()
+                        registerViewModel.checkUsername(username)
+                    }else if(username.isEmpty()){
+                        textInputLayoutUsernameSign.error = "Username is required"
+                    }
+                }
+            }
+
+
             btnSignUp.setOnClickListener {
                 validateFormAndRegister()
             }
@@ -104,23 +191,70 @@ class SignupActivity : AppCompatActivity() {
         val phone = binding.etPhone.text.toString()
         val password = binding.etPassword.text.toString()
         val colorError = ColorStateList.valueOf(Color.RED)
-        var isFormValid = true
+
+        isFormValid = true
+
+        if (email.isNotEmpty()){
+            binding.textInputLayoutNameSign.error = null
+            binding.textInputLayoutNameSign.isErrorEnabled = false
+
+            if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                binding.textInputLayoutEmail.error = "Invalid Email"
+                binding.textInputLayoutEmail.setErrorTextColor(colorError)
+                binding.textInputLayoutEmail.setErrorIconTintList(colorError)
+                isFormValid = false
+            } else {
+                binding.textInputLayoutNameSign.error = null
+                binding.textInputLayoutNameSign.isErrorEnabled = false
+            }
+
+        }else{
+            binding.textInputLayoutEmail.error = "Email is required"
+            binding.textInputLayoutEmail.setErrorTextColor(colorError)
+            binding.textInputLayoutEmail.setErrorIconTintList(colorError)
+            isFormValid = false
+        }
+
+        if (username.isEmpty()){
+            binding.textInputLayoutUsernameSign.error = "Username is required"
+            binding.textInputLayoutUsernameSign.setErrorTextColor(colorError)
+            binding.textInputLayoutUsernameSign.setErrorIconTintList(colorError)
+            isFormValid = false
+        } else {
+            binding.textInputLayoutUsernameSign.error = null
+            binding.textInputLayoutUsernameSign.isErrorEnabled = false
+        }
 
         if (name.isEmpty()) {
-            binding.textInputLayoutNameSign.error = "Name is required"
-            binding.textInputLayoutNameSign.setErrorTextColor(colorError)
-            binding.textInputLayoutNameSign.setErrorIconTintList(colorError)
-            binding.etName.requestFocus()
             isFormValid = false
         } else if (name.length <= 3) {
             binding.textInputLayoutNameSign.error = "Name Must Be More Than 3 Characters"
             binding.textInputLayoutNameSign.setErrorTextColor(colorError)
             binding.textInputLayoutNameSign.setErrorIconTintList(colorError)
-            binding.etName.requestFocus()
             isFormValid = false
         } else {
             binding.textInputLayoutNameSign.error = null
             binding.textInputLayoutNameSign.isErrorEnabled = false
+        }
+
+        if (phone.isEmpty()){
+            binding.textInputLayoutPhone.error = "Phone Number is required"
+            binding.textInputLayoutPhone.setErrorTextColor(colorError)
+            binding.textInputLayoutPhone.setErrorIconTintList(colorError)
+            isFormValid = false
+        } else {
+            binding.textInputLayoutPhone.error = null
+            binding.textInputLayoutPhone.isErrorEnabled = false
+        }
+
+        if(password.isEmpty()){
+            binding.textInputLayoutPassword.error = "Password is required"
+            binding.textInputLayoutPassword.setErrorTextColor(colorError)
+            binding.textInputLayoutPassword.setErrorIconTintList(colorError)
+            isFormValid = false
+        } else {
+            binding.textInputLayoutPassword.error = null
+            binding.textInputLayoutPassword.isErrorEnabled = false
         }
 
         if (isFormValid) {

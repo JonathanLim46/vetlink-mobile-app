@@ -70,6 +70,7 @@ class ForumPostListAdapter(
             holder.postImageProfile.setImageResource(R.drawable.img_default_profile)
         }
         if (forumPostList.postImagePets != null) {
+            Picasso.get().invalidate(forumPostList.postImagePets)
             Picasso.get()
                 .load(forumPostList.postImagePets)
                 .memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE)
