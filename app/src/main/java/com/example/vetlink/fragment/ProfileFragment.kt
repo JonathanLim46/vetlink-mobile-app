@@ -24,6 +24,8 @@ import com.example.vetlink.activity.MenuActivity
 import com.example.vetlink.databinding.FragmentProfileBinding
 import com.example.vetlink.helper.SessionManager
 import com.example.vetlink.viewModel.MainActivityViewModel
+import com.squareup.picasso.MemoryPolicy
+import com.squareup.picasso.NetworkPolicy
 import com.squareup.picasso.Picasso
 
 class ProfileFragment : Fragment() {
@@ -69,11 +71,16 @@ class ProfileFragment : Fragment() {
                         }
                         binding.layoutProfile.tvEmailProfile.text = spannableEmail
                         if (resource.data.photo != null) {
-                            Picasso.get().load(resource.data.photo).resize(50, 50).centerCrop().into(binding.layoutProfile.ivPhotoProfile)
+                            Picasso.get()
+                                .load(resource.data.photo)
+                                .memoryPolicy(MemoryPolicy.NO_CACHE)
+                                .networkPolicy(NetworkPolicy.NO_CACHE)
+                                .resize(50, 50)
+                                .centerCrop()
+                                .into(binding.layoutProfile.ivPhotoProfile)
                         }else{
                             binding.layoutProfile.ivPhotoProfile.setImageResource(R.drawable.img_default_profile)
                         }
-
                     } else {
                         binding.layoutProfile.tvUsernameProfile.text = "User"
                         binding.layoutProfile.tvEmailProfile.text = "No email available"

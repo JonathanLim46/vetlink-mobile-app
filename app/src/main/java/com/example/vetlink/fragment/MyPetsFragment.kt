@@ -128,7 +128,8 @@ class MyPetsFragment : Fragment(),
             petsListAdapter.setClickListener(this@MyPetsFragment)
 
             srlPets.setOnRefreshListener {
-
+                petsList.clear()
+                sharedMenuActivityViewModel.getPets()
                 petsListAdapter.notifyDataSetChanged()
                 srlPets.isRefreshing = false
             }

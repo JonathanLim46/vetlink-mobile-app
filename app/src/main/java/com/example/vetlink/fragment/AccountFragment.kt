@@ -24,6 +24,8 @@ import com.example.vetlink.databinding.FragmentAccountBinding
 import com.example.vetlink.helper.Session
 import com.example.vetlink.helper.SessionManager
 import com.example.vetlink.viewModel.MenuActivityViewModel
+import com.squareup.picasso.MemoryPolicy
+import com.squareup.picasso.NetworkPolicy
 import com.squareup.picasso.Picasso
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -87,7 +89,13 @@ class AccountFragment : Fragment() {
                     if (resource.data != null){
                         with(binding){
                             if (resource.data.photo != null){
-                                Picasso.get().load(resource.data.photo).resize(50,50).centerCrop().into(layoutAccount.ivAddImage)
+                                Picasso.get()
+                                    .load(resource.data.photo)
+                                    .memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE)
+                                    .networkPolicy(NetworkPolicy.NO_CACHE, NetworkPolicy.NO_STORE)
+                                    .resize(50,50)
+                                    .centerCrop()
+                                    .into(layoutAccount.ivAddImage)
                             } else {
                                 layoutAccount.ivAddImage.setImageResource(R.drawable.img_default_profile)
                             }
