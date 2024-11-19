@@ -1,21 +1,17 @@
 package com.example.vetlink.repository
 
-import android.se.omapi.Session
 import com.example.vetlink.data.model.auth.LoginResponse
-import com.example.vetlink.data.model.auth.LogoutResponse
 import com.example.vetlink.data.model.auth.RegisterResponse
-import com.example.vetlink.data.model.pets.PetDetailsResponse
 import com.example.vetlink.data.model.user.ProfileResponse
 import com.example.vetlink.data.network.AuthApi
 import com.example.vetlink.data.network.RetrofitInstance
+import com.example.vetlink.data.network.response.auth.CheckResponse
 import com.example.vetlink.helper.SessionManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
-import retrofit2.Response
 
 class AuthRepository(val session: SessionManager) {
 
@@ -23,6 +19,14 @@ class AuthRepository(val session: SessionManager) {
 
     suspend fun login(identifier: String, password: String): LoginResponse {
         return authApi.login(identifier, password)
+    }
+
+    suspend fun checkEmail(email: String): CheckResponse {
+        return authApi.checkEmail(email)
+    }
+
+    suspend fun checkUsername(username: String): CheckResponse {
+        return authApi.checkUsername(username)
     }
 
     suspend fun register(
