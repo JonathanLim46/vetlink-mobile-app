@@ -1,239 +1,248 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/refreshForum"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@color/white"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".fragment.ForumFragment">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <!--    HEADER    -->
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        >
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/layoutHeader"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingBottom="15dp"
-            android:background="@drawable/layout_border_card_main"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            >
+            android:layout_height="match_parent">
 
-            <TextView
-                android:id="@+id/tvMessageHeader"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
-                android:layout_marginTop="36dp"
-                android:text="Loading..."
-                android:textSize="13sp"
-                android:textColor="@color/hintColor"
-                android:textStyle="bold"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                />
-
-            <ImageView
-                android:layout_width="13dp"
-                android:layout_height="13dp"
-                android:layout_marginStart="3dp"
-                android:src="@drawable/img_wave"
-                app:layout_constraintStart_toEndOf="@id/tvMessageHeader"
-                app:layout_constraintTop_toTopOf="@id/tvMessageHeader"
-                app:layout_constraintBottom_toBottomOf="@id/tvMessageHeader"
-                />
-            
-            <TextView
-                android:id="@+id/tvQuoteHeader"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="KINDNESS STARTS \nWITH YOU"
-                android:textSize="24sp"
-                android:textStyle="bold"
-                android:textColor="@color/white"
-                app:layout_constraintTop_toBottomOf="@id/tvMessageHeader"
-                app:layout_constraintStart_toStartOf="@id/tvMessageHeader"
-                />
-
-            <ImageView
-                android:id="@+id/ivAddPostForum"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:layout_marginEnd="25dp"
-                android:src="@drawable/icon_add_post"
-                app:layout_constraintTop_toTopOf="@id/tvMessageHeader"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:tint="@color/white" />
-
-            <!-- SECOND CARD -->
+            <!--    HEADER    -->
             <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/layoutHeader"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
-                android:layout_marginEnd="24dp"
-                android:layout_marginTop="12dp"
-                android:layout_marginBottom="12dp"
-                android:background="@drawable/layout_border_card_second"
-                app:layout_constraintTop_toBottomOf="@id/tvQuoteHeader"
-                app:layout_constraintBottom_toBottomOf="parent"
+                android:paddingBottom="15dp"
+                android:background="@drawable/layout_border_card_main"
+                app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 >
 
                 <TextView
-                    android:id="@+id/tvTotalPost"
+                    android:id="@+id/tvMessageHeader"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
-                    android:text="Total\nPosts"
-                    android:textSize="14sp"
-                    android:textAlignment="center"
-                    android:textColor="#858585"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="36dp"
+                    android:text="Loading..."
+                    android:textSize="13sp"
+                    android:textColor="@color/hintColor"
                     android:textStyle="bold"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toStartOf="@id/tvTotalPostInProgress"
+                    />
+
+                <ImageView
+                    android:layout_width="13dp"
+                    android:layout_height="13dp"
+                    android:layout_marginStart="3dp"
+                    android:src="@drawable/img_wave"
+                    app:layout_constraintStart_toEndOf="@id/tvMessageHeader"
+                    app:layout_constraintTop_toTopOf="@id/tvMessageHeader"
+                    app:layout_constraintBottom_toBottomOf="@id/tvMessageHeader"
                     />
 
                 <TextView
-                    android:id="@+id/tvCountPost"
+                    android:id="@+id/tvQuoteHeader"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="16dp"
-                    android:text="0"
-                    android:textSize="12sp"
-                    android:textColor="#858585"
+                    android:text="KINDNESS STARTS \nWITH YOU"
+                    android:textSize="24sp"
                     android:textStyle="bold"
-                    app:layout_constraintTop_toBottomOf="@+id/tvTotalPost"
+                    android:textColor="@color/white"
+                    app:layout_constraintTop_toBottomOf="@id/tvMessageHeader"
+                    app:layout_constraintStart_toStartOf="@id/tvMessageHeader"
+                    />
+
+                <ImageView
+                    android:id="@+id/ivAddPostForum"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_marginEnd="25dp"
+                    android:src="@drawable/icon_add_post"
+                    app:layout_constraintTop_toTopOf="@id/tvMessageHeader"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:tint="@color/white" />
+
+                <!-- SECOND CARD -->
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginEnd="24dp"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginBottom="12dp"
+                    android:background="@drawable/layout_border_card_second"
+                    app:layout_constraintTop_toBottomOf="@id/tvQuoteHeader"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="@+id/tvTotalPost"
-                    app:layout_constraintEnd_toEndOf="@+id/tvTotalPost"
-                    />
-
-                <TextView
-                    android:id="@+id/tvTotalPostInProgress"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Pets You've\nLost"
-                    android:textSize="14sp"
-                    android:textAlignment="center"
-                    android:textColor="#858585"
-                    android:textStyle="bold"
-                    app:layout_constraintTop_toTopOf="@+id/tvTotalPost"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    />
+                    >
 
-                <TextView
-                    android:id="@+id/tvCountPostInProgress"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="0"
-                    android:textSize="12sp"
-                    android:textColor="#858585"
-                    android:textStyle="bold"
-                    app:layout_constraintTop_toBottomOf="@id/tvTotalPostInProgress"
-                    app:layout_constraintStart_toStartOf="@id/tvTotalPostInProgress"
-                    app:layout_constraintEnd_toEndOf="@id/tvTotalPostInProgress"
-                    />
+                    <TextView
+                        android:id="@+id/tvTotalPost"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:text="Total\nPosts"
+                        android:textSize="14sp"
+                        android:textAlignment="center"
+                        android:textColor="#858585"
+                        android:textStyle="bold"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toStartOf="@id/tvTotalPostInProgress"
+                        />
 
-                <TextView
-                    android:id="@+id/tvTotalPostFinished"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Pets You've\nFound"
-                    android:textSize="14sp"
-                    android:textAlignment="center"
-                    android:textColor="#858585"
-                    android:textStyle="bold"
-                    app:layout_constraintTop_toTopOf="@+id/tvTotalPost"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/tvTotalPostInProgress"
-                    />
+                    <TextView
+                        android:id="@+id/tvCountPost"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
+                        android:text="0"
+                        android:textSize="12sp"
+                        android:textColor="#858585"
+                        android:textStyle="bold"
+                        app:layout_constraintTop_toBottomOf="@+id/tvTotalPost"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="@+id/tvTotalPost"
+                        app:layout_constraintEnd_toEndOf="@+id/tvTotalPost"
+                        />
 
-                <TextView
-                    android:id="@+id/tvCountPostFinished"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="0"
-                    android:textSize="12sp"
-                    android:textColor="#858585"
-                    android:textStyle="bold"
-                    app:layout_constraintTop_toBottomOf="@+id/tvTotalPostFinished"
-                    app:layout_constraintStart_toStartOf="@id/tvTotalPostFinished"
-                    app:layout_constraintEnd_toEndOf="@id/tvTotalPostFinished"
-                    />
+                    <TextView
+                        android:id="@+id/tvTotalPostInProgress"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Pets You've\nLost"
+                        android:textSize="14sp"
+                        android:textAlignment="center"
+                        android:textColor="#858585"
+                        android:textStyle="bold"
+                        app:layout_constraintTop_toTopOf="@+id/tvTotalPost"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        />
+
+                    <TextView
+                        android:id="@+id/tvCountPostInProgress"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0"
+                        android:textSize="12sp"
+                        android:textColor="#858585"
+                        android:textStyle="bold"
+                        app:layout_constraintTop_toBottomOf="@id/tvTotalPostInProgress"
+                        app:layout_constraintStart_toStartOf="@id/tvTotalPostInProgress"
+                        app:layout_constraintEnd_toEndOf="@id/tvTotalPostInProgress"
+                        />
+
+                    <TextView
+                        android:id="@+id/tvTotalPostFinished"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Pets You've\nFound"
+                        android:textSize="14sp"
+                        android:textAlignment="center"
+                        android:textColor="#858585"
+                        android:textStyle="bold"
+                        app:layout_constraintTop_toTopOf="@+id/tvTotalPost"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/tvTotalPostInProgress"
+                        />
+
+                    <TextView
+                        android:id="@+id/tvCountPostFinished"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0"
+                        android:textSize="12sp"
+                        android:textColor="#858585"
+                        android:textStyle="bold"
+                        app:layout_constraintTop_toBottomOf="@+id/tvTotalPostFinished"
+                        app:layout_constraintStart_toStartOf="@id/tvTotalPostFinished"
+                        app:layout_constraintEnd_toEndOf="@id/tvTotalPostFinished"
+                        />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            <!-- TAB LAYOUT & VIEW PAGER -->
 
-        <!-- TAB LAYOUT & VIEW PAGER -->
-
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/tabLayoutForum"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
-            app:tabIndicatorFullWidth="true"
-            app:layout_constraintTop_toBottomOf="@+id/layoutHeader"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            style="@style/CustomTabLayoutStyle"
-            />
-        
-        <TextView
-            android:id="@+id/tvPageInformation"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="15dp"
-            android:layout_marginTop="15dp"
-            android:text="This page for find information and support for locating lost pets"
-            android:textSize="11sp"
-            android:drawablePadding="5dp"
-            app:drawableLeftCompat="@drawable/icon_alert"
-            app:drawableTint="@color/red"
-            app:layout_constraintTop_toBottomOf="@id/tabLayoutForum"
-            app:layout_constraintStart_toStartOf="parent"
-            />
-
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginTop="12dp"
-            android:visibility="visible"
-            app:layout_constraintTop_toBottomOf="@+id/tvPageInformation"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent">
-
-            <androidx.viewpager2.widget.ViewPager2
-                android:id="@+id/viewPagerForum"
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tabLayoutForum"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                app:tabIndicatorFullWidth="true"
+                app:layout_constraintTop_toBottomOf="@+id/layoutHeader"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                style="@style/CustomTabLayoutStyle"
                 />
 
-        </ScrollView>
+            <TextView
+                android:id="@+id/tvPageInformation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="15dp"
+                android:text="This page for find information and support for locating lost pets"
+                android:textSize="11sp"
+                android:drawablePadding="5dp"
+                app:drawableLeftCompat="@drawable/icon_alert"
+                app:drawableTint="@color/red"
+                app:layout_constraintTop_toBottomOf="@id/tabLayoutForum"
+                app:layout_constraintStart_toStartOf="parent"
+                />
 
-        <TextView
-            android:id="@+id/tvDataNull"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="No posts have been found yet."
-            android:textSize="12sp"
-            android:visibility="gone"
-            app:layout_constraintTop_toBottomOf="@+id/tvPageInformation"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            />
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginTop="12dp"
+                android:visibility="visible"
+                app:layout_constraintTop_toBottomOf="@+id/tvPageInformation"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent">
+
+                <androidx.viewpager2.widget.ViewPager2
+                    android:id="@+id/viewPagerForum"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    />
+
+            </ScrollView>
+
+            <TextView
+                android:id="@+id/tvDataNull"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="No posts have been found yet."
+                android:textSize="12sp"
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@+id/tvPageInformation"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                />
 
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-</LinearLayout>
+    </LinearLayout>
+
+
+
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

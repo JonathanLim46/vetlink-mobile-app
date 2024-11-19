@@ -65,8 +65,6 @@ class ForumPostListAdapter(
         if (forumPostList.postImageProfile != null) {
             Picasso.get()
                 .load(forumPostList.postImageProfile)
-                .networkPolicy(NetworkPolicy.NO_CACHE)
-                .memoryPolicy(MemoryPolicy.NO_CACHE)
                 .into(holder.postImageProfile)
         } else {
             holder.postImageProfile.setImageResource(R.drawable.img_default_profile)
@@ -74,12 +72,14 @@ class ForumPostListAdapter(
         if (forumPostList.postImagePets != null) {
             Picasso.get()
                 .load(forumPostList.postImagePets)
-                .networkPolicy(NetworkPolicy.NO_CACHE)
-                .memoryPolicy(MemoryPolicy.NO_CACHE)
+                .memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE)
+                .networkPolicy(NetworkPolicy.NO_CACHE, NetworkPolicy.NO_STORE)
                 .into(holder.postImagePets)
         } else {
             holder.postImagePets.setImageResource(R.drawable.icon_pets)
         }
+
+
 
         holder.postUsername.text = forumPostList.postUsername
         holder.postStatus.text = forumPostList.postStatus.replaceFirstChar { it.uppercaseChar() }
