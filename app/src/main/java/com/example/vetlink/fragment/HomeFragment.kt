@@ -317,6 +317,10 @@ class HomeFragment : Fragment(), RecyclerViewClickListener<ClinicList> {
 
             with(binding){
                 if (firstData != null) {
+
+                    tvSpotlight.visibility = View.VISIBLE
+                    tvViewMoreForum.visibility = View.VISIBLE
+                    cvSpotlight.visibility = View.VISIBLE
                     Log.d("Response Data: ", "${firstData}")
 
                     tvUserNamePostMissingSpotlight.text = firstData.user.username
@@ -341,6 +345,8 @@ class HomeFragment : Fragment(), RecyclerViewClickListener<ClinicList> {
                     }else{
                         binding.ivUserPhotoPostMissingSpotlight.setImageResource(R.drawable.img_default_profile)
                     }
+                } else {
+                    tvForumNull.visibility = View.VISIBLE
                 }
             }
         }
