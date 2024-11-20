@@ -351,6 +351,22 @@
                     app:layout_constraintTop_toTopOf="@id/tvSpotlight"
                     app:layout_constraintEnd_toEndOf="parent"/>
 
+                <TextView
+                    android:id="@+id/tvForumNull"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginTop="25dp"
+                    android:layout_marginBottom="20dp"
+                    android:visibility="gone"
+                    android:text="No recent forum yet"
+                    android:textAlignment="center"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvSpotlight"
+                    app:layout_constraintStart_toStartOf="@+id/cvHistoryClinic"
+                    />
+
                 <androidx.cardview.widget.CardView
                     android:id="@+id/cvSpotlight"
                     android:layout_width="match_parent"
@@ -361,6 +377,7 @@
                     android:layout_marginBottom="20dp"
                     app:cardCornerRadius="12dp"
                     android:elevation="3dp"
+                    android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tvSpotlight"
                     app:layout_constraintStart_toStartOf="@+id/cvHistoryClinic">

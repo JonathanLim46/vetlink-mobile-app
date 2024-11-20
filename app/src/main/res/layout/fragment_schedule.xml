@@ -26,20 +26,59 @@
                 >
 
                 <TextView
-                    android:id="@+id/tvUpComing"
+                    android:id="@+id/tvPending"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
-                    android:text="Upcoming"
+                    android:text="Pending"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:drawablePadding="12dp"
+                    app:drawableLeftCompat="@drawable/icon_dot"
+                    app:drawableTint="@color/defaultIcon"
+                    app:layout_constraintVertical_bias="0"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
+
+                <TextView
+                    android:id="@+id/tvCountPending"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:text="(-)"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@id/tvPending"
+                    app:layout_constraintTop_toTopOf="@+id/tvPending"
+                    app:layout_constraintStart_toEndOf="@+id/tvPending"
+                    />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvPending"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:nestedScrollingEnabled="false"
+                    android:scrollbars="horizontal"
+                    app:layout_constraintTop_toBottomOf="@id/tvCountPending"
+                    app:layout_constraintBottom_toTopOf="@+id/tvUpComingSchedule"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@id/tvPending"/>
+
+                <TextView
+                    android:id="@+id/tvUpComingSchedule"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="40dp"
+                    android:text="On Going"
                     android:textSize="24sp"
                     android:textStyle="bold"
                     android:drawablePadding="12dp"
                     app:drawableLeftCompat="@drawable/icon_dot"
                     app:drawableTint="@color/green"
-                    app:layout_constraintVertical_bias="0"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"/>
+                    app:layout_constraintTop_toBottomOf="@id/rvPending"
+                    app:layout_constraintStart_toStartOf="parent"/>
 
                 <TextView
                     android:id="@+id/tvCountUpcoming"
@@ -49,9 +88,9 @@
                     android:text="(-)"
                     android:textSize="24sp"
                     android:textStyle="bold"
-                    app:layout_constraintBottom_toBottomOf="@id/tvUpComing"
-                    app:layout_constraintTop_toTopOf="@+id/tvUpComing"
-                    app:layout_constraintStart_toEndOf="@+id/tvUpComing"
+                    app:layout_constraintBottom_toBottomOf="@id/tvUpComingSchedule"
+                    app:layout_constraintTop_toTopOf="@+id/tvUpComingSchedule"
+                    app:layout_constraintStart_toEndOf="@+id/tvUpComingSchedule"
                     />
 
                 <androidx.recyclerview.widget.RecyclerView
@@ -61,10 +100,11 @@
                     android:layout_marginTop="15dp"
                     android:nestedScrollingEnabled="false"
                     android:scrollbars="horizontal"
-                    app:layout_constraintTop_toBottomOf="@id/tvCountUpcoming"
-                    app:layout_constraintBottom_toTopOf="@+id/tvHistorySchedule"
+                    app:layout_constraintVertical_bias="0"
+                    app:layout_constraintTop_toBottomOf="@id/tvUpComingSchedule"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="@id/tvUpComing"/>
+                    app:layout_constraintStart_toStartOf="@id/tvUpComingSchedule"/>
 
                 <TextView
                     android:id="@+id/tvHistorySchedule"

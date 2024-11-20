@@ -72,14 +72,32 @@ class ScheduleFragment : Fragment() {
                 is Resource.Success ->{
 
                     if(resource.data != null){
+                        showSchedule()
+                        binding.layoutScheduleNull.visibility = View.GONE
+                        binding.scrollViewSchedule.visibility = View.VISIBLE
+                        Log.d("Schedule", "${resource.data.size}")
 
+                        var pending = resource.data.filter { it.status == "pending" }
                         var upComing = resource.data.filter { it.status == "ongoing" }
                         var history = resource.data.filter { it.status == "finished" }
                         var cancel = resource.data.filter { it.status == "canceled" }
 
+                        binding.tvCountPending.text = if (pending.isNotEmpty()) "(" + pending.size.toString() + ")" else "0"
                         binding.tvCountUpcoming.text = if (upComing.isNotEmpty()) "(" + upComing.size.toString() + ")" else "(0)"
                         binding.tvCountHistorySchedule.text = if (history.isNotEmpty()) "(" + history.size.toString() + ")" else "(0)"
                         binding.tvCountCancelSchedule.text = if (cancel.isNotEmpty()) "(" + cancel.size.toString() + ")" else "(0)"
+
+                        var pendingList = ArrayList(pending.map { queue ->
+                            ScheduleList(
+                                scheduleDate = dateFormat.format(queue.appointment_time),
+                                scheduleFullDate = fullDateFormat.format(queue.appointment_time),
+                                scheduleClinicName = queue.veteriner.clinic_name,
+                                schedulePetName = queue.pet.name,
+                                scheduleClinicFullLocation = queue.veteriner.city
+                            )
+                        })
+                        binding.rvPending.adapter = ScheduleListAdapter(pendingList)
+                        binding.rvPending.adapter?.notifyDataSetChanged()
 
                         var upComingList = ArrayList(upComing.map { queue ->
                             ScheduleList(
@@ -120,7 +138,7 @@ class ScheduleFragment : Fragment() {
 
 
 
-                        if (upComingList.isEmpty() && historyList.isEmpty() && cancelList.isEmpty()){
+                        if (pendingList.isEmpty() && upComingList.isEmpty() && historyList.isEmpty() && cancelList.isEmpty()){
                             showSchedule()
                             binding.scrollViewSchedule.visibility = View.GONE
                             binding.layoutScheduleNull.visibility = View.VISIBLE
@@ -148,11 +166,13 @@ class ScheduleFragment : Fragment() {
     private fun initView(){
         with(binding){
 
+            rvPending.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
             rvUpComing.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
             rvHistory.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
             rvCancel.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
 
             srlSchedule.setOnRefreshListener {
+                sharedMenuActivityViewModel.getQueues()
                 srlSchedule.isRefreshing = false
             }
 
