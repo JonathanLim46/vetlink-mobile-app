@@ -264,6 +264,7 @@ class HomeFragment : Fragment(), RecyclerViewClickListener<ClinicList> {
         sharedMainActivityViewModel.veteriners.observe(viewLifecycleOwner) { resource ->
             when (resource) {
                 is Resource.Loading -> {
+                    allClinicList.clear()
                     getLastLocation()
                     binding.shimmerClinic.startShimmer()
                 }

@@ -98,6 +98,8 @@ class ForumFragment : Fragment() {
 
         sharedMainActivityViewModel.forums.observe(viewLifecycleOwner){ forums ->
             if (forums.isNotEmpty()) {
+                binding.tvDataNull.visibility = View.GONE
+                binding.layoutForum.visibility = View.VISIBLE
                 Log.d("forums", "$forums")
                 userForum = forums.filter { it.user.id == sharedMainActivityViewModel.user.value?.id }
                 var userForumLost = userForum!!.filter { it.status == "lost" }
@@ -114,6 +116,7 @@ class ForumFragment : Fragment() {
 
                 setAdapter()
             } else {
+                binding.layoutForum.visibility = View.GONE
                 binding.tvDataNull.visibility = View.VISIBLE
             }
         }
